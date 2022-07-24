@@ -1,0 +1,19 @@
+# dockerエンジンの対象バージョンに合わせる
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    container_name: frontend-nextjs
+    working_dir: /frontend
+    stop_signal: SIGINT
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - '3000:3000'
+    # docker run -iを意味する
+    stdin_open: true
+    # -tを意味する
+    tty: true

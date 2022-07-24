@@ -1,0 +1,33 @@
+# dockerエンジンの対象バージョンに合わせる
+version: '3'
+
+services:
+  db:
+    image: postgres:14.3
+    environment:
+      POSTGRES_USER: neumann
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: neumann_development
+      TZ: Asia/Tokyo
+    ports:
+      - '5432:5432'
+    # stopでコンテナを落とすならDBのデータは消えないそうなのであえて永続化しない
+
+  backend:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    container_name: backend-rails-api
+    ports:
+      - '8080:8080'
+    working_dir: /backend
+    # こいつのおかげでctr+cした際にrails serverを切ってからコンテナを終了してくれる
+    # 137のエラーを解決してくれている
+    # 初回起動時のみだった。
+    stop_signal: SIGINT
+    volumes:
+      - ./backend:/backend
+    # docker run -iを意味する
+    stdin_open: true
+    # -tを意味する
+    tty: true
