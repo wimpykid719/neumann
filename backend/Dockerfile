@@ -1,4 +1,4 @@
-FROM ruby:3.1
+FROM ruby:3.1.2
 WORKDIR /backend
 RUN set -eux && \
     apt-get update -qq && \
