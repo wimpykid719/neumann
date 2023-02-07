@@ -2,6 +2,7 @@
 set -e
 
 bundle install
+bundle exec rails db:create RAILS_ENV=test
 bundle exec rails db:migrate
 
 if [ ! -e "/backend/config/routes.rb" ]; then
