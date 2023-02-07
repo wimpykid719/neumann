@@ -25,6 +25,8 @@ services:
     # 137のエラーを解決してくれている
     # 初回起動時のみだった。
     stop_signal: SIGINT
+    depends_on:
+      - db
     volumes:
       - ./backend:/backend
     # docker run -iを意味する
