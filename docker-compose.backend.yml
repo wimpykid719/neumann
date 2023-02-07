@@ -10,7 +10,8 @@ services:
       POSTGRES_DB: neumann_development
       TZ: Asia/Tokyo
     ports:
-      - '5432:5432'
+      - '15432:5432'
+    # ローカル側が5432だとtableplus等のクライアントツールから接続が出来ないため
     # stopでコンテナを落とすならDBのデータは消えないそうなのであえて永続化しない
 
   backend:
