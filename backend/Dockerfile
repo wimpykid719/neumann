@@ -6,7 +6,7 @@ RUN set -eux && \
       postgresql-client
 
 
-COPY Gemfile Gemfile.lock* /backend
+COPY Gemfile Gemfile.lock* /backend/
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
