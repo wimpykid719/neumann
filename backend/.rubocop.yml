@@ -11,6 +11,7 @@ AllCops:
     - "config/**/*"
     - "bin/*"
     - "node_modules/**/*"
+    - "spec/rails_helper.rb"
 
   # 新ルールを有効化
   NewCops: enable
@@ -21,7 +22,6 @@ Layout/LineLength:
   # 下記ファイルはチェックの対象から外す
   Exclude:
     - "Rakefile"
-    - "spec/rails_helper.rb"
     - "spec/spec_helper.rb"
 
 # RSpecは1つのブロックあたりの行数が多くなるため、チェックの除外から外す
