@@ -85,3 +85,12 @@ Style/FrozenStringLiteralComment:
 Naming/MethodParameterName:
   MinNameLength: 1
   1inherit_from: .rubocop_todo.yml
+
+# FactoryBot create時の省略推奨を無視
+FactoryBot/SyntaxMethods:
+  Exclude:
+    - 'spec/**/*'
+
+# Contextで使用されるべき単語のチェックを無視
+RSpec/ContextWording:
+  Enabled: false
