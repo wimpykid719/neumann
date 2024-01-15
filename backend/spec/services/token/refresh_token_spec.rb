@@ -17,6 +17,14 @@ RSpec.describe Token::RefreshToken, type: :service do
       it 'payload[:sub]の値は同じユーザIDでも暗号化のたびに異なる値になる' do
         expect(refresh_token.payload[:sub]).not_to eq(encrypt_for(user.id))
       end
+
+      it 'payload[:version]の値が想定通り' do
+        expect(refresh_token.payload[:version]).to be_present
+      end
+
+      it 'userモデルのcurrent_token_versionにtokenバージョンが保存されている' do
+        expect(user.reload.current_token_version).to eq(refresh_token.payload[:version])
+      end
     end
 
     context 'decode' do

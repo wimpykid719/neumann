@@ -42,6 +42,10 @@ module UserAuth
       nil
     end
 
+    def new_token_version
+      Digest::MD5.hexdigest(SecureRandom.uuid)
+    end
+
     # エンコード時のヘッダー
     # Doc: https://openid-foundation-japan.github.io/draft-ietf-oauth-json-web-token-11.ja.html#typHdrDef
     def header_fields

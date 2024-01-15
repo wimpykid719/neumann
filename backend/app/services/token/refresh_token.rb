@@ -4,12 +4,12 @@ module Token
   class RefreshToken
     include UserAuth::TokenConcern
 
-    attr_reader :user_id, :payload, :token
+    attr_reader :payload, :token
 
     def initialize(user_id)
-      @user_id = encrypt_for(user_id)
-      @payload = claims
+      @payload = claims(user_id)
       @token = JWT.encode(@payload, secret_key, algorithm, header_fields)
+      store_token_version(user_id, @payload[:version])
     end
 
     class << self
@@ -30,11 +30,16 @@ module Token
       token_lifetime.from_now.to_i
     end
 
+    def store_token_version(user_id, token_version)
+      User.find(user_id).update_token_version(token_version)
+    end
+
     # エンコード時のデフォルトクレーム
-    def claims
+    def claims(user_id)
       {
-        user_claim => @user_id,
-        exp: token_expiration
+        user_claim => encrypt_for(user_id),
+        exp: token_expiration,
+        version: new_token_version
       }
     end
   end
