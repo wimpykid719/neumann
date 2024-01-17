@@ -35,12 +35,19 @@ module Token
       token_lifetime.from_now.to_i
     end
 
+    def user_current_token_version(user_id)
+      token_version = User.find_by(id: user_id).current_token_version
+      raise 'TokenVersion Is Nil' if token_version.nil?
+
+      token_version
+    end
+
     # エンコード時のデフォルトクレーム
     def claims(user_id)
       {
         user_claim => encrypt_for(user_id),
         exp: token_expiration,
-        version: User.find(user_id).current_token_version
+        version: user_current_token_version(user_id)
       }
     end
   end

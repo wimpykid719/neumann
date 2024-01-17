@@ -29,6 +29,15 @@ RSpec.describe Token::AccessToken, type: :service do
       it '有効時間が30分とテキストで返る' do
         expect(access_token.lifetime_text).to eq('30分')
       end
+
+      context '異常系' do
+        let(:user_current_token_version_nil) { FactoryBot.create(:user) }
+        let(:access_token_current_token_version_nil) { described_class.new(user_current_token_version_nil.id) }
+
+        it 'token_versionがない場合は例外処理が発生する' do
+          expect { access_token_current_token_version_nil }.to raise_error(RuntimeError)
+        end
+      end
     end
 
     context 'decode' do
@@ -36,19 +45,21 @@ RSpec.describe Token::AccessToken, type: :service do
         expect(decrypt_for(access_token_decoded['sub']).to_i).to eq(user.id)
       end
 
-      it 'payload[:sub]の値が検証失敗した際nilが返る' do
-        expect(decrypt_for("#{access_token_decoded['sub']}_dummy_sub")).to be_nil
-      end
-
-      it '30分後有効期限が切れる' do
-        travel_to(30.minutes.from_now) do
-          expect { described_class.decode(access_token.token) }.to raise_error(JWT::ExpiredSignature)
+      context '異常系' do
+        it 'payload[:sub]の値が検証失敗した際nilが返る' do
+          expect(decrypt_for("#{access_token_decoded['sub']}_dummy_sub")).to be_nil
         end
-      end
 
-      it 'トークンが改竄出来ない' do
-        invalid_token = "#{access_token.token}_change_token"
-        expect { described_class.decode(invalid_token) }.to raise_error(JWT::VerificationError)
+        it '30分後有効期限が切れる' do
+          travel_to(30.minutes.from_now) do
+            expect { described_class.decode(access_token.token) }.to raise_error(JWT::ExpiredSignature)
+          end
+        end
+
+        it 'トークンが改竄出来ない' do
+          invalid_token = "#{access_token.token}_change_token"
+          expect { described_class.decode(invalid_token) }.to raise_error(JWT::VerificationError)
+        end
       end
     end
   end
