@@ -94,3 +94,11 @@ FactoryBot/SyntaxMethods:
 # Contextで使用されるべき単語のチェックを無視
 RSpec/ContextWording:
   Enabled: false
+
+# letの使用制限無視
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+# contextのネスト無視
+RSpec/NestedGroups:
+  Enabled: false
