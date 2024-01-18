@@ -102,3 +102,7 @@ RSpec/MultipleMemoizedHelpers:
 # contextのネスト無視
 RSpec/NestedGroups:
   Enabled: false
+
+# 期待値複数を有効とする
+RSpec/MultipleExpectations:
+  Enabled: false
