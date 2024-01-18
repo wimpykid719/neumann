@@ -27,7 +27,7 @@ RSpec.describe User do
       end
 
       it 'nameが51文字以上の場合エラー' do
-        u = FactoryBot.build(:user, name: 'あ'*51)
+        u = FactoryBot.build(:user, name: 'あ' * 51)
         expect(u).not_to be_valid
         expect(u.errors.full_messages_for(:name).first).to eq('ユーザ名は50文字以内で入力してください')
       end
@@ -65,7 +65,7 @@ RSpec.describe User do
       end
 
       it 'emailが256文字以上の場合エラー' do
-        u = FactoryBot.build(:user, email: 'あ'*256)
+        u = FactoryBot.build(:user, email: 'あ' * 256)
         expect(u).not_to be_valid
         expect(u.errors.full_messages_for(:email).first).to eq('メールアドレスは255文字以内で入力してください')
       end
@@ -93,7 +93,7 @@ RSpec.describe User do
       end
 
       it '73文字以上の場合エラー' do
-        expect { FactoryBot.create(:user, password: 'a'*73) }.to(raise_error do |error|
+        expect { FactoryBot.create(:user, password: 'a' * 73) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
           expect(error.message).to eq 'バリデーションに失敗しました: パスワードは72文字以内で入力してください'
         end)
