@@ -5,12 +5,8 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 },
                     format: { with: Constants::Regexps::EMAIL },
                     uniqueness: true
-  validates :password, presence: true,
-                       length: {
-                         minimum: 8,
-                         maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
-                       },
-                       allow_nil: true
+  validates :password, presence: true, length: { minimum: 8 },
+                       format: { with: Constants::Regexps::VALID_PASSWORD_REGEX }
 
   def update_token_version(token_version)
     update!(current_token_version: token_version)

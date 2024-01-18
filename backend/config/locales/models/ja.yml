@@ -5,5 +5,15 @@ ja:
     attributes:
       user:
         name: ユーザ名
-        email: メール
+        email: メールアドレス
         password: パスワード
+        password_confirmation: 確認用パスワード
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: は登録済みです
+            password:
+              invalid: は半角英数字、ハイフン、アンダーバーで入力してください
+              password_too_long: は72文字以内で入力してください
