@@ -119,12 +119,95 @@ RSpec.describe User do
           expect(error.message.split(',').first).to eq 'バリデーションに失敗しました: パスワードを入力してください'
         end)
       end
+
+      it '取り出したユーザのパスワードが空でも他のカラム値を更新可能' do
+        user = FactoryBot.create(:user)
+        # has_secure_passwordの仕様
+        # create時のインスタンスはpassword空でもカラム値の更新が可能
+        user_searched = described_class.find(user.id)
+
+        user_searched.update!(name: 'hiroki')
+        expect(user_searched.name).to eq('hiroki')
+      end
     end
   end
 
   describe 'methods' do
-    context '' do
-      it ''
+    let(:user_created) { FactoryBot.create(:user) }
+
+    context 'generate_refresh_token' do
+      it 'JWTリフレッシュトークンの発行' do
+        refresh_token = user_created.generate_refresh_token
+        expect(refresh_token.token).to be_present
+      end
+    end
+
+    context 'decode_refresh_token' do
+      it '復号化されたリフレッシュトークンが返る' do
+        refresh_token = user_created.generate_refresh_token
+        token = refresh_token.token
+        decoded_refresh_token = described_class.decode_refresh_token(token)
+        expect(decoded_refresh_token['sub']).to be_present
+      end
+    end
+
+    context 'from_refresh_token' do
+      it 'リフレッシュトークンから持ち主のユーザを取り出す' do
+        refresh_token = user_created.generate_refresh_token
+        token = refresh_token.token
+        user_searched = described_class.from_refresh_token(token)
+
+        expect(user_searched.id).to eq(user_created.id)
+      end
+    end
+
+    context 'generate_access_token' do
+      it 'JWTアクセストークンの発行' do
+        user_created.generate_refresh_token
+        access_token = user_created.generate_access_token
+        expect(access_token.token).to be_present
+      end
+
+      it 'オプションで指定した値がアクセストークンに含まれる' do
+        user_created.generate_refresh_token
+        access_token_opsions = user_created.generate_access_token({ test: 'test' })
+        token = access_token_opsions.token
+        decoded_access_token = described_class.decode_access_token(token)
+        expect(decoded_access_token['test']).to eq('test')
+      end
+    end
+
+    context 'decode_access_token' do
+      it '復号化されたアクセストークンが返る' do
+        user_created.generate_refresh_token
+        access_token = user_created.generate_access_token
+        token = access_token.token
+        decoded_access_token = described_class.decode_access_token(token)
+        expect(decoded_access_token['sub']).to be_present
+      end
+    end
+
+    context 'from_access_token' do
+      it 'アクセストークンから持ち主のユーザを取り出す' do
+        user_created.generate_refresh_token
+        access_token = user_created.generate_access_token
+        token = access_token.token
+        user_searched = described_class.from_access_token(token)
+
+        expect(user_searched.id).to eq(user_created.id)
+      end
+    end
+
+    context 'enforce_password_validation' do
+      it 'パスワードのバリデーションを強制する' do
+        user_searched = described_class.find(user_created.id)
+        user_searched.enforce_password_validation
+
+        expect { user_searched.update!(name: 'hiroki') }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message.split(',').first).to eq 'バリデーションに失敗しました: パスワードを入力してください'
+        end)
+      end
     end
   end
 end
