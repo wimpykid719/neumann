@@ -106,3 +106,7 @@ RSpec/NestedGroups:
 # 期待値複数を有効とする
 RSpec/MultipleExpectations:
   Enabled: false
+
+# 最大コード文字列を緩める
+RSpec/ExampleLength:
+  Max: 20
