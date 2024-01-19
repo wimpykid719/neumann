@@ -18,7 +18,7 @@ module Token
 
     # 認証も兼ねてトークンからユーザを取り出す
     module ClassMethods
-      include UserAuth::TokenConcern
+      include TokenConcern
 
       def decode_access_token(token)
         Token::AccessToken.decode(token)

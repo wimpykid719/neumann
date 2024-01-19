@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Token::AccessToken, type: :service do
   describe 'AccessToken' do
-    include UserAuth::TokenConcern
+    include TokenConcern
 
     let(:user) { FactoryBot.create(:user, current_token_version: new_token_version) }
     let!(:access_token) { described_class.new(user.id) }

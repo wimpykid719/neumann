@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Token::RefreshToken, type: :service do
   describe 'RefreshToken' do
-    include UserAuth::TokenConcern
+    include TokenConcern
 
     let(:user) { FactoryBot.create(:user) }
     let!(:refresh_token) { described_class.new(user.id) }

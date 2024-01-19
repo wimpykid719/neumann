@@ -2,7 +2,7 @@ require 'jwt'
 
 module Token
   class RefreshToken
-    include UserAuth::TokenConcern
+    include TokenConcern
 
     attr_reader :payload, :token
 
