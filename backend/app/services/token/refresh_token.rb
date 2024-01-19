@@ -39,7 +39,7 @@ module Token
       {
         user_claim => encrypt_for(user_id),
         exp: token_expiration,
-        version: new_token_version
+        version: get_token_version(user_id)
       }
     end
   end

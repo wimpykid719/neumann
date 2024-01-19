@@ -25,6 +25,11 @@ RSpec.describe Token::RefreshToken, type: :service do
       it 'userモデルのcurrent_token_versionにtokenバージョンが保存されている' do
         expect(user.reload.current_token_version).to eq(refresh_token.payload[:version])
       end
+
+      it 'リフレッシュトークン更新時すでに存在するtokenバージョンを使用する' do
+        refresh_token_updated = described_class.new(user.id)
+        expect(user.reload.current_token_version).to eq(refresh_token_updated.payload[:version])
+      end
     end
 
     context 'decode' do
