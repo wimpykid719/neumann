@@ -30,6 +30,13 @@ RSpec.describe Token::AccessToken, type: :service do
         expect(access_token.lifetime_text).to eq('30分')
       end
 
+      it 'optionsで値を設定できる' do
+        options = { test: 'test' }
+        access_token_opsions = described_class.new(user.id, options:)
+        decoded_access_token = described_class.decode(access_token_opsions.token)
+        expect(decoded_access_token['test']).to eq('test')
+      end
+
       context '異常系' do
         let(:user_current_token_version_nil) { FactoryBot.create(:user) }
         let(:access_token_current_token_version_nil) { described_class.new(user_current_token_version_nil.id) }
