@@ -33,7 +33,11 @@ RSpec.describe Token::RefreshToken, type: :service do
     end
 
     context 'decode' do
-      it 'payload[:sub]の値を複合化出来る' do
+      it '復号化出来る' do
+        expect(refresh_token_decoded.transform_keys(&:to_sym)).to eq(refresh_token.payload)
+      end
+
+      it 'payload[:sub]の値を復号化出来る' do
         expect(decrypt_for(refresh_token_decoded['sub']).to_i).to eq(user.id)
       end
 
