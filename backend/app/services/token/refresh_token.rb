@@ -14,7 +14,7 @@ module Token
 
     class << self
       def decode(token)
-        JWT.decode(token.to_s, UserAuthConfig.token_secret_signature_key, true).first
+        JWT.decode(token.to_s, secret_key, true).first
       end
     end
 
