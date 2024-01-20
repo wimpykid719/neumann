@@ -41,6 +41,10 @@ module TokenConcern
     nil
   end
 
+  def get_token_version(user_id)
+    User.find(user_id).current_token_version || new_token_version
+  end
+
   def new_token_version
     Digest::MD5.hexdigest(SecureRandom.uuid)
   end
