@@ -238,5 +238,34 @@ RSpec.describe User do
         end)
       end
     end
+
+    context 'logged_in_user' do
+      it 'メール・パスワードが一致するユーザを返す' do
+        login_user = described_class.logged_in_user(email: user_created.email, password: '1111111q')
+        expect(login_user.email).to eq(user_created.email)
+      end
+
+      context '異常系' do
+        it 'メールが一致しない' do
+          expect { described_class.logged_in_user(email: 'no_exist_email', password: '1111111q') }
+            .to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'パスワードが一致しない' do
+          expect { described_class.logged_in_user(email: user_created.email, password: 'no_match_password') }
+            .to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'メールがnil' do
+          expect { described_class.logged_in_user(email: nil, password: '1111111q') }
+            .to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'パスワードがnil' do
+          expect { described_class.logged_in_user(email: user_created.email, password: nil) }
+            .to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
   end
 end

@@ -19,6 +19,15 @@ class User < ApplicationRecord
     @enforce_password_validation = true
   end
 
+  class << self
+    def logged_in_user(email:, password:)
+      user_registered = User.find_by(email:)
+      raise UserAuthConfig.not_found_exception_class unless user_registered&.authenticate(password)
+
+      user_registered
+    end
+  end
+
   private
 
   def password_required?
