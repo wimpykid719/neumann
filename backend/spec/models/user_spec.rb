@@ -159,6 +159,20 @@ RSpec.describe User do
 
         expect(user_searched.id).to eq(user_created.id)
       end
+
+      context '異常系' do
+        it 'token_versionがDBと異なる場合、例外処理発生' do
+          refresh_token = user_created.generate_refresh_token
+          token = refresh_token.token
+
+          user_created.update!(current_token_version: 'changed_version')
+
+          expect { described_class.from_refresh_token(token) }.to(raise_error do |error|
+            expect(error).to be_a(Constants::Exceptions::TokenVersion)
+            expect(error.message).to eq 'パスワードに変更がありました。再度ログインして下さい。'
+          end)
+        end
+      end
     end
 
     context 'generate_access_token' do
@@ -195,6 +209,21 @@ RSpec.describe User do
         user_searched = described_class.from_access_token(token)
 
         expect(user_searched.id).to eq(user_created.id)
+      end
+
+      context '異常系' do
+        it 'token_versionがDBと異なる場合、例外処理発生' do
+          user_created.generate_refresh_token
+          access_token = user_created.generate_access_token
+          token = access_token.token
+
+          user_created.update!(current_token_version: 'changed_version')
+
+          expect { described_class.from_access_token(token) }.to(raise_error do |error|
+            expect(error).to be_a(Constants::Exceptions::TokenVersion)
+            expect(error.message).to eq 'パスワードに変更がありました。再度ログインして下さい。'
+          end)
+        end
       end
     end
 
