@@ -85,7 +85,6 @@ ja:
   errors:
     format: "%{attribute}%{message}"
     messages:
-      invalid_password: は半角英数字・ハイフン・アンダーバーが使えます
       accepted: を受諾してください
       blank: を入力してください
       confirmation: と%{attribute}の入力が一致しません
@@ -114,6 +113,7 @@ ja:
     template:
       body: 次の項目を確認してください
       header: "%{model}に%{count}個のエラーが発生しました"
+      password_changed: パスワードに変更がありました。再度ログインして下さい。
   helpers:
     select:
       prompt: 選択してください
