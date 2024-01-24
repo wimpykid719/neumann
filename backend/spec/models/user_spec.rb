@@ -140,6 +140,12 @@ RSpec.describe User do
         refresh_token = user_created.generate_refresh_token
         expect(refresh_token.token).to be_present
       end
+
+      it 'current_token_versionが保存される' do
+        expect(user_created.current_token_version).to be_nil
+        refresh_token = user_created.generate_refresh_token
+        expect(user_created.reload.current_token_version).to eq(refresh_token.payload[:version])
+      end
     end
 
     context 'decode_refresh_token' do
