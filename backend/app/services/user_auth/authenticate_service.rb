@@ -1,5 +1,7 @@
 module UserAuth
   module AuthenticateService
+    include UserAuthConcern
+
     # 認証（トークンの持ち主を判定）
     # 認証済みのユーザーが居ればtrue、存在しない場合は401を返す
     def authenticate_user
@@ -27,12 +29,6 @@ module UserAuth
       return nil unless token_from_request_headers
 
       @current_user ||= fetch_user_from_access_token
-    end
-
-    # 認証エラー
-    def unauthorized_user
-      cookies.delete(UserAuthConfig.session_key)
-      head(:unauthorized)
     end
   end
 end
