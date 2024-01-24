@@ -16,6 +16,10 @@ module Token
       Token::RefreshToken.new(id)
     end
 
+    def delete_token_version
+      update!(current_token_version: nil)
+    end
+
     # 認証も兼ねてトークンからユーザを取り出す
     module ClassMethods
       include TokenConcern
