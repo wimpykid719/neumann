@@ -12,7 +12,7 @@ Next.jsとRailsの組み合わせでサービスを作成して見たかった�
 
 ```bash
 # 初回起動時のコマンド
-docker-compose -f docker-compose.backend.yml -p backend up --build
+docker compose -f docker-compose.backend.yml -p backend up --build
 ```
 
 このコマンド一つでいい感じに環境を作ってサーバを起動してくれる。
@@ -29,7 +29,7 @@ docker-compose -f docker-compose.backend.yml -p backend up --build
 
 ```yaml
 # ビルド後こちらで起動する
-docker-compose -f docker-compose.backend.yml -p backend up
+docker compose -f docker-compose.backend.yml -p backend up
 
 # コンテナに入る際は
 docker exec -it backend-rails-api /bin/bash
@@ -38,7 +38,7 @@ docker exec -it backend-rails-api /bin/bash
 rails dbconsole
 
 # コンテナの削除
-docker-compose -f docker-compose.backend.yml -p backend rm
+docker compose -f docker-compose.backend.yml -p backend rm
 ```
 
 データベースの設定
@@ -147,20 +147,20 @@ Next.jsの環境を作るコンテナ
 
 ```bash
 # 初回起動時
-docker-compose -f docker-compose.frontend.yml -p frontend up --build
+docker compose -f docker-compose.frontend.yml -p frontend up --build
 ```
 
 環境構築後に使用するコマンド群
 
 ```bash
 # ビルド後こちらで起動する
-docker-compose -f docker-compose.frontend.yml -p frontend up
+docker compose -f docker-compose.frontend.yml -p frontend up
 
 # コンテナに入る際は
 docker exec -it frontend-nextjs /bin/bash
 
 # コンテナの削除
-docker-compose -f docker-compose.frontend.yml -p frontend rm
+docker compose -f docker-compose.frontend.yml -p frontend rm
 ```
 
 これで環境構築が出来る。
