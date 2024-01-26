@@ -1,4 +1,4 @@
-FROM node:16.15.0
+FROM node:21
 WORKDIR /frontend
 
 # ワイルドカードで不確定の場合がある際は必ず一つは存在するファイルをCOPYする必要がある。
