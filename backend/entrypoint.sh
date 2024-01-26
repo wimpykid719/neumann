@@ -8,7 +8,7 @@ bundle exec rails db:migrate
 if [ ! -e "/backend/config/routes.rb" ]; then
   echo 'rails new APIモード を実行する'
   # --skip入れないとpgのgemないってエラーが出る
-  rails new . --force --api --database=postgresql --skip-git --skip-bundle
+  rails new . --force --api --database=mysql --skip-git --skip-bundle
   bundle install
 fi
 

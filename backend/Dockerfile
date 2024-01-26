@@ -3,7 +3,7 @@ WORKDIR /backend
 RUN set -eux && \
     apt-get update -qq && \
     apt-get install -y \
-      postgresql-client
+      default-mysql-client
 
 
 COPY Gemfile Gemfile.lock* /backend/
