@@ -3,6 +3,7 @@ set -e
 
 if [ ! -e "/frontend/package.json" ]; then
   echo 'nextjsを新規インストール'
+  rm -rf neumann-client/.gitkeep
   npm init -y
   npm install create-next-app
   npx create-next-app@latest neumann-client --ts --tailwind \
