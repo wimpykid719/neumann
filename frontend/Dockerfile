@@ -1,8 +1,7 @@
 FROM node:21
 WORKDIR /frontend
 
-# ワイルドカードで不確定の場合がある際は必ず一つは存在するファイルをCOPYする必要がある。
-COPY Dockerfile /neumann-client/package.json* /neumann-client/package-lock.json* /frontend/
+COPY /neumann-client /frontend/
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
