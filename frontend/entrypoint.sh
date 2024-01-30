@@ -18,5 +18,6 @@ if [ ! -d "/frontend/neumann-client/node_modules" ]; then
   npm install
 fi
 
-# Then exec the container's main process (what's set as CMD in the Dockerfile).
+# Then exec the container's main process (what's set as CMD in the Dockerfile).'
+cd neumann-client
 exec "$@"
