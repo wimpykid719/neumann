@@ -5,21 +5,23 @@ services:
   db:
     image: mysql:8.0
     environment:
-      MYSQL_DATABASE: neumann_development
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
       TZ: Asia/Tokyo
     ports:
-      - '15432:3306'
+      - "15432:$MYSQL_PORT"
     # ローカル側が3306だとtableplus等のクライアントツールから接続が出来ないため
     # stopでコンテナを落とすならDBのデータは消えないそうなのであえて永続化しない
 
   backend:
+    environment:
+      FRONT_ORIGINS: "$FRONT_DOMAIN:$FRONT_PORT"
     build:
       context: ./backend/
       dockerfile: Dockerfile
     container_name: backend-rails-api
     ports:
-      - '8080:8080'
+      - "$BACK_PORT:$BACK_PORT"
     working_dir: /backend
     # こいつのおかげでctr+cした際にrails serverを切ってからコンテナを終了してくれる
     # 137のエラーを解決してくれている

@@ -3,6 +3,8 @@ version: '3'
 
 services:
   frontend:
+    environment:
+      API_URL: "$BACK_URL:$BACK_PORT"
     build:
       context: ./frontend/
       dockerfile: Dockerfile
@@ -12,7 +14,7 @@ services:
     volumes:
       - ./frontend:/frontend
     ports:
-      - '3000:3000'
+      - "$FRONT_PORT:$FRONT_PORT"
     # docker run -iを意味する
     stdin_open: true
     # -tを意味する
