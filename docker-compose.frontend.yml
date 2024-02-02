@@ -4,7 +4,7 @@ version: '3'
 services:
   frontend:
     environment:
-      API_URL: "$BACK_URL:$BACK_PORT"
+      NEXT_PUBLIC_API_URL: "$BACK_URL:$BACK_PORT"
     build:
       context: ./frontend/
       dockerfile: Dockerfile
