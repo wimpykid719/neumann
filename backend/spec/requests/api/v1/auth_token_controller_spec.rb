@@ -6,6 +6,21 @@ RSpec.describe Api::V1::AuthTokenController do
 
   let(:user) { FactoryBot.create(:user) }
 
+  describe '不正なリクエスト' do
+    context '異常系' do
+      it 'XMLHttpRequestがヘッダーに含まれていない、ステータスコード/403、エラーレスポンスが返る' do
+        post api_v1_auth_token_index_path, params: { auth: { email: user.email, password: '1111111q' } }
+
+        expect(response).to have_http_status(:forbidden)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('不正なリクエストです。')
+      end
+    end
+  end
+
   describe 'POST #create' do
     context '正常系' do
       it 'ログイン成功事、ステータスコード/201が返る' do
@@ -30,10 +45,14 @@ RSpec.describe Api::V1::AuthTokenController do
     end
 
     context '異常系' do
-      it 'パスワードが異なる場合、ステータスコード404が返る' do
+      it 'パスワードが異なる場合、ステータスコード/404、エラーレスポンスが返る' do
         post api_v1_auth_token_index_path, **headers, params: { auth: { email: user.email, password: 'wrong_password' } }
 
         expect(response).to have_http_status(:not_found)
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('メールアドレスまたは、パスワードが間違っています。')
       end
     end
   end
@@ -95,15 +114,19 @@ RSpec.describe Api::V1::AuthTokenController do
 
         expect(response).to have_http_status(:unauthorized)
         json = response.parsed_body
-        error = json['errors'].first
 
-        expect(error['message']).to eq('パスワードに変更がありました。再度ログインして下さい。')
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('パスワードに変更がありました。再度ログインして下さい。')
       end
 
-      it 'cookieにリフレッシュトークンがない場合、ステータスコード/401が返る' do
+      it 'cookieにリフレッシュトークンがない場合、ステータスコード/401、エラーレスポンスが返る' do
         post refresh_api_v1_auth_token_index_path, **headers
 
         expect(response).to have_http_status(:unauthorized)
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
       end
     end
   end

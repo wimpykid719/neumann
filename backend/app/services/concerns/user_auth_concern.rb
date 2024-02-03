@@ -5,12 +5,8 @@ module UserAuthConcern
     cookies.delete(UserAuthConfig.session_key)
   end
 
-  def unauthorized_user(message = nil)
+  def unauthorized_user(message = I18n.t('errors.request.unauthorized'))
     delete_session
-    if message.present?
-      render(status: :unauthorized, json: { errors: [{ message: }] })
-    else
-      head(:unauthorized)
-    end
+    render status: :unauthorized, json: { error: { message: } }
   end
 end

@@ -113,7 +113,11 @@ ja:
     template:
       body: 次の項目を確認してください
       header: "%{model}に%{count}個のエラーが発生しました"
+    request:
       password_changed: パスワードに変更がありました。再度ログインして下さい。
+      unauthorized: 認証に失敗しました。再度ログインをして下さい。
+      forbidden: 不正なリクエストです。
+      not_found: メールアドレスまたは、パスワードが間違っています。
   helpers:
     select:
       prompt: 選択してください

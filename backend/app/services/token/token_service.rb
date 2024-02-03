@@ -32,7 +32,7 @@ module Token
         payload = decode_access_token(token)
         user = find_user_from_payload(payload)
         unless verify_token_version?(payload['version'], user)
-          raise Constants::Exceptions::TokenVersion, I18n.t('errors.template.password_changed')
+          raise Constants::Exceptions::TokenVersion, I18n.t('errors.request.password_changed')
         end
 
         user
@@ -46,7 +46,7 @@ module Token
         payload = decode_refresh_token(token)
         user = find_user_from_payload(payload)
         unless verify_token_version?(payload['version'], user)
-          raise Constants::Exceptions::TokenVersion, I18n.t('errors.template.password_changed')
+          raise Constants::Exceptions::TokenVersion, I18n.t('errors.request.password_changed')
         end
 
         user
