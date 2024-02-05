@@ -4,6 +4,7 @@ import { postAuthToken } from '@/lib/wrapped-featch/login-request'
 import { LoginValidation, loginValidationSchema } from '@/lib/zod-schema/login-validation'
 import app from '@/text/app.json'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
 export default function LoginForm() {
@@ -33,6 +34,24 @@ export default function LoginForm() {
             <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
               ログイン
             </h1>
+            <button
+              type='button'
+              onClick={() => {}}
+              className='w-full hover:bg-gray-50 border border-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700'
+            >
+              <Image
+                src='/google-color.svg'
+                alt='Google Logo'
+                className='w-5 h-5 mr-2 inline'
+                width={16}
+                height={16}
+                priority
+              />
+              Login With Google
+            </button>
+            <div className='border border-x-0 border-t-0 border-gray-900 relative'>
+              <span className='p-3 bg-white absolute right-2/4 translate-x-1/2 -translate-y-1/2'>or</span>
+            </div>
             <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit(postAuthToken)}>
               <div>
                 <label htmlFor='email' className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
