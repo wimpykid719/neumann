@@ -50,7 +50,7 @@ export default function LoginForm() {
               Login With Google
             </button>
             <div className='border border-x-0 border-t-0 border-gray-900 relative'>
-              <span className='p-3 bg-white absolute right-2/4 translate-x-1/2 -translate-y-1/2'>or</span>
+              <span className='px-3  bg-white absolute right-2/4 translate-x-1/2 -translate-y-1/2'>or</span>
             </div>
             <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit(postAuthToken)}>
               <div>
