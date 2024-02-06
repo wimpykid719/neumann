@@ -1,29 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
         primary: {
-          100: '#ffe5e7',
-          200: '#ffb3b7',
-          300: '#ff8088',
-          400: '#ff4d58',
-          500: '#ff0211',
+          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
         },
         secondary: {
-          500: '#4DC9FF',
-          600: '#45b4e5',
+          DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
         },
         success: {
-          500: '#09BAB5',
+          DEFAULT: 'rgb(var(--color-success) / <alpha-value>)',
         },
         danger: {
-          500: '#ff0211',
+          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
         },
         warning: {
-          500: '#FFB035',
+          DEFAULT: 'rgb(var(--color-warning) / <alpha-value>)',
         },
       },
     },

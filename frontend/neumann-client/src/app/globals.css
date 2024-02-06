@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --color-primary: 255 2 17;
+  --color-secondary: 77 201 255;
+  --color-success: 9 186 181;
+  --color-warning: 255 176 53;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: 247 110 118;
+    --color-secondary: 110 206 247;
+    --color-success: 22 208 202;
+    --color-warning: 255 196 105;
+  }
+}
+
+@layer components {
+  .main-bg-color {
+    @apply bg-gray-50 dark:bg-gray-900;
+  }
+  .sub-bg-color {
+    @apply bg-white dark:bg-gray-700;
+  }
+  .main-text-color {
+    @apply text-gray-900 dark:text-gray-50;
+  }
+  .sub-text-color {
+    @apply text-gray-50 dark:text-gray-900;
+  }
+  .main-border-color {
+    @apply border-gray-900 dark:border-gray-50;
+  }
+}
+
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

@@ -19,9 +19,9 @@ export default function LoginForm() {
   })
 
   return (
-    <section className='bg-gray-50 dark:bg-gray-900'>
+    <section className='main-bg-color main-text-color'>
       <div className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
-        <a href='#' className='flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white'>
+        <a href='#' className='flex items-center mb-6 text-2xl font-semibold main-text-color'>
           <img
             className='w-8 h-8 mr-2'
             src='https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg'
@@ -29,15 +29,13 @@ export default function LoginForm() {
           />
           {app.title}
         </a>
-        <div className='w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700'>
+        <div className='w-full rounded-lg shadow dark:border dark:border-gray-600 md:mt-0 sm:max-w-md xl:p-0 sub-bg-color'>
           <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
-            <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
-              ログイン
-            </h1>
+            <h1 className='text-xl font-bold leading-tight tracking-tight md:text-2xl'>ログイン</h1>
             <button
               type='button'
               onClick={() => {}}
-              className='w-full hover:bg-gray-50 border border-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700'
+              className='w-full border font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:opacity-70 sub-bg-color main-border-color'
             >
               <Image
                 src='/google-color.svg'
@@ -49,12 +47,12 @@ export default function LoginForm() {
               />
               Login With Google
             </button>
-            <div className='border border-x-0 border-t-0 border-gray-900 relative'>
-              <span className='px-3  bg-white absolute right-2/4 translate-x-1/2 -translate-y-1/2'>or</span>
+            <div className='border border-x-0 border-t-0 relative main-border-color'>
+              <span className='px-3 absolute right-2/4 translate-x-1/2 -translate-y-1/2 sub-bg-color'>or</span>
             </div>
             <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit(postAuthToken)}>
               <div>
-                <label htmlFor='email' className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
+                <label htmlFor='email' className='block mb-2 text-sm font-medium'>
                   メールアドレス
                 </label>
                 <input
@@ -63,32 +61,28 @@ export default function LoginForm() {
                   name='email'
                   id='email'
                   className={`
-                    bg-gray-50 border
+                    border
                     ${
                       errors.email?.message
-                        ? 'border-primary-500 focus:ring-primary-500 focus:border-primary-500'
-                        : 'border-gray-900 focus:ring-secondary-600 focus:border-secondary-600'
+                        ? 'focus:ring-primary focus:border-primary border-primary '
+                        : 'focus:ring-secondary focus:border-secondary border-gray-900 dark:border-gray-400'
                     }
-                    text-gray-900
                     sm:text-sm
                     rounded-lg
                     focus:ring-1
                     focus:outline-none
                     block
                     w-full p-2.5
-                    dark:bg-gray-700
-                    dark:border-gray-600
-                    dark:placeholder-gray-400
-                    dark:text-white
-                    dark:focus:ring-blue-500
-                    dark:focus:border-blue-500
+                  placeholder-gray-400
+                  bg-gray-50
+                  dark:bg-gray-500
                   `}
                   placeholder='name@company.com'
                 />
-                {errors.email?.message && <p className='text-sm text-primary-500'>{errors.email?.message}</p>}
+                {errors.email?.message && <p className='text-sm text-primary'>{errors.email?.message}</p>}
               </div>
               <div>
-                <label htmlFor='password' className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
+                <label htmlFor='password' className='block mb-2 text-sm font-medium'>
                   パスワード
                 </label>
                 <input
@@ -98,43 +92,39 @@ export default function LoginForm() {
                   id='password'
                   placeholder='••••••••'
                   className={`
-                    bg-gray-50 border
-                    ${
-                      errors.password?.message
-                        ? 'border-primary-500 focus:ring-primary-500 focus:border-primary-500'
-                        : 'border-gray-900 focus:ring-secondary-600 focus:border-secondary-600'
-                    }
-                    text-gray-900
-                    sm:text-sm
-                    rounded-lg
-                    focus:ring-1
-                    focus:outline-none
-                    block
-                    w-full p-2.5
-                    dark:bg-gray-700
-                    dark:border-gray-600
-                    dark:placeholder-gray-400
-                    dark:text-white
-                    dark:focus:ring-blue-500
-                    dark:focus:border-blue-500
+                  border
+                  ${
+                    errors.password?.message
+                      ? 'focus:ring-primary focus:border-primary border-primary '
+                      : 'focus:ring-secondary focus:border-secondary border-gray-900 dark:border-gray-400'
+                  }
+                  sm:text-sm
+                  rounded-lg
+                  focus:ring-1
+                  focus:outline-none
+                  block
+                  w-full p-2.5
+                placeholder-gray-400
+                bg-gray-50
+                dark:bg-gray-500
                   `}
                 />
-                {errors.password?.message && <p className='text-sm text-primary-500'>{errors.password?.message}</p>}
+                {errors.password?.message && <p className='text-sm text-primary'>{errors.password?.message}</p>}
               </div>
-              <div className='flex items-center justify-between'>
-                <a href='#' className='text-sm font-medium text-primary-600 hover:underline dark:text-primary-500'>
+              <div className='flex items-center justify-between text-gray-500'>
+                <a href='#' className='text-sm font-medium hover:underline'>
                   パスワードを忘れた
                 </a>
               </div>
               <button
                 type='submit'
-                className='w-full text-white bg-secondary-500 hover:bg-secondary-600 focus:ring-4 focus:outline-none focus:ring-secondary-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
+                className='w-full bg-secondary hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-secondary focus:opacity-70 font-medium rounded-lg text-sm px-5 py-2.5 text-center sub-text-color'
               >
                 ログイン
               </button>
-              <p className='text-sm font-light text-gray-500 dark:text-gray-400'>
+              <p className='text-sm font-light text-gray-500'>
                 アカウントを持っていない?{' '}
-                <a href='#' className='font-medium text-primary-600 hover:underline dark:text-primary-500'>
+                <a href='#' className='font-medium text-secondary hover:underline'>
                   アカウント作成
                 </a>
               </p>
