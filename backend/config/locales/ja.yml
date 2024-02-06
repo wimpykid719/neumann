@@ -117,7 +117,8 @@ ja:
       password_changed: パスワードに変更がありました。再度ログインして下さい。
       unauthorized: 認証に失敗しました。再度ログインをして下さい。
       forbidden: 不正なリクエストです。
-      not_found: メールアドレスまたは、パスワードが間違っています。
+      failed_login: メールアドレスまたは、パスワードが間違っています。
+      not_found_user: 存在しないユーザです。
   helpers:
     select:
       prompt: 選択してください

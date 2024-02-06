@@ -1,8 +1,9 @@
 class Api::V1::AuthTokenController < ApplicationController
   include UserAuth::SessionService
+  include LoginResponseConcern
 
   # 各アクションでの例外をここで拾う
-  rescue_from UserAuthConfig.not_found_exception_class, with: :status_not_found
+  rescue_from UserAuthConfig.not_found_exception_class, with: :status_failed_login
   rescue_from Constants::Exceptions::TokenVersion do |error|
     unauthorized_user(error.message)
   end
@@ -12,23 +13,14 @@ class Api::V1::AuthTokenController < ApplicationController
   # ログイン
   def create
     delete_session
-
     authenticated_user = User.logged_in_user(email: auth_params['email'], password: auth_params['password'])
-    refresh_token = authenticated_user.generate_refresh_token
-    access_token = authenticated_user.generate_access_token
 
-    refresh_token_to_cookie(refresh_token)
-
-    render status: :created, json: login_response(access_token)
+    render status: :created, json: login_response_with_cookie(authenticated_user)
   end
 
   # リフレッシュ
   def refresh
-    refresh_token = session_user.generate_refresh_token
-    access_token = session_user.generate_access_token
-
-    refresh_token_to_cookie(refresh_token)
-    render status: :created, json: login_response(access_token)
+    render status: :created, json: login_response_with_cookie(session_user)
   end
 
   # ログアウト
