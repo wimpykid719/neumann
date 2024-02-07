@@ -89,14 +89,11 @@ async function http<T>(path: string, config: RequestInit): Promise<T | FetchErro
   const res = await fetch(request)
 
   if (!res.ok) {
-    let error = {}
     try {
       const data = await res.json()
-      error = new FetchError(data.error.message, res.status)
+      return new FetchError(data.error.message, res.status)
     } catch {
-      error = new FetchError(requestErrorText.internal_server_error, res.status)
-    } finally {
-      throw error
+      return new FetchError(requestErrorText.internal_server_error, res.status)
     }
   }
 
