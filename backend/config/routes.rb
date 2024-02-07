@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api, format: "json" do
     namespace :v1 do
-      resources :users, only: [:index, :create]
+      resources :users, only: [:show, :create]
 
       resources :auth_token, only: [:create] do
         post :refresh, on: :collection
