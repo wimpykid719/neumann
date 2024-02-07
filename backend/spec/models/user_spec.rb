@@ -81,42 +81,42 @@ RSpec.describe User do
       it '8文字の場合エラー' do
         expect { FactoryBot.create(:user, password: '1234567') }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message).to eq 'バリデーションに失敗しました: パスワードは8文字以上で入力してください'
+          expect(error.message).to eq 'パスワードは8文字以上で入力してください'
         end)
       end
 
       it '確認用パスワードが異なる場合エラー' do
         expect { FactoryBot.create(:user, password: '12345678', password_confirmation: '12345679') }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message).to eq 'バリデーションに失敗しました: 確認用パスワードとパスワードの入力が一致しません'
+          expect(error.message).to eq '確認用パスワードとパスワードの入力が一致しません'
         end)
       end
 
       it '73文字以上の場合エラー' do
         expect { FactoryBot.create(:user, password: 'a' * 73) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message).to eq 'バリデーションに失敗しました: パスワードは72文字以内で入力してください'
+          expect(error.message).to eq 'パスワードは72文字以内で入力してください'
         end)
       end
 
       it '不正な形式は登録不可' do
         expect { FactoryBot.create(:user, password: '@{}$$%%&&[]') }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message).to eq 'バリデーションに失敗しました: パスワードは半角英数字、ハイフン、アンダーバーで入力してください'
+          expect(error.message).to eq 'パスワードは半角英数字、ハイフン、アンダーバーで入力してください'
         end)
       end
 
       it 'nilの場合エラー' do
         expect { FactoryBot.create(:user, password: nil) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message.split(',').first).to eq 'バリデーションに失敗しました: パスワードを入力してください'
+          expect(error.message.split(',').first).to eq 'パスワードを入力してください'
         end)
       end
 
       it '空の場合エラー' do
         expect { FactoryBot.create(:user, password: '') }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message.split(',').first).to eq 'バリデーションに失敗しました: パスワードを入力してください'
+          expect(error.message.split(',').first).to eq 'パスワードを入力してください'
         end)
       end
 
@@ -240,7 +240,7 @@ RSpec.describe User do
 
         expect { user_searched.update!(name: 'hiroki') }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message.split(',').first).to eq 'バリデーションに失敗しました: パスワードを入力してください'
+          expect(error.message.split(',').first).to eq 'パスワードを入力してください'
         end)
       end
     end
