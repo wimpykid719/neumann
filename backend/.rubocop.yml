@@ -110,3 +110,7 @@ RSpec/MultipleExpectations:
 # 最大コード文字列を緩める
 RSpec/ExampleLength:
   Max: 20
+
+# letの最大文字列を緩める
+Layout/LineLength:
+  Max: 150
