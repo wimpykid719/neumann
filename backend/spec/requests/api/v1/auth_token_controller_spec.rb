@@ -2,9 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::AuthTokenController do
   include TokenConcern
-  include_context 'requests'
-
-  let(:user) { FactoryBot.create(:user) }
+  include_context 'user_authorities'
 
   describe '不正なリクエスト' do
     context '異常系' do
