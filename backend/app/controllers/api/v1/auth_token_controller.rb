@@ -31,23 +31,6 @@ class Api::V1::AuthTokenController < ApplicationController
 
   private
 
-  # refresh_tokenをcookieにセットする
-  def refresh_token_to_cookie(refresh_token)
-    payload = refresh_token.payload
-
-    cookies[UserAuthConfig.session_key] = {
-      value: refresh_token.token,
-      expires: Time.zone.at(payload[:exp]),
-      secure: Rails.env.production?,
-      http_only: true
-    }
-  end
-
-  # ログイン時のデフォルトレスポンス
-  def login_response(access_token)
-    { token: access_token.token }
-  end
-
   def auth_params
     params.require(:auth).permit(:email, :password)
   end
