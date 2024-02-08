@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "debug": "node inspect node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
