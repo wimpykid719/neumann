@@ -1,10 +1,10 @@
 'use client'
 
+import GoogleIcon from '@/components/common/icon/GoogleIcon'
 import { postAuthToken } from '@/lib/wrappedFeatch/loginRequest'
 import { LoginValidation, loginValidationSchema } from '@/lib/zodSchema/loginValidation'
 import app from '@/text/app.json'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
 export default function LoginForm() {
@@ -32,14 +32,7 @@ export default function LoginForm() {
             onClick={() => {}}
             className='w-full border font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:opacity-70 sub-bg-color main-border-color'
           >
-            <Image
-              src='/google-color.svg'
-              alt='Google Logo'
-              className='w-5 h-5 mr-2 inline'
-              width={16}
-              height={16}
-              priority
-            />
+            <GoogleIcon className='w-5 h-5 mr-2 inline' />
             Login With Google
           </button>
           <div className='border border-x-0 border-t-0 relative main-border-color'>
