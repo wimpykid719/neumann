@@ -1,0 +1,50 @@
+'use client'
+
+import Toast from '@/components/common/Toast'
+import { createContext, useContext, useRef, useState } from 'react'
+
+type ToastContext = {
+  showToast: (message: string) => void
+  closeToast: () => void
+}
+
+export const ToastContext = createContext<ToastContext>({
+  showToast: () => {},
+  closeToast: () => {},
+})
+
+export const useToast = () => {
+  return useContext(ToastContext)
+}
+
+export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
+  const [toastMessage, setToastMessage] = useState<string>('')
+  const [isShowToast, setShowToast] = useState<boolean>(false)
+  const timer = useRef<ReturnType<typeof setTimeout>>()
+
+  const showToast = (message: string) => {
+    // すでに実行されているsetTimeout()をキャンセルする
+    if (timer.current) {
+      clearTimeout(timer.current)
+    }
+
+    setToastMessage(message)
+    setShowToast(true)
+    timer.current = setTimeout(() => {
+      setShowToast(false)
+    }, 5000)
+  }
+
+  const closeToast = () => {
+    // すでに実行されているsetTimeout()をキャンセルする
+    clearTimeout(timer.current)
+    setShowToast(false)
+  }
+
+  return (
+    <ToastContext.Provider value={{ showToast, closeToast }}>
+      <Toast isShowToast={isShowToast} message={toastMessage} closeToast={closeToast} />
+      {children}
+    </ToastContext.Provider>
+  )
+}

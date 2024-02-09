@@ -1,5 +1,6 @@
 'use client'
 
+import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { SignupData, postUserCreate } from '@/lib/wrappedFeatch/signupRequest'
 import { SignupValidation, SignupValidationSchema } from '@/lib/zodSchema/signupValidation'
@@ -8,16 +9,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
-const createUser = async (data: SignupData) => {
-  const res = await postUserCreate(data)
-  if (res instanceof FetchError) {
-    console.log(res.message)
-  } else {
-    console.log(res.token)
-  }
-}
-
 export default function SignupForm() {
+  const { showToast } = useToast()
+
   const {
     register,
     handleSubmit,
@@ -27,6 +21,15 @@ export default function SignupForm() {
     shouldUnregister: false,
     resolver: zodResolver(SignupValidationSchema),
   })
+
+  const createUser = async (data: SignupData) => {
+    const res = await postUserCreate(data)
+    if (res instanceof FetchError) {
+      showToast(res.message)
+    } else {
+      console.log(res.token)
+    }
+  }
 
   return (
     <section className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
