@@ -1,4 +1,4 @@
-import * as fetch from '@/lib/wrapped-featch'
+import * as fetch from '@/lib/wrappedFeatch'
 
 export type SignupData = {
   name: string

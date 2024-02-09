@@ -1,7 +1,7 @@
 'use client'
 
-import { postAuthToken } from '@/lib/wrapped-featch/login-request'
-import { LoginValidation, loginValidationSchema } from '@/lib/zod-schema/login-validation'
+import { postAuthToken } from '@/lib/wrappedFeatch/loginRequest'
+import { LoginValidation, loginValidationSchema } from '@/lib/zodSchema/loginValidation'
 import app from '@/text/app.json'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'

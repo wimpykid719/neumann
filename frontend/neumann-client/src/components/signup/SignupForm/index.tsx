@@ -1,8 +1,8 @@
 'use client'
 
 import { FetchError } from '@/lib/errors'
-import { SignupData, postUserCreate } from '@/lib/wrapped-featch/signup-request'
-import { SignupValidation, SignupValidationSchema } from '@/lib/zod-schema/signup-validation'
+import { SignupData, postUserCreate } from '@/lib/wrappedFeatch/signupRequest'
+import { SignupValidation, SignupValidationSchema } from '@/lib/zodSchema/signupValidation'
 import app from '@/text/app.json'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'

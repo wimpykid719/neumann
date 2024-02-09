@@ -1,5 +1,5 @@
 import { FetchError } from '@/lib/errors'
-import * as fetch from '@/lib/wrapped-featch'
+import * as fetch from '@/lib/wrappedFeatch'
 
 type LoginData = {
   email: string

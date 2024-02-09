@@ -1,4 +1,4 @@
-import { loginValidationSchema } from '@/lib/zod-schema/login-validation'
+import { loginValidationSchema } from '@/lib/zodSchema/loginValidation'
 
 describe('loginValidationSchema', () => {
   describe('正常系', () => {
