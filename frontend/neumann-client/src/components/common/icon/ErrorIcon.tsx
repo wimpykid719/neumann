@@ -1,13 +1,9 @@
-type ErrorIconProps = {
-  width?: number
-  height?: number
-  fill?: string
-}
+import { SvgIconProps } from '@/components/common/icon/types'
 
-export default function ErrorIcon({ width = 22, height = 22, fill = 'currentColor' }: ErrorIconProps) {
+export default function ErrorIcon({ width = 22, height = 22, className = '' }: SvgIconProps) {
   return (
     <svg
-      className={fill}
+      className={className}
       width={width}
       height={height}
       viewBox='0 0 22 22'
