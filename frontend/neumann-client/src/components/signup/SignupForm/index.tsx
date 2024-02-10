@@ -25,7 +25,7 @@ export default function SignupForm() {
   const createUser = async (data: SignupData) => {
     const res = await postUserCreate(data)
     if (res instanceof FetchError) {
-      showToast(res.message)
+      showToast(res.message, 'error')
     } else {
       console.log(res.token)
     }

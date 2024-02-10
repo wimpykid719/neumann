@@ -2,18 +2,31 @@
 
 import { motion } from 'framer-motion'
 import ErrorIcon from './icon/ErrorIcon'
+import SuccessIcon from './icon/SuccessIcon'
 
 type ToastProps = {
   isShowToast: boolean
   message: string
+  toastType: 'success' | 'error'
   closeToast: () => void
 }
 
-export default function Toast({ isShowToast, message, closeToast }: ToastProps) {
+const toastTypeTheme = (toastType: ToastProps['toastType']) => {
+  switch (toastType) {
+    case 'success':
+      return { color: 'success', icon: <SuccessIcon /> }
+    case 'error':
+      return { color: 'danger', icon: <ErrorIcon /> }
+  }
+}
+
+export default function Toast({ isShowToast, message, toastType, closeToast }: ToastProps) {
   const variants = {
     visible: { bottom: '2%', opacity: 1, scale: 1 },
     hidden: { opacity: 0, bottom: '-10%', scale: 0.5 },
   }
+
+  const { color, icon } = toastTypeTheme(toastType)
 
   return (
     <motion.div
@@ -22,14 +35,14 @@ export default function Toast({ isShowToast, message, closeToast }: ToastProps) 
       variants={variants}
       transition={{ ease: 'easeOut', duration: 0.4 }}
       id='toast-default'
-      className='flex items-center max-w-xs sm:max-w-md w-full p-4 text-danger bg-primary bg-opacity-20 rounded-lg shadow border-2 border-primary'
+      className={`flex items-center max-w-xs sm:max-w-md w-full p-4 text-${color} bg-${color} bg-opacity-20 rounded-lg shadow border-2 border-${color}`}
       role='alert'
     >
-      <ErrorIcon />
+      {icon}
       <div className='ms-3 text-sm font-normal'>{message}</div>
       <button
         type='button'
-        className='ms-auto -mx-1.5 -my-1.5 bg-primary bg-opacity-0 text-primary hover:bg-opacity-10 rounded-lg focus:ring-2 focus:ring-primary p-1.5 inline-flex items-center justify-center h-8 w-8'
+        className={`ms-auto -mx-1.5 -my-1.5 bg-${color} bg-opacity-0 text-${color} hover:bg-opacity-10 rounded-lg focus:ring-2 focus:ring-${color} p-1.5 inline-flex items-center justify-center h-8 w-8`}
         data-dismiss-target='#toast-default'
         aria-label='Close'
         onClick={closeToast}
