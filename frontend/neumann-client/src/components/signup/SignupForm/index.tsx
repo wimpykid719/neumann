@@ -6,6 +6,7 @@ import { FetchError } from '@/lib/errors'
 import { SignupData, postUserCreate } from '@/lib/wrappedFeatch/signupRequest'
 import { SignupValidation, SignupValidationSchema } from '@/lib/zodSchema/signupValidation'
 import app from '@/text/app.json'
+import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -25,7 +26,7 @@ export default function SignupForm() {
   const createUser = async (data: SignupData) => {
     const res = await postUserCreate(data)
     if (res instanceof FetchError) {
-      showToast(res.message, 'error')
+      showToast(res.message, toastStatus.error)
     } else {
       console.log(res.token)
     }
