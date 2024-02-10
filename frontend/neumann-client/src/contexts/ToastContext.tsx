@@ -1,14 +1,13 @@
 'use client'
 
 import Toast from '@/components/common/Toast'
+import { ToastType } from '@/types/toast'
 import { createContext, useContext, useRef, useState } from 'react'
 
 type ToastContext = {
   showToast: (message: string, type: ToastType) => void
   closeToast: () => void
 }
-
-type ToastType = 'success' | 'error'
 
 export const ToastContext = createContext<ToastContext>({
   showToast: () => {},

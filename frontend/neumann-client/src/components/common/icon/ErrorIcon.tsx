@@ -1,4 +1,4 @@
-import { SvgIconProps } from '@/components/common/icon/types'
+import { SvgIconProps } from '@/types/icon'
 
 export default function ErrorIcon({ width = 22, height = 22, className = '' }: SvgIconProps) {
   return (

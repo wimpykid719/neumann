@@ -1,5 +1,6 @@
 'use client'
 
+import { ToastType } from '@/types/toast'
 import { motion } from 'framer-motion'
 import ErrorIcon from './icon/ErrorIcon'
 import SuccessIcon from './icon/SuccessIcon'
@@ -7,7 +8,7 @@ import SuccessIcon from './icon/SuccessIcon'
 type ToastProps = {
   isShowToast: boolean
   message: string
-  toastType: 'success' | 'error'
+  toastType: ToastType
   closeToast: () => void
 }
 

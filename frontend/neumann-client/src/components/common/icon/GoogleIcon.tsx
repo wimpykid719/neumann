@@ -1,4 +1,4 @@
-import { SvgIconProps } from '@/components/common/icon/types'
+import { SvgIconProps } from '@/types/icon'
 
 export default function GoogleIcon({ width = 16, height = 16, className = '' }: SvgIconProps) {
   return (
