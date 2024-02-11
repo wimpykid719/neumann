@@ -14,6 +14,13 @@ RSpec.describe User do
         expect(user.name).to be_present
       end
 
+      it '重複したユーザ名は登録不可' do
+        FactoryBot.create(:user, name: 'same_name')
+        u = FactoryBot.build(:user, name: 'same_name')
+        expect(u).not_to be_valid
+        expect(u.errors.full_messages_for(:name).first).to eq('ユーザ名はすでに使用されています')
+      end
+
       it 'nilの場合エラー' do
         u = FactoryBot.build(:user, name: nil)
         expect(u).not_to be_valid

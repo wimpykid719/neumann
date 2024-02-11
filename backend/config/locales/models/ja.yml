@@ -12,6 +12,8 @@ ja:
       models:
         user:
           attributes:
+            name:
+              taken: はすでに使用されています
             email:
               taken: は登録済みです
             password:
