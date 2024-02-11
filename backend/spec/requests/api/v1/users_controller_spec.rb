@@ -5,30 +5,32 @@ RSpec.describe Api::V1::UsersController do
   include_context 'user_authorities'
 
   let(:user_not_logged_in) { FactoryBot.create(:user, name: 'hiroki', current_token_version: new_token_version) }
-  let(:user_duplicated_email) { FactoryBot.create(:user, email: 'duplicate@duplicate.com', current_token_version: new_token_version) }
+  let(:user_duplicated_email) { FactoryBot.create(:user, name: 'duplicate-1', email: 'duplicate@dup.com', current_token_version: new_token_version) }
   let!(:user_params) { { user: { name: 'test', email: 'test@test.com', password: '1111111q' } } }
-  let!(:user_params_duplicated_email) { { user: { name: 'test', email: 'duplicate@duplicate.com', password: '1111111q' } } }
+  let!(:user_params_duplicated_email) { { user: { name: 'duplicate-2', email: 'duplicate@dup.com', password: '1111111q' } } }
 
   describe 'GET #show' do
     context '正常系' do
       it '認証成功、ステータスコード/200が返る' do
-        get api_v1_user_path(user.id), **headers
+        get api_v1_user_path(user.name), **headers
 
         expect(response).to have_http_status(:ok)
       end
 
-      it '検索ユーザが返る' do
-        get api_v1_user_path(user.id), **headers
+      it 'ログインユーザ自身がユーザ詳細を取得する場合、ユーザ名、メールアドレスが返る' do
+        get api_v1_user_path(user.name), **headers_with_access_token
 
         json = response.parsed_body
         expect(json['name']).to eq('neumann')
+        expect(json['email']).to be_present
       end
 
-      it 'ログインユーザと異なるユーザが返る' do
-        get api_v1_user_path(user_not_logged_in.id), **headers
+      it '未ログインユーザがユーザ詳細を取得する場合、ユーザ名のみが返る' do
+        get api_v1_user_path(user_not_logged_in.name), **headers
 
         json = response.parsed_body
         expect(json['name']).to eq('hiroki')
+        expect(json['email']).to be_nil
       end
     end
 

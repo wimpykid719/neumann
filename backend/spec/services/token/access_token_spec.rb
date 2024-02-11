@@ -42,7 +42,7 @@ RSpec.describe Token::AccessToken, type: :service do
       end
 
       context '異常系' do
-        let(:user_current_token_version_nil) { FactoryBot.create(:user) }
+        let(:user_current_token_version_nil) { FactoryBot.create(:user, name: 'hiroki') }
         let(:access_token_current_token_version_nil) { described_class.new(user_current_token_version_nil.id, user_current_token_version_nil.name) }
 
         it 'token_versionがない場合は例外処理が発生する' do

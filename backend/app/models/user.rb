@@ -20,6 +20,10 @@ class User < ApplicationRecord
     @enforce_password_validation = true
   end
 
+  def to_param
+    name
+  end
+
   class << self
     def logged_in_user(email:, password:)
       user_registered = User.find_by(email:)
