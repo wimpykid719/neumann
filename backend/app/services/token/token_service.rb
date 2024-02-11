@@ -56,9 +56,13 @@ module Token
 
       private
 
+      def find_user_from_decrypted_id(user_id_encrypted)
+        User.find(decrypt_for(user_id_encrypted))
+      end
+
       def find_user_from_payload(payload)
         user_id_encrypted = payload.with_indifferent_access[user_claim]
-        User.find(decrypt_for(user_id_encrypted))
+        find_user_from_decrypted_id(user_id_encrypted)
       end
 
       def verify_token_version?(token_version, user)
