@@ -5,11 +5,15 @@ RSpec.describe Token::AccessToken, type: :service do
     include TokenConcern
 
     let(:user) { FactoryBot.create(:user, current_token_version: new_token_version) }
-    let!(:access_token) { described_class.new(user.id) }
+    let!(:access_token) { described_class.new(user.id, user.name) }
     let(:access_token_decoded) { described_class.decode(access_token.token) }
     let!(:lifetime) { UserAuthConfig.access_token_lifetime }
 
     context 'encode' do
+      it 'ユーザ名が含まれている' do
+        expect(access_token.payload[:username]).to eq(user.name)
+      end
+
       it 'payload[:exp]の値は想定通り(1秒許容)' do
         expect(access_token.payload[:exp]).to be_within(1.second).of(lifetime.from_now.to_i)
       end
@@ -32,14 +36,14 @@ RSpec.describe Token::AccessToken, type: :service do
 
       it 'optionsで値を設定できる' do
         options = { test: 'test' }
-        access_token_opsions = described_class.new(user.id, options:)
+        access_token_opsions = described_class.new(user.id, user.name, options:)
         decoded_access_token = described_class.decode(access_token_opsions.token)
         expect(decoded_access_token['test']).to eq('test')
       end
 
       context '異常系' do
         let(:user_current_token_version_nil) { FactoryBot.create(:user) }
-        let(:access_token_current_token_version_nil) { described_class.new(user_current_token_version_nil.id) }
+        let(:access_token_current_token_version_nil) { described_class.new(user_current_token_version_nil.id, user_current_token_version_nil.name) }
 
         it 'token_versionがない場合は例外処理が発生する' do
           expect { access_token_current_token_version_nil }.to raise_error(RuntimeError)

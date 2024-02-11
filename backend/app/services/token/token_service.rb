@@ -7,7 +7,7 @@ module Token
 
     # アクセストークンのインスタンス生成
     def generate_access_token(options = {})
-      Token::AccessToken.new(id, options:)
+      Token::AccessToken.new(id, name, options:)
     end
 
     # リフレッシュトークンのインスタンス生成
@@ -28,6 +28,7 @@ module Token
         Token::AccessToken.decode(token)
       end
 
+      # rubocop:disable Style/IfUnlessModifier
       def from_access_token(token)
         payload = decode_access_token(token)
         user = find_user_from_payload(payload)
@@ -51,6 +52,7 @@ module Token
 
         user
       end
+      # rubocop:enable Style/IfUnlessModifier
 
       private
 
