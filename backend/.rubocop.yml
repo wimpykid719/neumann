@@ -18,7 +18,7 @@ AllCops:
 
 # 1行あたりの文字数をチェックする
 Layout/LineLength:
-  Max: 130
+  Max: 150
   # 下記ファイルはチェックの対象から外す
   Exclude:
     - "Rakefile"
@@ -111,6 +111,5 @@ RSpec/MultipleExpectations:
 RSpec/ExampleLength:
   Max: 20
 
-# letの最大文字列を緩める
-Layout/LineLength:
-  Max: 150
+Lint/RedundantCopDisableDirective:
+  Enabled: false
