@@ -20,6 +20,7 @@ class User < ApplicationRecord
     @enforce_password_validation = true
   end
 
+  # params[:id]をオーバライド
   def to_param
     name
   end
