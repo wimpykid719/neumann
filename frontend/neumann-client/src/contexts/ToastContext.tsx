@@ -2,6 +2,7 @@
 
 import Toast from '@/components/common/Toast'
 import { ToastType } from '@/types/toast'
+import { toastTime } from '@/utils/toast'
 import { createContext, useContext, useRef, useState } from 'react'
 
 type ToastContext = {
@@ -35,7 +36,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     setShowToast(true)
     timer.current = setTimeout(() => {
       setShowToast(false)
-    }, 5000)
+    }, toastTime.default)
   }
 
   const closeToast = () => {
