@@ -27,15 +27,21 @@ function buildFullPath(baseURL: string, requestedURL: string): string {
 
 /** リクエストヘッダを構築する */
 function buildHeaders<T = HeadersInit>(headers?: T): HeadersInit {
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+  }
+
   if (!headers) {
-    // 未指定(undefined)の場合、`Content-Type: application/json` を返す
     return {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
+      ...defaultHeaders,
     }
   }
 
-  return headers
+  return {
+    ...defaultHeaders,
+    ...headers,
+  }
 }
 
 /**
