@@ -1,9 +1,12 @@
 import LoginForm from '@/components/login/LoginForm'
+import { ToastProvider } from '@/contexts/ToastContext'
 
 export default function LoginPage() {
   return (
     <main className=''>
-      <LoginForm />
+      <ToastProvider>
+        <LoginForm />
+      </ToastProvider>
     </main>
   )
 }

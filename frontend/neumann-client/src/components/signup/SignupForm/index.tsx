@@ -1,17 +1,23 @@
 'use client'
 
 import GoogleIcon from '@/components/common/icon/GoogleIcon'
+import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { SignupData, postUserCreate } from '@/lib/wrappedFeatch/signupRequest'
 import { SignupValidation, SignupValidationSchema } from '@/lib/zodSchema/signupValidation'
 import app from '@/text/app.json'
-import { toastStatus } from '@/utils/toast'
+import toastText from '@/text/toast.json'
+import { sleep } from '@/utils/sleep'
+import { toastStatus, toastTime } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 export default function SignupForm() {
   const { showToast } = useToast()
+  const { setAccessToken } = useAccessToken()
+  const router = useRouter()
 
   const {
     register,
@@ -25,10 +31,14 @@ export default function SignupForm() {
 
   const createUser = async (data: SignupData) => {
     const res = await postUserCreate(data)
+
     if (res instanceof FetchError) {
       showToast(res.message, toastStatus.error)
     } else {
-      console.log(res.token)
+      showToast(toastText.user_created, toastStatus.success)
+      await sleep(toastTime.succeeded)
+      setAccessToken(res.token)
+      router.push('/')
     }
   }
 

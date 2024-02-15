@@ -1,13 +1,22 @@
 'use client'
 
 import GoogleIcon from '@/components/common/icon/GoogleIcon'
-import { postAuthToken } from '@/lib/wrappedFeatch/loginRequest'
+import { useAccessToken } from '@/contexts/AccessTokenContext'
+import { useToast } from '@/contexts/ToastContext'
+import { FetchError } from '@/lib/errors'
+import { LoginData, postAuthToken } from '@/lib/wrappedFeatch/loginRequest'
 import { LoginValidation, loginValidationSchema } from '@/lib/zodSchema/loginValidation'
 import app from '@/text/app.json'
+import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 export default function LoginForm() {
+  const { showToast } = useToast()
+  const { setAccessToken } = useAccessToken()
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -17,6 +26,17 @@ export default function LoginForm() {
     shouldUnregister: false,
     resolver: zodResolver(loginValidationSchema),
   })
+
+  const loginUser = async (data: LoginData) => {
+    const res = await postAuthToken(data)
+
+    if (res instanceof FetchError) {
+      showToast(res.message, toastStatus.error)
+    } else {
+      setAccessToken(res.token)
+      router.push('/')
+    }
+  }
 
   return (
     <section className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
@@ -38,7 +58,7 @@ export default function LoginForm() {
           <div className='border border-x-0 border-t-0 relative main-border-color'>
             <span className='px-3 absolute right-2/4 translate-x-1/2 -translate-y-1/2 sub-bg-color'>or</span>
           </div>
-          <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit(postAuthToken)}>
+          <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit(loginUser)}>
             <div>
               <label htmlFor='email' className='block mb-2 text-sm font-medium'>
                 メールアドレス
