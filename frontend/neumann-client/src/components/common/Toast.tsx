@@ -31,6 +31,7 @@ export default function Toast({ isShowToast, message, toastType, closeToast }: T
 
   return (
     <motion.div
+      data-testid='toast'
       initial={{ bottom: '-10%', left: '50%', x: '-50%', opacity: 0, position: 'fixed', scale: 0.3 }}
       animate={isShowToast ? 'visible' : 'hidden'}
       variants={variants}
