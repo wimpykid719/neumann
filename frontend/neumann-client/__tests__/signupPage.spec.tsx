@@ -2,7 +2,6 @@ import SignupPage from '@/app/signup/page'
 import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { FetchError } from '@/lib/errors'
 import { postUserCreate } from '@/lib/wrappedFeatch/signupRequest'
-import { toastTime } from '@/utils/toast'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
 
@@ -16,6 +15,10 @@ jest.mock('@/contexts/AccessTokenContext', () => ({
 
 jest.mock('@/lib/wrappedFeatch/signupRequest', () => ({
   postUserCreate: jest.fn(),
+}))
+
+jest.mock('@/utils/sleep', () => ({
+  sleep: jest.fn(),
 }))
 
 describe('SignupPage', () => {
@@ -34,7 +37,6 @@ describe('SignupPage', () => {
     })
 
     it('ユーザ作成後、アクセストークンが返り、トップページに移動', async () => {
-      const flushPromises = () => new Promise(resolve => jest.requireActual('timers').setImmediate(resolve))
       const mockPostUserCreate = postUserCreate as jest.Mock
       mockPostUserCreate.mockResolvedValue({ token: 'dummyToken' })
 
@@ -55,10 +57,6 @@ describe('SignupPage', () => {
 
       const submitButton = screen.getByRole('button', { name: '登録' })
       fireEvent.click(submitButton)
-
-      // 非同期関数の処理が全て完了している事を確認
-      await flushPromises()
-      jest.advanceTimersByTime(toastTime.succeeded)
 
       await waitFor(async () => {
         expect(mockPostUserCreate).toHaveBeenCalledWith({
