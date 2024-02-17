@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_user
 
   def show
-    if current_user
+    if current_user.name == params[:id]
       render json: @current_user.as_json(only: [:name, :email])
     else
       # params[:id]には一意性で登録されたユーザ名が入る

@@ -25,6 +25,14 @@ RSpec.describe Api::V1::UsersController do
         expect(json['email']).to be_present
       end
 
+      it 'ログインユーザ自身が別のユーザ詳細を取得する場合、ユーザ名のみが返る' do
+        get api_v1_user_path(user_not_logged_in.name), **headers_with_access_token
+
+        json = response.parsed_body
+        expect(json['name']).to eq('hiroki')
+        expect(json['email']).to be_nil
+      end
+
       it '未ログインユーザがユーザ詳細を取得する場合、ユーザ名のみが返る' do
         get api_v1_user_path(user_not_logged_in.name), **headers
 
