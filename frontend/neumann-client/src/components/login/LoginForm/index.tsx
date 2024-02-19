@@ -34,6 +34,7 @@ export default function LoginForm() {
       showToast(res.message, toastStatus.error)
     } else {
       setAccessToken(res.token)
+      localStorage.setItem('isLoggedIn', '1')
       router.push('/')
     }
   }

@@ -38,6 +38,7 @@ export default function SignupForm() {
       showToast(toastText.user_created, toastStatus.success)
       await sleep(toastTime.succeeded)
       setAccessToken(res.token)
+      localStorage.setItem('isLoggedIn', '1')
       router.push('/')
     }
   }
