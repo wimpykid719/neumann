@@ -1,5 +1,6 @@
 import SignupPage from '@/app/signup/page'
 import { useAccessToken } from '@/contexts/AccessTokenContext'
+import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { postUserCreate } from '@/lib/wrappedFeatch/signupRequest'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -11,6 +12,10 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@/contexts/AccessTokenContext', () => ({
   useAccessToken: jest.fn().mockReturnValue({ setAccessToken: jest.fn() }),
+}))
+
+jest.mock('@/contexts/ToastContext', () => ({
+  useToast: jest.fn().mockReturnValue({ showToast: jest.fn() }),
 }))
 
 jest.mock('@/lib/wrappedFeatch/signupRequest', () => ({
@@ -31,10 +36,6 @@ describe('SignupPage', () => {
       jest.runOnlyPendingTimers()
       jest.useRealTimers()
     })
-    it('トースターが存在する', () => {
-      render(<SignupPage />)
-      expect(screen.getByTestId('toast')).toBeInTheDocument()
-    })
 
     it('ユーザ作成後、アクセストークンが返り、トップページに移動', async () => {
       const mockPostUserCreate = postUserCreate as jest.Mock
@@ -45,6 +46,7 @@ describe('SignupPage', () => {
       render(<SignupPage />)
 
       expect(useRouter().push).not.toHaveBeenCalled()
+      expect(useToast().showToast).not.toHaveBeenCalled()
 
       const userNameInput = screen.getByLabelText('ユーザ名')
       fireEvent.change(userNameInput, { target: { value: 'こんどう ひろき' } })
@@ -64,7 +66,7 @@ describe('SignupPage', () => {
           email: 'test@example.com',
           password: 'password',
         })
-        expect(screen.queryByText('ユーザが作成されました')).toBeInTheDocument()
+        expect(useToast().showToast).toHaveBeenCalledWith('ユーザが作成されました', 'success')
         expect(useAccessToken().setAccessToken).toHaveBeenCalledWith('dummyToken')
         expect(useRouter().push).toHaveBeenCalledWith('/')
       })
@@ -78,7 +80,7 @@ describe('SignupPage', () => {
       render(<SignupPage />)
 
       expect(useRouter().push).not.toHaveBeenCalled()
-      expect(screen.queryByText('ユーザ作成に失敗しました')).not.toBeInTheDocument()
+      expect(useToast().showToast).not.toHaveBeenCalled()
 
       const userNameInput = screen.getByLabelText('ユーザ名')
       fireEvent.change(userNameInput, { target: { value: 'こんどう ひろき' } })
@@ -93,7 +95,7 @@ describe('SignupPage', () => {
       fireEvent.click(submitButton)
 
       await waitFor(() => {
-        expect(screen.queryByText('ユーザ作成に失敗しました')).toBeInTheDocument()
+        expect(useToast().showToast).toHaveBeenCalledWith('ユーザ作成に失敗しました', 'error')
       })
     })
   })

@@ -1,5 +1,6 @@
 import LoginPage from '@/app/login/page'
 import { useAccessToken } from '@/contexts/AccessTokenContext'
+import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { postAuthToken } from '@/lib/wrappedFeatch/loginRequest'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -13,17 +14,16 @@ jest.mock('@/contexts/AccessTokenContext', () => ({
   useAccessToken: jest.fn().mockReturnValue({ setAccessToken: jest.fn() }),
 }))
 
+jest.mock('@/contexts/ToastContext', () => ({
+  useToast: jest.fn().mockReturnValue({ showToast: jest.fn() }),
+}))
+
 jest.mock('@/lib/wrappedFeatch/loginRequest', () => ({
   postAuthToken: jest.fn(),
 }))
 
 describe('loginPage', () => {
   describe('正常系', () => {
-    it('トースターが存在する', () => {
-      render(<LoginPage />)
-      expect(screen.getByTestId('toast')).toBeInTheDocument()
-    })
-
     it('ログイン後、アクセストークンが返り、トップページに移動', async () => {
       const mockPostAuthToken = postAuthToken as jest.Mock
       mockPostAuthToken.mockResolvedValue({ token: 'dummyToken' })
@@ -56,7 +56,7 @@ describe('loginPage', () => {
       render(<LoginPage />)
 
       expect(useRouter().push).not.toHaveBeenCalled()
-      expect(screen.queryByText('ログインに失敗しました')).not.toBeInTheDocument()
+      expect(useToast().showToast).not.toHaveBeenCalled()
 
       const emailInput = screen.getByLabelText('メールアドレス')
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
@@ -68,7 +68,7 @@ describe('loginPage', () => {
       fireEvent.click(submitButton)
 
       await waitFor(() => {
-        expect(screen.queryByText('ログインに失敗しました')).toBeInTheDocument()
+        expect(useToast().showToast).toHaveBeenCalledWith('ログインに失敗しました', 'error')
       })
     })
   })
