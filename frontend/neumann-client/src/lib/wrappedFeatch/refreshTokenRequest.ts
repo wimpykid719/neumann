@@ -1,4 +1,5 @@
 import * as fetch from '@/lib/wrappedFeatch'
+import { AccessToken } from '@/types/accessToken'
 import jwt from 'jsonwebtoken'
 
 type Response = {
@@ -10,7 +11,7 @@ const isValidExp = (exp: number) => {
   return currentTime < exp
 }
 
-export async function refreshToken(accessToken: string | undefined) {
+export async function refreshToken(accessToken: AccessToken) {
   const isLoggedInStr = localStorage.getItem('isLoggedIn')
   if (!isLoggedInStr || !Boolean(parseInt(isLoggedInStr, 10))) return
 
