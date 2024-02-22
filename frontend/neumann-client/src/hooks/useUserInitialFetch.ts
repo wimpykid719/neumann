@@ -1,10 +1,10 @@
+import { useUser } from '@/contexts/UserContext'
 import { FetchError } from '@/lib/errors'
 import { getUser } from '@/lib/wrappedFeatch/userRequest'
 import { AccessToken } from '@/types/accessToken'
 import { ToastType } from '@/types/toast'
-import { User } from '@/types/user'
 import { toastStatus } from '@/utils/toast'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import useSWR from 'swr'
 
 export const useUserInitialFetch = (
@@ -12,7 +12,7 @@ export const useUserInitialFetch = (
   accessToken: AccessToken,
   showToast: (message: string, type: ToastType) => void,
 ) => {
-  const [user, setUser] = useState<User>()
+  const { user, setUser } = useUser()
   const { data } = useSWR(userName && accessToken ? [userName, accessToken] : null, ([userName, accessToken]) =>
     getUser(userName, accessToken),
   )

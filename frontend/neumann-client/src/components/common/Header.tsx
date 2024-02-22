@@ -1,5 +1,10 @@
 'use client'
+import { useAccessToken } from '@/contexts/AccessTokenContext'
+import { useToast } from '@/contexts/ToastContext'
+import { useSilentRefresh } from '@/hooks/useSilentRefresh'
+import { useUserInitialFetch } from '@/hooks/useUserInitialFetch'
 import app from '@/text/app.json'
+import { getUserNameFromAccessToken } from '@/utils/token'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import BizRankIcon from './icon/BizRankIcon'
@@ -8,6 +13,15 @@ import LogoutIcon from './icon/LogoutIcon'
 import SettingsIcon from './icon/SettingsIcon'
 
 export default function Header() {
+  // ユーザ情報・サイレントリフレッシュに関する値
+  const { showToast } = useToast()
+  const { accessToken } = useAccessToken()
+  const newAccessToken = useSilentRefresh(accessToken, showToast)
+  const token = newAccessToken || accessToken
+  const userName = getUserNameFromAccessToken(token)
+  const user = useUserInitialFetch(userName, newAccessToken || accessToken, showToast)
+
+  // メニューに関する値
   const [isOpen, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const documentClickHandler = useRef<(e: MouseEvent) => void>(() => {})
@@ -62,7 +76,7 @@ export default function Header() {
             className='absolute rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
             ref={menuRef}
           >
-            <div className='font-bold p-3'>ユーザ名</div>
+            <div className='font-bold p-3'>{user?.name}</div>
             <ul>
               <li className='flex items-center p-3 cursor-pointer hover:bg-gray-500'>
                 <span className='inline-flex items-center w-7'>
