@@ -7,7 +7,7 @@ import { toastStatus } from '@/utils/toast'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
-export const useUser = (
+export const useUserInitialFetch = (
   userName: string | undefined,
   accessToken: AccessToken,
   showToast: (message: string, type: ToastType) => void,
