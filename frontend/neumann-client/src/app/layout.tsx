@@ -1,5 +1,6 @@
 import { AccessTokenProvider } from '@/contexts/AccessTokenContext'
 import { ToastProvider } from '@/contexts/ToastContext'
+import { UserProvider } from '@/contexts/UserContext'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -21,7 +22,9 @@ export default function RootLayout({
     <html lang='en'>
       <body className={inter.className}>
         <AccessTokenProvider>
-          <ToastProvider>{children}</ToastProvider>
+          <UserProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </UserProvider>
         </AccessTokenProvider>
       </body>
     </html>
