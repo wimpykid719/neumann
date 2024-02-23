@@ -13,8 +13,9 @@ export const useUserInitialFetch = (
   showToast: (message: string, type: ToastType) => void,
 ) => {
   const { user, setUser } = useUser()
-  const { data } = useSWR(userName && accessToken ? [userName, accessToken] : null, ([userName, accessToken]) =>
-    getUser(userName, accessToken),
+  const { data, isLoading } = useSWR(
+    userName && accessToken ? [userName, accessToken] : null,
+    ([userName, accessToken]) => getUser(userName, accessToken),
   )
 
   useEffect(() => {
@@ -25,5 +26,5 @@ export const useUserInitialFetch = (
     }
   }, [data])
 
-  return user
+  return { user, isLoading }
 }
