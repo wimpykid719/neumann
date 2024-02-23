@@ -1,5 +1,6 @@
 import * as fetch from '@/lib/wrappedFeatch'
 import { AccessToken } from '@/types/accessToken'
+import { isLoggedInBefore } from '@/utils/localStorage'
 import jwt from 'jsonwebtoken'
 
 type Response = {
@@ -12,8 +13,7 @@ const isValidExp = (exp: number) => {
 }
 
 export async function refreshToken(accessToken: AccessToken) {
-  const isLoggedInStr = localStorage.getItem('isLoggedIn')
-  if (!isLoggedInStr || !Boolean(parseInt(isLoggedInStr, 10))) return
+  if (!isLoggedInBefore()) return
 
   // ローカルストレージに過去にログインした形跡がある場合、そしてアクセストークンがないサイレントリフレッシュ
   if (!accessToken)
