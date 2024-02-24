@@ -1,4 +1,3 @@
-import { AccessToken } from '@/types/accessToken'
 import { User } from '@/types/user'
 import { isLoggedInBefore } from '@/utils/localStorage'
 import { motion } from 'framer-motion'
@@ -10,21 +9,22 @@ import SettingsIcon from '../icon/SettingsIcon'
 
 type AvatarProps = {
   user: User | undefined
-  token: AccessToken
   isRefreshed: boolean
   isLoading: boolean
 }
 
-export default function Avatar({ user, token, isRefreshed, isLoading }: AvatarProps) {
+export default function Avatar({ user, isRefreshed, isLoading }: AvatarProps) {
   const [isOpen, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const documentClickHandler = useRef<(e: MouseEvent) => void>(() => {})
+  const [loginStatus, setLoginStatus] = useState(true)
   const variants = {
     visible: { top: '64px', opacity: 1, scale: 1 },
     hidden: { opacity: 0, bottom: 0, scale: 0.5 },
   }
 
   useEffect(() => {
+    setLoginStatus(isLoggedInBefore())
     documentClickHandler.current = e => {
       if (e.target === null) return
       // メニューの内側をクリックした場合何もしない、as Nodeに関してはクリックされる要素の型を推論するのは難しいため
@@ -46,7 +46,7 @@ export default function Avatar({ user, token, isRefreshed, isLoading }: AvatarPr
     document.removeEventListener('click', documentClickHandler.current)
   }
 
-  if ((isLoggedInBefore() && !user && !isRefreshed) || isLoading)
+  if ((loginStatus && !user && !isRefreshed) || isLoading)
     return (
       <div className='w-12 h-12 rounded-lg shadow sub-bg-color animate-pulse dark:border dark:border-gray-600'></div>
     )

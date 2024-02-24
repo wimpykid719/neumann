@@ -27,7 +27,7 @@ export default function Header() {
           </h1>
         </Link>
       </div>
-      <Avatar user={user} token={token} isRefreshed={isRefreshed} isLoading={isLoading} />
+      <Avatar user={user} isRefreshed={isRefreshed} isLoading={isLoading} />
     </section>
   )
 }
