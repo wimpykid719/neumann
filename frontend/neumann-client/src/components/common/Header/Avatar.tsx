@@ -72,19 +72,19 @@ export default function Avatar({ user, isRefreshed, isLoading }: AvatarProps) {
             >
               <div className='font-bold p-3'>{user?.name}</div>
               <ul>
-                <li className='flex items-center p-3 cursor-pointer hover:bg-gray-500'>
+                <li className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'>
                   <span className='inline-flex items-center w-7'>
                     <HurtIcon />
                   </span>
                   いいねした本
                 </li>
-                <li className='flex items-center p-3 cursor-pointer hover:bg-gray-500'>
+                <li className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'>
                   <span className='inline-flex items-center w-7'>
                     <SettingsIcon />
                   </span>
                   アカウント設定
                 </li>
-                <li className='flex items-center p-3 cursor-pointer hover:bg-gray-500 rounded-b-lg'>
+                <li className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 rounded-b-lg'>
                   <span className='inline-flex items-center w-7'>
                     <LogoutIcon />
                   </span>
@@ -104,7 +104,7 @@ export default function Avatar({ user, isRefreshed, isLoading }: AvatarProps) {
           </Link>
           <Link
             href='/login'
-            className='w-28 h-11 bg-primary text-center rounded-lg flex justify-center items-center text-sm font-bold hover:opacity-70'
+            className='w-28 h-11 bg-primary text-center rounded-lg flex justify-center items-center sub-text-color text-sm font-bold hover:opacity-70'
           >
             ログイン
           </Link>
