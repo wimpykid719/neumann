@@ -250,6 +250,15 @@ RSpec.describe User do
           expect(error.message.split(',').first).to eq 'パスワードを入力してください'
         end)
       end
+
+      it '有効後パスワードのupdateで入力があれば、以降はパスワード不要となる' do
+        user_searched = described_class.find(user_created.id)
+        user_searched.enforce_password_validation
+
+        expect(user_searched.update!(password: '1111111q')).to be(true)
+        expect(user_searched.update!(name: 'hiroki')).to be(true)
+        expect(user_searched.name).to eq 'hiroki'
+      end
     end
 
     context 'logged_in_user' do
