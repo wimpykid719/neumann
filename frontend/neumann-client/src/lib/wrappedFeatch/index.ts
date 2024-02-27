@@ -135,8 +135,8 @@ export async function put<T, U = object>(path: string, body: T, options?: Option
 }
 
 // deleteはJSの予約語であるためdestroyとする
-export async function destroy<T = object>(path: string, options?: Options<T>): Promise<unknown | FetchError> {
-  return http(buildPathWithSearchParams(path, options?.params ? options.params : undefined), {
+export async function destroy<T = object>(path: string, options?: Options<T>): Promise<T | FetchError> {
+  return http<T>(buildPathWithSearchParams(path, options?.params ? options.params : undefined), {
     method: 'DELETE',
     headers: buildHeaders(options?.headers),
     credentials: buildCredentials(options?.credentials),

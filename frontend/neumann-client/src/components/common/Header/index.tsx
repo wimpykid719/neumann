@@ -15,7 +15,7 @@ export default function Header() {
   const { newAccessToken, isRefreshed } = useSilentRefresh(accessToken, showToast)
   const token = newAccessToken || accessToken
   const userName = getUserNameFromAccessToken(token)
-  const { user, isLoading } = useUserInitialFetch(userName, newAccessToken || accessToken, showToast)
+  const { isLoading } = useUserInitialFetch(userName, newAccessToken || accessToken, showToast)
 
   return (
     <section className='flex justify-between py-7'>
@@ -27,7 +27,7 @@ export default function Header() {
           </h1>
         </Link>
       </div>
-      <Avatar user={user} isRefreshed={isRefreshed} isLoading={isLoading} />
+      <Avatar isRefreshed={isRefreshed} isLoading={isLoading} />
     </section>
   )
 }

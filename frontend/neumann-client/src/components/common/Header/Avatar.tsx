@@ -1,5 +1,8 @@
-import { User } from '@/types/user'
+import { useAccessToken } from '@/contexts/AccessTokenContext'
+import { useUser } from '@/contexts/UserContext'
+import { deleteRefreshToken } from '@/lib/wrappedFeatch/logoutRequest'
 import { isLoggedInBefore } from '@/utils/localStorage'
+import { updateLogoutStatus } from '@/utils/localStorage'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -8,12 +11,13 @@ import LogoutIcon from '../icon/LogoutIcon'
 import SettingsIcon from '../icon/SettingsIcon'
 
 type AvatarProps = {
-  user: User | undefined
   isRefreshed: boolean
   isLoading: boolean
 }
 
-export default function Avatar({ user, isRefreshed, isLoading }: AvatarProps) {
+export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
+  const { user, setUser } = useUser()
+  const { setAccessToken } = useAccessToken()
   const [isOpen, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const documentClickHandler = useRef<(e: MouseEvent) => void>(() => {})
@@ -44,6 +48,15 @@ export default function Avatar({ user, isRefreshed, isLoading }: AvatarProps) {
 
   const removeDocumentClickHandler = () => {
     document.removeEventListener('click', documentClickHandler.current)
+  }
+
+  const logout = async () => {
+    const res = await deleteRefreshToken()
+    if (Object.keys(res).length === 0) {
+      updateLogoutStatus()
+      setUser(undefined)
+      setAccessToken('')
+    }
   }
 
   if ((loginStatus && !user && !isRefreshed) || isLoading)
@@ -84,13 +97,16 @@ export default function Avatar({ user, isRefreshed, isLoading }: AvatarProps) {
                   </span>
                   アカウント設定
                 </li>
-                <li className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 rounded-b-lg'>
-                  <span className='inline-flex items-center w-7'>
-                    <LogoutIcon />
-                  </span>
-                  ログアウト
-                </li>
               </ul>
+              <button
+                onClick={logout}
+                className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 rounded-b-lg w-full'
+              >
+                <span className='inline-flex items-center w-7'>
+                  <LogoutIcon />
+                </span>
+                ログアウト
+              </button>
             </motion.div>
           )}
         </div>
