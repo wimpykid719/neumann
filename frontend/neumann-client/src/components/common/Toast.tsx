@@ -40,7 +40,7 @@ export default function Toast({ isShowToast, message, toastType, closeToast }: T
       className={`flex items-center max-w-xs sm:max-w-md w-full p-4 text-${color} bg-${color} bg-opacity-20 rounded-lg shadow border-2 border-${color}`}
       role='alert'
     >
-      {icon}
+      <div className='whitespace-nowrap'>{icon}</div>
       <div className='ms-3 text-sm font-normal'>{message}</div>
       <button
         type='button'
