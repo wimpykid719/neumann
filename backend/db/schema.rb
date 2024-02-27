@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_11_144632) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_27_122227) do
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -18,6 +18,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_11_144632) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "current_token_version"
+    t.string "profile_name", default: "", null: false
+    t.text "bio"
+    t.string "x", default: "", null: false
+    t.string "instagram", default: "", null: false
+    t.string "facebook", default: "", null: false
+    t.string "linkedin", default: "", null: false
+    t.string "tiktok", default: "", null: false
+    t.string "youtube", default: "", null: false
+    t.string "website", default: "", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["name"], name: "index_users_on_name", unique: true
   end
