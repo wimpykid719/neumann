@@ -138,7 +138,7 @@ RSpec.describe Api::V1::AuthTokenController do
 
         delete api_v1_auth_token_index_path, **headers
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:no_content)
       end
 
       it 'cookieリフレッシュトークンが削除される' do

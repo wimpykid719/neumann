@@ -26,7 +26,7 @@ class Api::V1::AuthTokenController < ApplicationController
   # ログアウト
   def destroy
     delete_session if session_user.delete_token_version
-    head(:ok) if cookies[UserAuthConfig.session_key].nil?
+    head(:no_content) if cookies[UserAuthConfig.session_key].nil?
   end
 
   private
