@@ -52,6 +52,16 @@ RSpec.describe Api::V1::UsersController do
         expect(json.size).to eq(1)
         expect(json['error']['message']).to eq('存在しないユーザです。')
       end
+
+      it 'tokenのバージョンに変更があった場合' do
+        user.update_token_version('version_new')
+        get api_v1_user_path(user), **headers_with_access_token
+
+        expect(response).to have_http_status(:unauthorized)
+        json = response.parsed_body
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('パスワードに変更がありました。再度ログインして下さい。')
+      end
     end
   end
 

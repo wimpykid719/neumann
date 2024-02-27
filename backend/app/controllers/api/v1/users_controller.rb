@@ -2,6 +2,9 @@ class Api::V1::UsersController < ApplicationController
   # before_action :authenticate_user, only: [:update]
   include LoginResponseConcern
 
+  rescue_from Constants::Exceptions::TokenVersion do |error|
+    unauthorized_user(error.message)
+  end
   rescue_from ActiveRecord::RecordInvalid do |error|
     status_unprocessable_entity(error.message)
   end
