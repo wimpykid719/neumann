@@ -13,6 +13,7 @@ ja:
         user:
           attributes:
             name:
+              invalid: は半角英数字、ハイフン、アンダーバーで入力してください
               taken: はすでに使用されています
             email:
               taken: は登録済みです

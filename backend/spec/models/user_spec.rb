@@ -21,6 +21,13 @@ RSpec.describe User do
         expect(u.errors.full_messages_for(:name).first).to eq('ユーザ名はすでに使用されています')
       end
 
+      it '不正な形式は登録不可' do
+        expect { FactoryBot.create(:user, name: 'こんどう ひろき') }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message).to eq 'ユーザ名は半角英数字、ハイフン、アンダーバーで入力してください'
+        end)
+      end
+
       it 'nilの場合エラー' do
         u = FactoryBot.build(:user, name: nil)
         expect(u).not_to be_valid
