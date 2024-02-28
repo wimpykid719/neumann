@@ -8,6 +8,15 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: 確認用パスワード
+        profile_name: 表示名
+        bio: 自己紹介
+        x: Xのユーザ名
+        instagram: Instagramのユーザ名
+        facebook: Facebookのユーザ名
+        linkedin: LinkedInのユーザ名
+        tiktok: TikTokのユーザ名
+        youtube: YouTubeのユーザ名
+        website: ウェブサイトのURL
     errors:
       models:
         user:
@@ -20,3 +29,9 @@ ja:
             password:
               invalid: は半角英数字、ハイフン、アンダーバーで入力してください
               password_too_long: は72文字以内で入力してください
+            website:
+              invalid: が不正な形式です
+            tiktok:
+              invalid: は先頭の@不要です
+            youtube:
+              invalid: は先頭の@不要です

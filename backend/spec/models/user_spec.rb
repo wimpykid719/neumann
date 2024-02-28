@@ -144,6 +144,286 @@ RSpec.describe User do
         expect(user_searched.name).to eq('hiroki')
       end
     end
+
+    context 'profile_name' do
+      before do
+        user.update(profile_name: 'こんどう ひろき')
+      end
+
+      it '登録可能' do
+        expect(user.profile_name).to eq 'こんどう ひろき'
+      end
+
+      it '別のユーザと重複可能' do
+        u = FactoryBot.create(:user, name: 'same_profile_name')
+        u.update(profile_name: 'こんどう ひろき')
+
+        expect(user.profile_name).to eq('こんどう ひろき')
+        expect(u.profile_name).to eq('こんどう ひろき')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(profile_name: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(profile_name: '')
+        expect(user.profile_name).to eq('')
+      end
+
+      it 'nameが31文字以上の場合エラー' do
+        user.update(profile_name: 'あ' * 31)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('表示名は30文字以内で入力してください')
+      end
+    end
+
+    context 'bio' do
+      before do
+        user.update(bio: '自己紹介文')
+      end
+
+      it '登録可能' do
+        expect(user.bio).to eq('自己紹介文')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(bio: nil)
+        end.not_to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(bio: '')
+        expect(user.bio).to eq('')
+      end
+
+      it 'nameが181文字以上の場合エラー' do
+        user.update(bio: 'あ' * 181)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages_for(:bio).first).to eq('自己紹介は180文字以内で入力してください')
+      end
+    end
+
+    context 'x' do
+      before do
+        user.update(x: 'hiroki1879')
+      end
+
+      it '登録可能' do
+        expect(user.x).to eq('hiroki1879')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(x: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(x: '')
+        expect(user.x).to eq('')
+      end
+
+      it 'xのユーザ名が51文字以上の場合エラー' do
+        user.update(x: 'a' * 51)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('Xのユーザ名は50文字以内で入力してください')
+      end
+    end
+
+    context 'instagram' do
+      before do
+        user.update(instagram: 'hiroki1879')
+      end
+
+      it '登録可能' do
+        expect(user.instagram).to eq('hiroki1879')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(instagram: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(instagram: '')
+        expect(user.instagram).to eq('')
+      end
+
+      it 'instagramのユーザ名が51文字以上の場合エラー' do
+        user.update(instagram: 'a' * 51)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('Instagramのユーザ名は50文字以内で入力してください')
+      end
+    end
+
+    context 'facebook' do
+      before do
+        user.update(facebook: 'hiroki1879')
+      end
+
+      it '登録可能' do
+        expect(user.facebook).to eq('hiroki1879')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(facebook: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(facebook: '')
+        expect(user.facebook).to eq('')
+      end
+
+      it 'facebookのユーザ名が51文字以上の場合エラー' do
+        user.update(facebook: 'a' * 51)
+
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('Facebookのユーザ名は50文字以内で入力してください')
+      end
+    end
+
+    context 'linkedin' do
+      before do
+        user.update(linkedin: 'hiroki1879')
+      end
+
+      it '登録可能' do
+        expect(user.linkedin).to eq('hiroki1879')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(linkedin: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(linkedin: '')
+        expect(user.linkedin).to eq('')
+      end
+
+      it 'linkedinのユーザ名が51文字以上の場合エラー' do
+        user.update(linkedin: 'a' * 51)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('LinkedInのユーザ名は50文字以内で入力してください')
+      end
+    end
+
+    context 'tiktok' do
+      before do
+        user.update(tiktok: 'hiroki1879')
+      end
+
+      it '登録可能' do
+        expect(user.tiktok).to eq('hiroki1879')
+      end
+
+      it '先頭の@含まれる場合エラー' do
+        expect { user.update!(tiktok: '@hiroki-9_87') }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message).to eq('TikTokのユーザ名は先頭の@不要です')
+        end)
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(tiktok: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(tiktok: '')
+        expect(user.tiktok).to eq('')
+      end
+
+      it 'tiktokのユーザ名が51文字以上の場合エラー' do
+        user.update(tiktok: 'a' * 51)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('TikTokのユーザ名は50文字以内で入力してください')
+      end
+    end
+
+    context 'youtube' do
+      before do
+        user.update(youtube: 'hiroki1879')
+      end
+
+      it '登録可能' do
+        expect(user.youtube).to eq('hiroki1879')
+      end
+
+      it '先頭の@含まれる場合エラー' do
+        expect { user.update!(youtube: '@hiroki-9_87') }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message).to eq('YouTubeのユーザ名は先頭の@不要です')
+        end)
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(youtube: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(youtube: '')
+        expect(user.youtube).to eq('')
+      end
+
+      it 'youtubeのユーザ名が51文字以上の場合エラー' do
+        user.update(youtube: 'a' * 51)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('YouTubeのユーザ名は50文字以内で入力してください')
+      end
+    end
+
+    context 'website' do
+      before do
+        user.update(website: 'https://test.com')
+      end
+
+      it '登録可能' do
+        expect(user.website).to eq('https://test.com')
+      end
+
+      it '暗号化されていないURLは登録不可' do
+        expect { user.update!(website: 'http://test.com') }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message).to eq('ウェブサイトのURLが不正な形式です')
+        end)
+      end
+
+      it '不正な形式は登録不可' do
+        expect { user.update!(website: 'https://-@{}$$%%&&[]#') }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message).to eq('ウェブサイトのURLが不正な形式です')
+        end)
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          user.update(website: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        user.update(website: '')
+        expect(user.website).to eq('')
+      end
+
+      it 'websiteのURLが256文字以上の場合エラー' do
+        user.update(website: 'a' * 256)
+        expect(user).not_to be_valid
+        expect(user.errors.full_messages.first).to eq('ウェブサイトのURLは255文字以内で入力してください')
+      end
+    end
   end
 
   describe 'methods' do

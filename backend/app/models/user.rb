@@ -12,6 +12,18 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8 },
                        format: { with: Constants::Regexps::VALID_PASSWORD_REGEX },
                        if: :password_required?
+  validates :profile_name, length: { maximum: 30 }
+  validates :bio, length: { maximum: 180 }
+  validates :x, length: { maximum: 50 }
+  validates :instagram, length: { maximum: 50 }
+  validates :facebook, length: { maximum: 50 }
+  validates :linkedin, length: { maximum: 50 }
+  validates :tiktok, length: { maximum: 50 },
+                     format: { with: Constants::Regexps::TIKTOK }
+  validates :youtube, length: { maximum: 50 },
+                      format: { with: Constants::Regexps::YOUTUBE }
+  validates :website, length: { maximum: 255 },
+                      format: { with: Constants::Regexps::URL }
 
   def update_token_version(token_version)
     update!(current_token_version: token_version)
