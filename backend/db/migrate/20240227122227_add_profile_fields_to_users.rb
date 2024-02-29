@@ -1,13 +1,18 @@
 class AddProfileFieldsToUsers < ActiveRecord::Migration[7.1]
   def change
-    add_column :users, :profile_name, :string, null: false, default: ''
-    add_column :users, :bio, :text
-    add_column :users, :x, :string, null: false, default: ''
-    add_column :users, :instagram, :string, null: false, default: ''
-    add_column :users, :facebook, :string, null: false, default: ''
-    add_column :users, :linkedin, :string, null: false, default: ''
-    add_column :users, :tiktok, :string, null: false, default: ''
-    add_column :users, :youtube, :string, null: false, default: ''
-    add_column :users, :website, :string,  null: false, default: ''
+    create_table :profiles do |t|
+      t.belongs_to :user, foreign_key: true
+      t.string :profile_name, null: false, default: ''
+      t.text :bio
+      t.string :x, null: false, default: ''
+      t.string :instagram, null: false, default: ''
+      t.string :facebook, null: false, default: ''
+      t.string :linkedin, null: false, default: ''
+      t.string :tiktok, null: false, default: ''
+      t.string :youtube, null: false, default: ''
+      t.string :website, null: false, default: ''
+
+      t.timestamps
+    end
   end
 end
