@@ -15,7 +15,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_27_232656) do
     t.bigint "user_id"
     t.string "profile_name", default: "", null: false
     t.text "bio"
-    t.string "x", default: "", null: false
+    t.string "x_twitter", default: "", null: false
     t.string "instagram", default: "", null: false
     t.string "facebook", default: "", null: false
     t.string "linkedin", default: "", null: false
