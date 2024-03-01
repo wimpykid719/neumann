@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  # before_action :authenticate_user, only: [:update]
+  before_action :authenticate_user, only: [:show]
   include LoginResponseConcern
 
   rescue_from Constants::Exceptions::TokenVersion do |error|
@@ -11,17 +11,15 @@ class Api::V1::UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_user
 
   def show
-    if current_user && current_user.name == params[:id]
-      render json: @current_user.as_json(only: [:name, :email])
-    else
-      # params[:id]には一意性で登録されたユーザ名が入る
-      user = User.find_by!(name: params[:id])
-      render json: user.as_json(only: [:name])
-    end
+    render json: @current_user.as_json(
+      only: [:name, :email],
+      include: { profile: { only: :profile_name } }
+    )
   end
 
   def create
     user = User.create!(users_params)
+    user.create_profile
 
     render status: :created, json: login_response_with_cookie(user)
   end

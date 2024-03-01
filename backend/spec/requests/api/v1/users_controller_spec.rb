@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController do
-  include TokenConcern
   include_context 'user_authorities'
 
   let(:user_not_logged_in) { FactoryBot.create(:user, name: 'hiroki', current_token_version: new_token_version) }
@@ -11,46 +10,62 @@ RSpec.describe Api::V1::UsersController do
 
   describe 'GET #show' do
     context '正常系' do
+      before do
+        user
+        profile
+      end
+
       it '認証成功、ステータスコード/200が返る' do
-        get api_v1_user_path(user.name), **headers
+        get api_v1_user_path(user.name), **headers_with_access_token
 
         expect(response).to have_http_status(:ok)
       end
 
-      it 'ログインユーザ自身がユーザ詳細を取得する場合、ユーザ名、メールアドレスが返る' do
+      it 'ログインユーザ自身がユーザ詳細を取得する場合、ユーザ名、メールアドレス、表示各が返る' do
         get api_v1_user_path(user.name), **headers_with_access_token
 
         json = response.parsed_body
+
+        expect(json.size).to eq(3)
         expect(json['name']).to eq('neumann')
         expect(json['email']).to be_present
+        expect(json['profile']['profile_name']).to eq('ノイマン')
       end
 
-      it 'ログインユーザ自身が別のユーザ詳細を取得する場合、ユーザ名のみが返る' do
+      it 'ログインユーザ自身が別のユーザ詳細を取得しようとしても自身が返る' do
         get api_v1_user_path(user_not_logged_in.name), **headers_with_access_token
+        expect(response).to have_http_status(:ok)
 
         json = response.parsed_body
-        expect(json['name']).to eq('hiroki')
-        expect(json['email']).to be_nil
+
+        expect(json.size).to eq(3)
+        expect(json['name']).to eq('neumann')
+        expect(json['email']).to be_present
+        expect(json['profile']['profile_name']).to eq('ノイマン')
       end
 
-      it '未ログインユーザがユーザ詳細を取得する場合、ユーザ名のみが返る' do
+      it '未ログインユーザがユーザ詳細を取得する場合、認証エラーとなる' do
         get api_v1_user_path(user_not_logged_in.name), **headers
 
+        expect(response).to have_http_status(:unauthorized)
+
         json = response.parsed_body
-        expect(json['name']).to eq('hiroki')
-        expect(json['email']).to be_nil
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
       end
     end
 
     context '異常系' do
-      it '存在しないユーザ、ステータスコード/404、エラーレスポンスが還る' do
-        get api_v1_user_path(user_not_logged_in.id + 1), **headers
+      it 'ユーザ存在しない場合、認証エラーとなる' do
+        user.destroy
+        get api_v1_user_path(user_not_logged_in.id + 1), **headers_with_access_token
 
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
         json = response.parsed_body
 
         expect(json.size).to eq(1)
-        expect(json['error']['message']).to eq('存在しないユーザです。')
+        expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
       end
 
       it 'tokenのバージョンに変更があった場合' do
