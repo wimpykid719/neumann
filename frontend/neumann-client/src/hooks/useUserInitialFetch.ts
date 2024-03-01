@@ -8,15 +8,11 @@ import { useEffect } from 'react'
 import useSWR from 'swr'
 
 export const useUserInitialFetch = (
-  userName: string | undefined,
   accessToken: AccessToken,
   showToast: (message: string, type: ToastType) => void,
 ) => {
   const { user, setUser } = useUser()
-  const { data, isLoading } = useSWR(
-    userName && accessToken ? [userName, accessToken] : null,
-    ([userName, accessToken]) => getUser(userName, accessToken),
-  )
+  const { data, isLoading } = useSWR(accessToken || null, accessToken => getUser(accessToken))
 
   useEffect(() => {
     if (data instanceof FetchError) {
