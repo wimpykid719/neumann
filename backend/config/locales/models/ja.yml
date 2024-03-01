@@ -8,9 +8,10 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: 確認用パスワード
+      profile:
         profile_name: 表示名
         bio: 自己紹介
-        x: Xのユーザ名
+        x_twitter: Xのユーザ名
         instagram: Instagramのユーザ名
         facebook: Facebookのユーザ名
         linkedin: LinkedInのユーザ名
@@ -29,6 +30,8 @@ ja:
             password:
               invalid: は半角英数字、ハイフン、アンダーバーで入力してください
               password_too_long: は72文字以内で入力してください
+        profile:
+          attributes:
             website:
               invalid: が不正な形式です
             tiktok:
