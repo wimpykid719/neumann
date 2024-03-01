@@ -7,7 +7,7 @@ module Token
 
     # アクセストークンのインスタンス生成
     def generate_access_token(options = {})
-      Token::AccessToken.new(id, name, options:)
+      Token::AccessToken.new(id, options:)
     end
 
     # リフレッシュトークンのインスタンス生成

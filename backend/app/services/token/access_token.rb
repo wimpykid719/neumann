@@ -6,8 +6,8 @@ module Token
 
     attr_reader :payload, :token
 
-    def initialize(user_id, user_name, options: {})
-      @payload = claims(user_id, user_name).merge(options)
+    def initialize(user_id, options: {})
+      @payload = claims(user_id).merge(options)
       @token = JWT.encode(@payload, secret_key, algorithm, header_fields)
     end
 
@@ -43,9 +43,8 @@ module Token
     end
 
     # エンコード時のデフォルトクレーム
-    def claims(user_id, user_name)
+    def claims(user_id)
       {
-        username: user_name,
         user_claim => encrypt_for(user_id),
         exp: token_expiration,
         version: user_current_token_version(user_id)
