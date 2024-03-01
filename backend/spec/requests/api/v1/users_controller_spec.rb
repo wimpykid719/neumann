@@ -28,7 +28,7 @@ RSpec.describe Api::V1::UsersController do
         expect(json.size).to eq(3)
         expect(json['name']).to eq('neumann')
         expect(json['email']).to be_present
-        expect(json['profile']['profile_name']).to eq('ノイマン')
+        expect(json['profile']['name']).to eq('ノイマン')
       end
 
       it 'ログインユーザ自身が別のユーザ詳細を取得しようとしても自身が返る' do
@@ -40,7 +40,7 @@ RSpec.describe Api::V1::UsersController do
         expect(json.size).to eq(3)
         expect(json['name']).to eq('neumann')
         expect(json['email']).to be_present
-        expect(json['profile']['profile_name']).to eq('ノイマン')
+        expect(json['profile']['name']).to eq('ノイマン')
       end
 
       it '未ログインユーザがユーザ詳細を取得する場合、認証エラーとなる' do

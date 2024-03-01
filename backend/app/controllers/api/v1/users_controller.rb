@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
   def show
     render json: @current_user.as_json(
       only: [:name, :email],
-      include: { profile: { only: :profile_name } }
+      include: { profile: { only: :name } }
     )
   end
 

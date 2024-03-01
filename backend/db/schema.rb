@@ -13,7 +13,7 @@
 ActiveRecord::Schema[7.1].define(version: 2024_02_27_232656) do
   create_table "profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id"
-    t.string "profile_name", default: "", null: false
+    t.string "name", default: "", null: false
     t.text "bio"
     t.string "x_twitter", default: "", null: false
     t.string "instagram", default: "", null: false

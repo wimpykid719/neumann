@@ -22,7 +22,7 @@ RSpec.describe Api::V1::ProfilesController do
         json = response.parsed_body
 
         expect(json.size).to eq(9)
-        expect(json['profile_name']).to eq('ノイマン')
+        expect(json['name']).to eq('ノイマン')
         expect(json['bio']).to eq('あらゆる学問に精通しています。コンピュータの開発に貢献しました。')
         expect(json['x_twitter']).to eq('neumann-1903')
         expect(json['instagram']).to eq('neumann_1903')

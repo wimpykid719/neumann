@@ -9,31 +9,31 @@ RSpec.describe Profile do
   end
 
   describe 'validation' do
-    context 'profile_name' do
+    context 'name' do
       it '登録可能' do
-        expect(profile.profile_name).to be_present
+        expect(profile.name).to be_present
       end
 
       it '別のユーザと重複可能' do
-        new_profile = FactoryBot.build(:profile, profile_name: 'ノイマン', user:)
+        new_profile = FactoryBot.build(:profile, name: 'ノイマン', user:)
 
         expect(new_profile).to be_valid
-        expect(new_profile.profile_name).to eq('ノイマン')
+        expect(new_profile.name).to eq('ノイマン')
       end
 
       it 'nilの場合エラー' do
         expect do
-          profile.update!(profile_name: nil, user:)
+          profile.update!(name: nil, user:)
         end.to raise_error(ActiveRecord::NotNullViolation)
       end
 
       it '空文字入力可能' do
-        profile.update(profile_name: '', user:)
-        expect(profile.profile_name).to eq('')
+        profile.update(name: '', user:)
+        expect(profile.name).to eq('')
       end
 
       it 'nameが31文字以上の場合エラー' do
-        profile.update(profile_name: 'あ' * 31, user:)
+        profile.update(name: 'あ' * 31, user:)
         expect(profile).not_to be_valid
         expect(profile.errors.full_messages.first).to eq('表示名は30文字以内で入力してください')
       end
@@ -50,8 +50,8 @@ RSpec.describe Profile do
       end
 
       it '空文字入力可能' do
-        profile.update(profile_name: '', user:)
-        expect(profile.profile_name).to eq('')
+        profile.update(name: '', user:)
+        expect(profile.name).to eq('')
       end
 
       it 'nameが181文字以上の場合エラー' do
