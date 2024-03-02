@@ -3,7 +3,7 @@ import { useUser } from '@/contexts/UserContext'
 import { deleteRefreshToken } from '@/lib/wrappedFeatch/logoutRequest'
 import { isLoggedInBefore } from '@/utils/localStorage'
 import { updateLogoutStatus } from '@/utils/localStorage'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import HurtIcon from '../icon/HurtIcon'
@@ -22,9 +22,9 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   const documentClickHandler = useRef<(e: MouseEvent) => void>(() => {})
   const [loginStatus, setLoginStatus] = useState(true)
-  const variants = {
-    visible: { top: '64px', opacity: 1, scale: 1 },
-    hidden: { opacity: 0, bottom: 0, scale: 0.5 },
+  const keys = {
+    goodBooks: 'goodBooks',
+    accountSettings: 'accountSettings',
   }
 
   useEffect(() => {
@@ -74,41 +74,49 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
           >
             (,,0‸0,,)
           </button>
-          {isOpen && (
-            <motion.div
-              initial={{ right: 0, opacity: 0, scale: 0.3 }}
-              animate={isOpen ? 'visible' : 'hidden'}
-              variants={variants}
-              transition={{ ease: 'easeOut', duration: 0.2 }}
-              className='absolute rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
-              ref={menuRef}
-            >
-              <div className='font-bold p-3'>{user?.name}</div>
-              <ul>
-                <li className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'>
-                  <span className='inline-flex items-center w-7'>
-                    <HurtIcon />
-                  </span>
-                  いいねした本
-                </li>
-                <li className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'>
-                  <span className='inline-flex items-center w-7'>
-                    <SettingsIcon />
-                  </span>
-                  アカウント設定
-                </li>
-              </ul>
-              <button
-                onClick={logout}
-                className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 rounded-b-lg w-full'
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ right: 0, opacity: 0, scale: 0.3 }}
+                animate={{ top: '64px', opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ ease: 'easeOut', duration: 0.2 }}
+                className='absolute rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
+                ref={menuRef}
               >
-                <span className='inline-flex items-center w-7'>
-                  <LogoutIcon />
-                </span>
-                ログアウト
-              </button>
-            </motion.div>
-          )}
+                <div className='font-bold p-3'>{user?.name}</div>
+                <ul>
+                  <li
+                    key={keys.goodBooks}
+                    className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'
+                  >
+                    <span className='inline-flex items-center w-7'>
+                      <HurtIcon />
+                    </span>
+                    いいねした本
+                  </li>
+                  <li
+                    key={keys.accountSettings}
+                    className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'
+                  >
+                    <span className='inline-flex items-center w-7'>
+                      <SettingsIcon />
+                    </span>
+                    アカウント設定
+                  </li>
+                </ul>
+                <button
+                  onClick={logout}
+                  className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 rounded-b-lg w-full'
+                >
+                  <span className='inline-flex items-center w-7'>
+                    <LogoutIcon />
+                  </span>
+                  ログアウト
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       ) : (
         <div className='flex justify-between w-60'>
