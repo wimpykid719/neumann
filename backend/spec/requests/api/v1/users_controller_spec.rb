@@ -6,6 +6,7 @@ RSpec.describe Api::V1::UsersController do
   let(:user_duplicated_email) { FactoryBot.create(:user, name: 'duplicate-1', email: 'duplicate@dup.com', current_token_version: new_token_version) }
   let!(:user_params) { { user: { name: 'test', email: 'test@test.com', password: '1111111q' } } }
   let!(:user_params_duplicated_email) { { user: { name: 'duplicate-2', email: 'duplicate@dup.com', password: '1111111q' } } }
+  let!(:user_params_lost_name) { { user: { email: 'lost@lost.com', password: '1111111q' } } }
 
   describe 'GET #show' do
     context '正常系' do
@@ -114,6 +115,17 @@ RSpec.describe Api::V1::UsersController do
 
         expect(json.size).to eq(1)
         expect(json['error']['message']).to eq('メールアドレスは登録済みです')
+      end
+
+      it '特定のparamsが存在しない場合' do
+        post api_v1_users_path, **headers, params: user_params_lost_name
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('ユーザ名を入力してください, ユーザ名は半角英数字、ハイフン、アンダーバーで入力してください')
       end
     end
   end
