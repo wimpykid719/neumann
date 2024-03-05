@@ -95,7 +95,8 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                     </span>
                     いいねした本
                   </li>
-                  <li
+                  <Link
+                    href={'settings/account'}
                     key={keys.accountSettings}
                     className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'
                   >
@@ -103,7 +104,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                       <SettingsIcon />
                     </span>
                     アカウント設定
-                  </li>
+                  </Link>
                 </ul>
                 <button
                   onClick={logout}
