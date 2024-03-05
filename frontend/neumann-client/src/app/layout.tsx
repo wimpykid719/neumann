@@ -1,4 +1,5 @@
 import { AccessTokenProvider } from '@/contexts/AccessTokenContext'
+import { ModalProvider } from '@/contexts/ModalContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 import { UserProvider } from '@/contexts/UserContext'
 
@@ -23,7 +24,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <AccessTokenProvider>
           <UserProvider>
-            <ToastProvider>{children}</ToastProvider>
+            <ToastProvider>
+              <ModalProvider>{children}</ModalProvider>
+            </ToastProvider>
           </UserProvider>
         </AccessTokenProvider>
       </body>
