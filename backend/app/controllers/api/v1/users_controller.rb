@@ -18,13 +18,13 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def create
-    user = User.create!(users_params)
+    user = User.create!(create_params)
     user.create_profile
 
     render status: :created, json: login_response_with_cookie(user)
   end
 
-  def users_params
+  def create_params
     params.require(:user).permit(:name, :email, :password)
   end
 end
