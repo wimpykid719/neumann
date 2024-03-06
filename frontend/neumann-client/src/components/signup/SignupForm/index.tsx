@@ -72,7 +72,7 @@ export default function SignupForm() {
                 </label>
                 <input
                   {...register('name')}
-                  type='name'
+                  type='text'
                   name='name'
                   id='name'
                   className={`
