@@ -6,9 +6,9 @@ import InputLoading from "@/components/settings/account/Form/InputLoading"
 
 
 export default function AccountPage() {
-  const { user } = useUser()
+  const { user, setUser } = useUser()
 
-  if (user) return <AccountForm user={user} />
+  if (user) return <AccountForm user={user} setUser={setUser} />
 
   return <InputLoading />
 }

@@ -16,10 +16,13 @@ type Response = {
 }
 
 type UpdateParams = {
-  account: AccountUpdateData
+  user: AccountUpdateData
 }
 
-export async function patchUserAccount(updateData: AccountUpdateData) {
-  const params = { account: updateData }
-  return await fetch.put<UpdateParams, Response>('/api/v1/users', params, { credentials: 'include' })
+export async function patchUserAccount(updateData: AccountUpdateData, accessToken: string) {
+  const params = { user: updateData }
+  return await fetch.patch<UpdateParams, Response>('/api/v1/users', params, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    credentials: 'include',
+  })
 }

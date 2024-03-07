@@ -1,4 +1,5 @@
 {
   "user_created": "ユーザが作成されました",
-  "account_updated": "アカウント情報が更新されました"
+  "account_updated": "アカウント情報が更新されました",
+  "no_access_token": "アクセストークンが存在しないです。再度ログインをお願いします。"
 }

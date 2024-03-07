@@ -1,30 +1,48 @@
+import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { useModal } from '@/contexts/ModalContext'
 import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { AccountUpdateData, patchUserAccount } from '@/lib/wrappedFeatch/patchAccountRequest'
+import { silentRefresh } from '@/lib/wrappedFeatch/silentRefresh'
 import { AccountUpdateValidation, AccountUpdateValidationSchema } from '@/lib/zodSchema/accountUpdateValidation'
 import toastText from '@/text/toast.json'
+import toast from '@/text/toast.json'
 import { User } from '@/types/user'
-import { sleep } from '@/utils/sleep'
-import { toastTime } from '@/utils/toast'
 import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import OldPasswordConfirmModal from './OldPasswordConfirmModal'
 
-export default function AccountForm(props: { user: User }) {
-  const { user } = props
+type Props = {
+  user: User
+  setUser: (user: User | undefined) => void
+}
+
+export default function AccountForm({ user, setUser }: Props) {
+  const { accessToken, setAccessToken } = useAccessToken()
+
   const { showToast } = useToast()
   const { showModal, closeModal } = useModal()
 
   const requestUpdate = async (data: AccountUpdateData) => {
-    const res = await patchUserAccount(data)
-
-    if (res instanceof FetchError) {
-      showToast(res.message, toastStatus.error)
+    const resSilentRefresh = await silentRefresh(accessToken)
+    if (resSilentRefresh instanceof FetchError) {
+      showToast(resSilentRefresh.message, toastStatus.error)
     } else {
-      showToast(toastText.account_updated, toastStatus.success)
-      await sleep(toastTime.succeeded)
+      const token = resSilentRefresh?.token || accessToken
+      if (!token) return showToast(toast.no_access_token, toastStatus.error)
+
+      setAccessToken(token)
+
+      const res = await patchUserAccount(data, token)
+      if (res instanceof FetchError) {
+        showToast(res.message, toastStatus.error)
+      } else {
+        if (res.email) {
+          setUser({ ...user, email: res.email })
+        }
+        showToast(toastText.account_updated, toastStatus.success)
+      }
     }
   }
 
@@ -36,6 +54,8 @@ export default function AccountForm(props: { user: User }) {
           newPassword={data.newPassword}
           showToast={showToast}
           closeModal={closeModal}
+          user={user}
+          setUser={setUser}
         />,
       )
     } else {

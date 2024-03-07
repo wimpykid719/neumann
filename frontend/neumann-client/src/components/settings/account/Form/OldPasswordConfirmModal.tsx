@@ -1,12 +1,12 @@
-'use client'
-
+import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { FetchError } from '@/lib/errors'
 import { AccountUpdateData, patchUserAccount } from '@/lib/wrappedFeatch/patchAccountRequest'
+import { silentRefresh } from '@/lib/wrappedFeatch/silentRefresh'
 import { OldPasswordValidation, OldPasswordValidationSchema } from '@/lib/zodSchema/oldPasswordConfirmValidation'
 import toastText from '@/text/toast.json'
+import toast from '@/text/toast.json'
 import { ToastType } from '@/types/toast'
-import { sleep } from '@/utils/sleep'
-import { toastTime } from '@/utils/toast'
+import { User } from '@/types/user'
 import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -16,6 +16,8 @@ type OldPasswordConfirmModalProps = {
   newPassword: string
   showToast: (message: string, type: ToastType) => void
   closeModal: () => void
+  user: User
+  setUser: (user: User | undefined) => void
 }
 
 export default function OldPasswordConfirmModal({
@@ -23,7 +25,10 @@ export default function OldPasswordConfirmModal({
   newPassword,
   showToast,
   closeModal,
+  user,
+  setUser,
 }: OldPasswordConfirmModalProps) {
+  const { accessToken, setAccessToken } = useAccessToken()
   const {
     register,
     handleSubmit,
@@ -35,14 +40,29 @@ export default function OldPasswordConfirmModal({
   })
 
   const requestUpdate = async (data: AccountUpdateData) => {
-    const res = await patchUserAccount(data)
-    closeModal()
-
-    if (res instanceof FetchError) {
-      showToast(res.message, toastStatus.error)
+    const resSilentRefresh = await silentRefresh(accessToken)
+    if (resSilentRefresh instanceof FetchError) {
+      closeModal()
+      showToast(resSilentRefresh.message, toastStatus.error)
     } else {
-      showToast(toastText.account_updated, toastStatus.success)
-      await sleep(toastTime.succeeded)
+      const token = resSilentRefresh?.token || accessToken
+      if (!token) {
+        closeModal()
+        showToast(toast.no_access_token, toastStatus.error)
+        return
+      }
+      setAccessToken(token)
+
+      const res = await patchUserAccount(data, token)
+      closeModal()
+      if (res instanceof FetchError) {
+        showToast(res.message, toastStatus.error)
+      } else {
+        if (res.email) {
+          setUser({ ...user, email: res.email })
+        }
+        showToast(toastText.account_updated, toastStatus.success)
+      }
     }
   }
 
