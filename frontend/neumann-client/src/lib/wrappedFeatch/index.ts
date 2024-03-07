@@ -134,6 +134,15 @@ export async function put<T, U = object>(path: string, body: T, options?: Option
   })
 }
 
+export async function patch<T, U = object>(path: string, body: T, options?: Options<U>): Promise<U | FetchError> {
+  return http<U>(path, {
+    method: 'PATCH',
+    body: buildRequestBody(body),
+    headers: buildHeaders(options?.headers),
+    credentials: buildCredentials(options?.credentials),
+  })
+}
+
 // deleteはJSの予約語であるためdestroyとする
 export async function destroy<T = object>(path: string, options?: Options<T>): Promise<T | FetchError> {
   return http<T>(buildPathWithSearchParams(path, options?.params ? options.params : undefined), {
