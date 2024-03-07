@@ -1,6 +1,5 @@
 'use client'
 
-import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useSilentRefresh } from '@/hooks/useSilentRefresh'
 import { useUserInitialFetch } from '@/hooks/useUserInitialFetch'
@@ -11,9 +10,8 @@ import Avatar from './Avatar'
 
 export default function Header() {
   const { showToast } = useToast()
-  const { accessToken } = useAccessToken()
-  const { newAccessToken, isRefreshed } = useSilentRefresh(accessToken, showToast)
-  const { isLoading } = useUserInitialFetch(newAccessToken || accessToken, showToast)
+  const { accessToken, isRefreshed } = useSilentRefresh(showToast)
+  const { isLoading } = useUserInitialFetch(accessToken, showToast)
 
   return (
     <section className='flex justify-between py-7'>

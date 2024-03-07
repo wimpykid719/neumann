@@ -1,3 +1,4 @@
+import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { FetchError } from '@/lib/errors'
 import { silentRefresh } from '@/lib/wrappedFeatch/silentRefresh'
 import { AccessToken } from '@/types/accessToken'
@@ -5,8 +6,8 @@ import { ToastType } from '@/types/toast'
 import { toastStatus } from '@/utils/toast'
 import { useEffect, useState } from 'react'
 
-export const useSilentRefresh = (accessToken: AccessToken, showToast: (message: string, type: ToastType) => void) => {
-  const [newAccessToken, setNewAccessToken] = useState<AccessToken>()
+export const useSilentRefresh = (showToast: (message: string, type: ToastType) => void) => {
+  const { accessToken, setAccessToken } = useAccessToken()
   const [isRefreshed, setIsRefreshed] = useState(false)
 
   useEffect(() => {
@@ -17,10 +18,12 @@ export const useSilentRefresh = (accessToken: AccessToken, showToast: (message: 
         showToast(res.message, toastStatus.error)
       } else {
         setIsRefreshed(true)
-        setNewAccessToken(res?.token)
+        if (res) {
+          setAccessToken(res.token)
+        }
       }
     }
     initFetch(accessToken)
   }, [])
-  return { newAccessToken, isRefreshed }
+  return { accessToken, isRefreshed }
 }
