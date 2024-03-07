@@ -115,6 +115,7 @@ ja:
       header: "%{model}に%{count}個のエラーが発生しました"
     request:
       password_changed: パスワードに変更がありました。再度ログインして下さい。
+      old_password_wrong: 以前のパスワードが間違っています。
       unauthorized: 認証に失敗しました。再度ログインをして下さい。
       forbidden: 不正なリクエストです。
       failed_login: メールアドレスまたは、パスワードが間違っています。

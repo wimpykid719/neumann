@@ -7,6 +7,11 @@ RSpec.describe Api::V1::UsersController do
   let!(:user_params) { { user: { name: 'test', email: 'test@test.com', password: '1111111q' } } }
   let!(:user_params_duplicated_email) { { user: { name: 'duplicate-2', email: 'duplicate@dup.com', password: '1111111q' } } }
   let!(:user_params_lost_name) { { user: { email: 'lost@lost.com', password: '1111111q' } } }
+  let!(:update_params) { { user: { new_email: 'new@new.com', new_password: '2222222q', old_password: '1111111q' } } }
+  let!(:update_params_email) { { user: { new_email: 'new@new.com', new_password: '', old_password: '' } } }
+  let!(:update_params_password) { { user: { new_email: '', new_password: '2222222q', old_password: '1111111q' } } }
+  let!(:update_params_wrong_password) { { user: { new_email: 'new@new.com', new_password: '2222222q', old_password: 'wrong_password' } } }
+  let!(:update_params_empty) { { user: { new_email: '', new_password: '', old_password: '' } } }
 
   describe 'GET #show' do
     context '正常系' do
@@ -126,6 +131,80 @@ RSpec.describe Api::V1::UsersController do
 
         expect(json.size).to eq(1)
         expect(json['error']['message']).to eq('ユーザ名を入力してください, ユーザ名は半角英数字、ハイフン、アンダーバーで入力してください')
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    context '正常系' do
+      before do
+        user
+        profile
+      end
+
+      context '正常系' do
+        it 'メールアドレス、パスワード変更' do
+          patch api_v1_users_path, **headers_with_access_token, params: update_params
+
+          expect(response).to have_http_status(:ok)
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(1)
+          expect(json['email']).to eq(update_params[:user][:new_email])
+        end
+
+        it 'メールアドレスのみ変更' do
+          patch api_v1_users_path, **headers_with_access_token, params: update_params_email
+
+          expect(response).to have_http_status(:ok)
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(1)
+          expect(json['email']).to eq(update_params[:user][:new_email])
+        end
+
+        it 'パスワード変更のみ変更' do
+          patch api_v1_users_path, **headers_with_access_token, params: update_params_password
+
+          expect(response).to have_http_status(:no_content)
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(0)
+        end
+
+        it '以前のパスワードが間違えている' do
+          patch api_v1_users_path, **headers_with_access_token, params: update_params_wrong_password
+
+          expect(response).to have_http_status(:unauthorized)
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(1)
+          expect(json['error']['message']).to eq('以前のパスワードが間違っています。')
+        end
+      end
+
+      context '異常系' do
+        it '全ての項目が空、ユーザ情報が変更されない' do
+          patch api_v1_users_path, **headers_with_access_token, params: update_params_empty
+
+          expect(response).to have_http_status(:no_content)
+          expect(user).to eq(User.find(user.id))
+        end
+
+        it 'アクセストークンなし' do
+          patch api_v1_users_path, **headers, params: update_params
+
+          expect(response).to have_http_status(:unauthorized)
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(1)
+          expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
+        end
       end
     end
   end
