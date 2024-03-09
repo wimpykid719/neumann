@@ -1,9 +1,8 @@
-import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { useModal } from '@/contexts/ModalContext'
 import { useToast } from '@/contexts/ToastContext'
+import { useSilentRefresh } from '@/hooks/useSilentRefresh'
 import { FetchError } from '@/lib/errors'
 import { AccountUpdateData, patchUserAccount } from '@/lib/wrappedFeatch/patchAccountRequest'
-import { silentRefresh } from '@/lib/wrappedFeatch/silentRefresh'
 import { AccountUpdateValidation, AccountUpdateValidationSchema } from '@/lib/zodSchema/accountUpdateValidation'
 import toastText from '@/text/toast.json'
 import toast from '@/text/toast.json'
@@ -19,30 +18,22 @@ type Props = {
 }
 
 export default function AccountForm({ user, setUser }: Props) {
-  const { accessToken, setAccessToken } = useAccessToken()
-
   const { showToast } = useToast()
+  const { accessToken, execSilentRefresh } = useSilentRefresh(showToast)
   const { showModal, closeModal } = useModal()
 
   const requestUpdate = async (data: AccountUpdateData) => {
-    const resSilentRefresh = await silentRefresh(accessToken)
-    if (resSilentRefresh instanceof FetchError) {
-      showToast(resSilentRefresh.message, toastStatus.error)
+    const token = (await execSilentRefresh()) || accessToken
+    if (!token) return showToast(toast.no_access_token, toastStatus.error)
+
+    const res = await patchUserAccount(data, token)
+    if (res instanceof FetchError) {
+      showToast(res.message, toastStatus.error)
     } else {
-      const token = resSilentRefresh?.token || accessToken
-      if (!token) return showToast(toast.no_access_token, toastStatus.error)
-
-      setAccessToken(token)
-
-      const res = await patchUserAccount(data, token)
-      if (res instanceof FetchError) {
-        showToast(res.message, toastStatus.error)
-      } else {
-        if (res.email) {
-          setUser({ ...user, email: res.email })
-        }
-        showToast(toastText.account_updated, toastStatus.success)
+      if (res.email) {
+        setUser({ ...user, email: res.email })
       }
+      showToast(toastText.account_updated, toastStatus.success)
     }
   }
 
