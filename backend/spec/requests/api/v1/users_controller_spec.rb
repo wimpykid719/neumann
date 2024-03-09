@@ -136,75 +136,73 @@ RSpec.describe Api::V1::UsersController do
   end
 
   describe 'PATCH #update' do
+    before do
+      user
+      profile
+    end
+
     context '正常系' do
-      before do
-        user
-        profile
+      it 'メールアドレス、パスワード変更' do
+        patch api_v1_users_path, **headers_with_access_token, params: update_params
+
+        expect(response).to have_http_status(:ok)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['email']).to eq(update_params[:user][:new_email])
       end
 
-      context '正常系' do
-        it 'メールアドレス、パスワード変更' do
-          patch api_v1_users_path, **headers_with_access_token, params: update_params
+      it 'メールアドレスのみ変更' do
+        patch api_v1_users_path, **headers_with_access_token, params: update_params_email
 
-          expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:ok)
 
-          json = response.parsed_body
+        json = response.parsed_body
 
-          expect(json.size).to eq(1)
-          expect(json['email']).to eq(update_params[:user][:new_email])
-        end
-
-        it 'メールアドレスのみ変更' do
-          patch api_v1_users_path, **headers_with_access_token, params: update_params_email
-
-          expect(response).to have_http_status(:ok)
-
-          json = response.parsed_body
-
-          expect(json.size).to eq(1)
-          expect(json['email']).to eq(update_params[:user][:new_email])
-        end
-
-        it 'パスワード変更のみ変更' do
-          patch api_v1_users_path, **headers_with_access_token, params: update_params_password
-
-          expect(response).to have_http_status(:no_content)
-
-          json = response.parsed_body
-
-          expect(json.size).to eq(0)
-        end
-
-        it '以前のパスワードが間違えている' do
-          patch api_v1_users_path, **headers_with_access_token, params: update_params_wrong_password
-
-          expect(response).to have_http_status(:unauthorized)
-
-          json = response.parsed_body
-
-          expect(json.size).to eq(1)
-          expect(json['error']['message']).to eq('以前のパスワードが間違っています。')
-        end
+        expect(json.size).to eq(1)
+        expect(json['email']).to eq(update_params[:user][:new_email])
       end
 
-      context '異常系' do
-        it '全ての項目が空、ユーザ情報が変更されない' do
-          patch api_v1_users_path, **headers_with_access_token, params: update_params_empty
+      it 'パスワード変更のみ変更' do
+        patch api_v1_users_path, **headers_with_access_token, params: update_params_password
 
-          expect(response).to have_http_status(:no_content)
-          expect(user).to eq(User.find(user.id))
-        end
+        expect(response).to have_http_status(:no_content)
 
-        it 'アクセストークンなし' do
-          patch api_v1_users_path, **headers, params: update_params
+        json = response.parsed_body
 
-          expect(response).to have_http_status(:unauthorized)
+        expect(json.size).to eq(0)
+      end
 
-          json = response.parsed_body
+      it '以前のパスワードが間違えている' do
+        patch api_v1_users_path, **headers_with_access_token, params: update_params_wrong_password
 
-          expect(json.size).to eq(1)
-          expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
-        end
+        expect(response).to have_http_status(:unauthorized)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('以前のパスワードが間違っています。')
+      end
+    end
+
+    context '異常系' do
+      it '全ての項目が空、ユーザ情報が変更されない' do
+        patch api_v1_users_path, **headers_with_access_token, params: update_params_empty
+
+        expect(response).to have_http_status(:no_content)
+        expect(user).to eq(User.find(user.id))
+      end
+
+      it 'アクセストークンなし' do
+        patch api_v1_users_path, **headers, params: update_params
+
+        expect(response).to have_http_status(:unauthorized)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
       end
     end
   end
