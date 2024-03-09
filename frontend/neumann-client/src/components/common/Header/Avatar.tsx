@@ -84,7 +84,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                 className='absolute rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
                 ref={menuRef}
               >
-                <div className='font-bold p-3'>{user?.name}</div>
+                <div className='font-bold p-3'>{user.profile.name || user.name}</div>
                 <ul>
                   <li
                     key={keys.goodBooks}
