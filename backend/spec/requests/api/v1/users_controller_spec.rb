@@ -32,9 +32,19 @@ RSpec.describe Api::V1::UsersController do
         json = response.parsed_body
 
         expect(json.size).to eq(3)
+        expect(json['profile'].size).to eq(9)
+
         expect(json['name']).to eq('neumann')
         expect(json['email']).to be_present
         expect(json['profile']['name']).to eq('ノイマン')
+        expect(json['profile']['bio']).to eq('あらゆる学問に精通しています。コンピュータの開発に貢献しました。')
+        expect(json['profile']['x_twitter']).to eq('neumann-1903')
+        expect(json['profile']['instagram']).to eq('neumann_1903')
+        expect(json['profile']['facebook']).to eq('neumann-1903')
+        expect(json['profile']['linkedin']).to eq('neumann-1903')
+        expect(json['profile']['tiktok']).to eq('neumann-1903')
+        expect(json['profile']['youtube']).to eq('neumann-1903')
+        expect(json['profile']['website']).to eq('https://neuman.com')
       end
 
       it 'ログインユーザ自身が別のユーザ詳細を取得しようとしても自身が返る' do
