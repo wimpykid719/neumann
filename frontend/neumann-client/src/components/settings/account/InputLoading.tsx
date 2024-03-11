@@ -33,7 +33,7 @@ export default function InputLoading() {
               type='button'
               className='
                     w-60 bg-secondary
-                    hover:opacity-70
+                    hover:bg-opacity-70
                     focus:ring-4
                     focus:outline-none
                     focus:ring-secondary

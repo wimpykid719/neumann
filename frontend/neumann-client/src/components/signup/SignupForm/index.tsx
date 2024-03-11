@@ -161,7 +161,7 @@ export default function SignupForm() {
               type='submit'
               className='
                   w-full bg-secondary
-                  hover:opacity-70
+                  hover:bg-opacity-70
                   focus:ring-4
                   focus:outline-none
                   focus:ring-secondary
