@@ -2,7 +2,7 @@
 
 import AccountForm from "@/components/settings/account/Form"
 import { useUser } from '@/contexts/UserContext'
-import InputLoading from "@/components/settings/account/Form/InputLoading"
+import InputLoading from "@/components/settings/account/InputLoading"
 
 
 export default function AccountPage() {

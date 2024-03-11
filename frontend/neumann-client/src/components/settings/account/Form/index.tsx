@@ -10,7 +10,7 @@ import { User } from '@/types/user'
 import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import OldPasswordConfirmModal from './OldPasswordConfirmModal'
+import OldPasswordConfirmModal from '../OldPasswordConfirmModal'
 
 type Props = {
   user: User
