@@ -24,10 +24,10 @@ class Api::V1::BooksController < ApplicationController
   private
 
   def books_params
-    [:title, :img_url]
+    [:id, :title, :img_url]
   end
 
   def book_params
-    [:title, :img_url, :description, :score, :page, :launched, :author, :publisher, :associate_url]
+    [*books_params, :description, :score, :page, :launched, :author, :publisher, :associate_url]
   end
 end
