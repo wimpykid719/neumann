@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resource :users, only: [:show, :create, :update]
       resource :profiles, only: [:update]
       resources :profiles, only: [:show]
+      resources :books, only: [:index, :show]
 
       resources :auth_token, only: [:create] do
         post :refresh, on: :collection

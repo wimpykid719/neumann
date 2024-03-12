@@ -11,5 +11,8 @@ FactoryBot.define do
     author { '高橋 昌一郎' }
     publisher { '講談社' }
     associate_url { 'https://amzn.to/4c9f3R8' }
+
+    created_at { Time.zone.now }
+    updated_at { Time.zone.now }
   end
 end

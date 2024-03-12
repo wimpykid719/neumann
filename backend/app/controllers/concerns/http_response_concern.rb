@@ -12,6 +12,10 @@ module HttpResponseConcern
     render status: :not_found, json: { error: { message: I18n.t('errors.request.not_found_user') } }
   end
 
+  def status_not_found_book
+    render status: :not_found, json: { error: { message: I18n.t('errors.request.not_found_book') } }
+  end
+
   def verify_xhr_request
     return if request.xhr?
 

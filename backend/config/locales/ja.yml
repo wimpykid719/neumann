@@ -120,6 +120,7 @@ ja:
       forbidden: 不正なリクエストです。
       failed_login: メールアドレスまたは、パスワードが間違っています。
       not_found_user: 存在しないユーザです。
+      not_found_book: 登録されていない書籍です。
   helpers:
     select:
       prompt: 選択してください
