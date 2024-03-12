@@ -26,7 +26,7 @@ RSpec.describe Api::V1::ProfilesController do
         profile
       end
 
-      it '認証成功、ステータスコード/200が返る' do
+      it 'リクエスト成功、ステータスコード/200が返る' do
         get api_v1_profile_path(user.name), **headers
 
         expect(response).to have_http_status(:ok)
