@@ -139,6 +139,7 @@ GEM
     nio4r (2.7.0)
     nokogiri (1.16.0-aarch64-linux)
       racc (~> 1.4)
+    pagy (7.0.10)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -274,6 +275,7 @@ DEPENDENCIES
   ffaker
   jwt
   mysql2
+  pagy (~> 7.0)
   pry-byebug
   pry-rails
   puma (~> 6.4, >= 6.4.2)

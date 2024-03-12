@@ -1,9 +1,19 @@
 class Api::V1::BooksController < ApplicationController
+  rescue_from Pagy::OverflowError, with: :status_not_found_pages
   rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_book
 
   def index
-    books = Book.all
-    render json: books.as_json(only: books_params)
+    pagy, books = pagy(Book.all)
+    metadata = pagy_metadata(pagy)
+
+    render json: {
+      books: books.as_json(only: books_params),
+      pages: {
+        prev: metadata[:prev],
+        next: metadata[:next],
+        last: metadata[:last]
+      }
+    }
   end
 
   def show

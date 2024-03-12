@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::BooksController do
   include_context 'user_authorities'
   let(:book) { FactoryBot.create(:book) }
-  let(:books) { FactoryBot.build_list(:book, 100) }
+  let(:books) { FactoryBot.build_list(:book, 1000) }
 
   describe 'GET #index' do
     context '正常系' do
@@ -24,10 +24,65 @@ RSpec.describe Api::V1::BooksController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(100)
-        expect(json[0].size).to eq(2)
-        expect(json[0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
-        expect(json[0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+        expect(json.size).to eq(2)
+        expect(json['books'].size).to eq(100)
+        expect(json['books'][0].size).to eq(2)
+        expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+        expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+
+        expect(json['pages'].size).to eq(3)
+        expect(json['pages']['prev']).to be_nil
+        expect(json['pages']['next']).to eq(2)
+        expect(json['pages']['last']).to eq(10)
+      end
+
+      it '書籍一覧が返る（2ページ目）' do
+        get api_v1_books_path, **headers, params: { page: 2 }
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(2)
+        expect(json['books'].size).to eq(100)
+        expect(json['books'][0].size).to eq(2)
+        expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+        expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+
+        expect(json['pages'].size).to eq(3)
+        expect(json['pages']['prev']).to eq(1)
+        expect(json['pages']['next']).to eq(3)
+        expect(json['pages']['last']).to eq(10)
+      end
+
+      it '書籍一覧が返る（10ページ目）' do
+        get api_v1_books_path, **headers, params: { page: 10 }
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(2)
+        expect(json['books'].size).to eq(100)
+        expect(json['books'][0].size).to eq(2)
+        expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+        expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+
+        expect(json['pages'].size).to eq(3)
+        expect(json['pages']['prev']).to eq(9)
+        expect(json['pages']['next']).to be_nil
+        expect(json['pages']['last']).to eq(10)
+      end
+
+      it 'リクエスト失敗、ステータスコード/404が返る' do
+        get api_v1_books_path, **headers, params: { page: 11 }
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it '書籍一覧が返る（存在しないページ）' do
+        get api_v1_books_path, **headers, params: { page: 11 }
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('存在しないページです。')
       end
     end
 
@@ -39,7 +94,12 @@ RSpec.describe Api::V1::BooksController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(0)
+        expect(json['books'].size).to eq(0)
+
+        expect(json['pages'].size).to eq(3)
+        expect(json['pages']['prev']).to be_nil
+        expect(json['pages']['next']).to be_nil
+        expect(json['pages']['last']).to eq(1)
       end
     end
   end

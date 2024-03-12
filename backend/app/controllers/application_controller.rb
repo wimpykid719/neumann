@@ -5,4 +5,5 @@ class ApplicationController < ActionController::API
   include ActionController::Cookies
   include UserAuth::AuthenticateService
   include HttpResponseConcern
+  include Pagy::Backend
 end
