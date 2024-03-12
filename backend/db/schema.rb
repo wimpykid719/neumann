@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_27_232656) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_11_075122) do
+  create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title", default: "", null: false
+    t.string "img_url", default: "", null: false
+    t.text "description"
+    t.float "score", default: 0.0, null: false
+    t.integer "page", default: 0, null: false
+    t.date "launched"
+    t.string "author", default: "", null: false
+    t.string "publisher", default: "", null: false
+    t.string "associate_url", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.string "name", default: "", null: false

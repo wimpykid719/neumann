@@ -5,4 +5,5 @@ class Constants::Regexps
   URL = %r{\A(https://[\w\-.]+(:\d+)?(/[\w\-.]*)*(\?\S*)?)?\z}
   TIKTOK = /\A([^@].*|)\z/
   YOUTUBE = /\A([^@].*|)\z/
+  DATE = /\A\z|\A[1-9]\d{3}-\d{2}-\d{2}\z/
 end

@@ -18,6 +18,16 @@ ja:
         tiktok: TikTokのユーザ名
         youtube: YouTubeのユーザ名
         website: ウェブサイトのURL
+      book:
+        title: タイトル
+        img_url: 画像のURL
+        description: 説明文
+        score: 評価ポイント
+        page: ページ数
+        launched: 発売日
+        author: 著者
+        publisher: 出版社
+        associate_url: アソシエイトリンク
     errors:
       models:
         user:
@@ -38,3 +48,11 @@ ja:
               invalid: は先頭の@不要です
             youtube:
               invalid: は先頭の@不要です
+        book:
+          attributes:
+            img_url:
+              invalid: が不正な形式です
+            launched:
+              invalid: が不正な形式です
+            associate_url:
+              invalid: が不正な形式です
