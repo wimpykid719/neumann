@@ -28,7 +28,6 @@ export default function ProfileForm({ user, setUser }: Props) {
       showToast(res.message, toastStatus.error)
     } else {
       if (res) {
-        user['profile']
         setUser({
           ...user,
           profile: { ...user['profile'] },
