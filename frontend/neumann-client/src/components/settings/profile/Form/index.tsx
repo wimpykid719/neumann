@@ -30,7 +30,7 @@ export default function ProfileForm({ user, setUser }: Props) {
       if (res) {
         setUser({
           ...user,
-          profile: { ...user['profile'] },
+          profile: { ...res },
         })
       }
       showToast(toastText.account_updated, toastStatus.success)
