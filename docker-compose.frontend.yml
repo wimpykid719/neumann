@@ -5,6 +5,7 @@ services:
   frontend:
     environment:
       NEXT_PUBLIC_API_URL: "$BACK_URL:$BACK_PORT"
+      API_URL_FROM_SERVER: "$BACK_URL_FROM_SERVER:$BACK_PORT"
     build:
       context: ./frontend/
       dockerfile: Dockerfile

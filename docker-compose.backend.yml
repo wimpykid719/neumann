@@ -16,6 +16,7 @@ services:
   backend:
     environment:
       FRONT_ORIGINS: "$FRONT_DOMAIN:$FRONT_PORT"
+      ALLOW_HOST_PORT: "$ALLOW_HOST:$BACK_PORT"
     build:
       context: ./backend/
       dockerfile: Dockerfile
