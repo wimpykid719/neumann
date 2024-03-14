@@ -13,9 +13,15 @@ services:
     stop_signal: SIGINT
     volumes:
       - ./frontend:/frontend
+    networks:
+      - interconnect
     ports:
       - "$FRONT_PORT:$FRONT_PORT"
     # docker run -iを意味する
     stdin_open: true
     # -tを意味する
     tty: true
+networks:
+  interconnect:
+    name: interconnect
+    external: true

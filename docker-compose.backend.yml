@@ -20,6 +20,9 @@ services:
       context: ./backend/
       dockerfile: Dockerfile
     container_name: backend-rails-api
+    networks:
+      - default
+      - interconnect
     ports:
       - "$BACK_PORT:$BACK_PORT"
     working_dir: /backend
@@ -35,3 +38,7 @@ services:
     stdin_open: true
     # -tを意味する
     tty: true
+networks:
+  interconnect:
+    name: interconnect
+    external: true
