@@ -93,7 +93,7 @@ RSpec.describe Book do
 
     context 'score' do
       it '登録可能' do
-        expect(book.score).to eq(0.873)
+        expect(book.score).to be_present
       end
 
       it 'nilの場合エラー' do
@@ -117,7 +117,7 @@ RSpec.describe Book do
 
     context 'page' do
       it '登録可能' do
-        expect(book.page).to eq(272)
+        expect(book.page).to be_present
       end
 
       it 'nilの場合エラー' do

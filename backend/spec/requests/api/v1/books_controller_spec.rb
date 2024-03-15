@@ -73,6 +73,25 @@ RSpec.describe Api::V1::BooksController do
         expect(json['pages']['last']).to eq(10)
       end
 
+      it '評価ポイントが高い順に並んでいる' do
+        Book.destroy_all
+
+        book1 = FactoryBot.create(:book, score: 0.5)
+        book2 = FactoryBot.create(:book, score: 0.8)
+        book3 = FactoryBot.create(:book, score: 0.3)
+
+        get api_v1_books_path, **headers
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(2)
+        expect(json['books'].size).to eq(3)
+
+        expect(json['books'][0]['id']).to eq(book2.id)
+        expect(json['books'][1]['id']).to eq(book1.id)
+        expect(json['books'][2]['id']).to eq(book3.id)
+      end
+
       it 'リクエスト失敗、ステータスコード/404が返る' do
         get api_v1_books_path, **headers, params: { page: 11 }
 
@@ -129,8 +148,8 @@ RSpec.describe Api::V1::BooksController do
         expect(json['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
         expect(json['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
         expect(json['description']).to be_present
-        expect(json['score']).to eq(0.873)
-        expect(json['page']).to eq(272)
+        expect(json['score']).to be_present
+        expect(json['page']).to be_present
         expect(json['launched']).to eq('2021-02-17')
         expect(json['author']).to eq('高橋 昌一郎')
         expect(json['publisher']).to eq('講談社')

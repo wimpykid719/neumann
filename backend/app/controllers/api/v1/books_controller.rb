@@ -3,7 +3,7 @@ class Api::V1::BooksController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_book
 
   def index
-    pagy, books = pagy(Book.all)
+    pagy, books = pagy(Book.order('score DESC'))
     metadata = pagy_metadata(pagy)
 
     render json: {
