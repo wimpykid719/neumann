@@ -12,6 +12,7 @@ RSpec.describe Api::V1::UsersController do
   let!(:update_params_password) { { user: { new_email: '', new_password: '2222222q', old_password: '1111111q' } } }
   let!(:update_params_wrong_password) { { user: { new_email: 'new@new.com', new_password: '2222222q', old_password: 'wrong_password' } } }
   let!(:update_params_empty) { { user: { new_email: '', new_password: '', old_password: '' } } }
+  let!(:update_params_space_password) { { user: { new_email: 'space@space.com', new_password: ' ', old_password: '1111111q' } } }
 
   describe 'GET #show' do
     context '正常系' do
@@ -152,32 +153,44 @@ RSpec.describe Api::V1::UsersController do
     end
 
     context '正常系' do
-      it 'メールアドレス、パスワード変更' do
+      it 'メールアドレス、パスワード変更でトークンのバージョンが更新される' do
+        current_token_version = user.current_token_version
         patch api_v1_users_path, **headers_with_access_token, params: update_params
 
         expect(response).to have_http_status(:ok)
 
+        user.reload
+        expect(user.current_token_version).not_to eq(current_token_version)
+
         json = response.parsed_body
 
         expect(json.size).to eq(1)
         expect(json['email']).to eq(update_params[:user][:new_email])
       end
 
-      it 'メールアドレスのみ変更' do
+      it 'メールアドレスのみ変更でトークンのバージョンは更新されない' do
+        current_token_version = user.current_token_version
         patch api_v1_users_path, **headers_with_access_token, params: update_params_email
 
         expect(response).to have_http_status(:ok)
 
+        user.reload
+        expect(user.current_token_version).to eq(current_token_version)
+
         json = response.parsed_body
 
         expect(json.size).to eq(1)
         expect(json['email']).to eq(update_params[:user][:new_email])
       end
 
-      it 'パスワード変更のみ変更' do
+      it 'パスワード変更のみでトークンのバージョンが更新される' do
+        current_token_version = user.current_token_version
         patch api_v1_users_path, **headers_with_access_token, params: update_params_password
 
         expect(response).to have_http_status(:no_content)
+
+        user.reload
+        expect(user.current_token_version).not_to eq(current_token_version)
 
         json = response.parsed_body
 
@@ -202,6 +215,21 @@ RSpec.describe Api::V1::UsersController do
 
         expect(response).to have_http_status(:no_content)
         expect(user).to eq(User.find(user.id))
+      end
+
+      it '更新するパスワードがスペースのみ' do
+        current_token_version = user.current_token_version
+        patch api_v1_users_path, **headers_with_access_token, params: update_params_space_password
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        user.reload
+        expect(user.current_token_version).to eq(current_token_version)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('パスワードを入力してください, パスワードは8文字以上で入力してください, パスワードは半角英数字、ハイフン、アンダーバーで入力してください')
       end
 
       it 'アクセストークンなし' do

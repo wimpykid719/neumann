@@ -48,8 +48,10 @@ class Api::V1::UsersController < ApplicationController
       update_params[:new_password]
     )
 
-    if update_hash[:password] && !user&.authenticate(update_params[:old_password])
-      raise Constants::Exceptions::OldPassword, I18n.t('errors.request.old_password_wrong')
+    if update_hash[:password]
+      check_password(user, update_params[:old_password])
+      user.enforce_password_validation
+      update_hash[:current_token_version] = User.new_token_version
     end
 
     update_user_response(user, update_hash)
@@ -67,8 +69,8 @@ class Api::V1::UsersController < ApplicationController
 
   def update_email_password(new_email, new_password)
     update_hash = {}
-    update_hash[:email] = new_email if new_email.present?
-    update_hash[:password] = new_password if new_password.present?
+    update_hash[:email] = new_email unless new_email.empty?
+    update_hash[:password] = new_password unless new_password.empty?
     update_hash
   end
 
@@ -91,5 +93,11 @@ class Api::V1::UsersController < ApplicationController
   def update_user_response(user, update_hash)
     user.update!(update_hash)
     update_response(update_hash)
+  end
+
+  def check_password(user, password)
+    return if user&.authenticate(password)
+
+    raise Constants::Exceptions::OldPassword, I18n.t('errors.request.old_password_wrong')
   end
 end
