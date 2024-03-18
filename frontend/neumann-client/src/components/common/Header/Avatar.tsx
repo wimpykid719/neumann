@@ -1,8 +1,6 @@
-import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { useUser } from '@/contexts/UserContext'
-import { deleteRefreshToken } from '@/lib/wrappedFeatch/logoutRequest'
+import { useLogout } from '@/hooks/useLogout'
 import { isLoggedInBefore } from '@/utils/localStorage'
-import { updateLogoutStatus } from '@/utils/localStorage'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -16,8 +14,8 @@ type AvatarProps = {
 }
 
 export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
-  const { user, setUser } = useUser()
-  const { setAccessToken } = useAccessToken()
+  const { user } = useUser()
+  const { execLogout } = useLogout()
   const [isOpen, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const documentClickHandler = useRef<(e: MouseEvent) => void>(() => {})
@@ -51,12 +49,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
   }
 
   const logout = async () => {
-    const res = await deleteRefreshToken()
-    if (Object.keys(res).length === 0) {
-      updateLogoutStatus()
-      setUser(undefined)
-      setAccessToken('')
-    }
+    await execLogout('/')
   }
 
   if ((loginStatus && !user && !isRefreshed) || isLoading)
