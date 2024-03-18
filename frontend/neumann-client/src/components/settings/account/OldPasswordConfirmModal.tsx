@@ -7,8 +7,10 @@ import toastText from '@/text/toast.json'
 import toast from '@/text/toast.json'
 import { ToastType } from '@/types/toast'
 import { User } from '@/types/user'
-import { toastStatus } from '@/utils/toast'
+import { sleep } from '@/utils/sleep'
+import { toastStatus, toastTime } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 type OldPasswordConfirmModalProps = {
@@ -38,6 +40,7 @@ export default function OldPasswordConfirmModal({
     shouldUnregister: false,
     resolver: zodResolver(OldPasswordValidationSchema),
   })
+  const router = useRouter()
 
   const requestUpdate = async (data: AccountUpdateData) => {
     const resSilentRefresh = await silentRefresh(accessToken)
@@ -62,6 +65,8 @@ export default function OldPasswordConfirmModal({
           setUser({ ...user, email: res.email })
         }
         showToast(toastText.account_updated, toastStatus.success)
+        await sleep(toastTime.succeeded)
+        router.push('/login')
       }
     }
   }
