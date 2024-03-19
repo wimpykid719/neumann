@@ -13,11 +13,11 @@ export const ProfileUpdateValidationSchema = z.object({
   tiktok: z
     .string()
     .max(50, validation.tiktokMax)
-    .regex(/(^[^@].*|\s*)$/, { message: validation.noNeedAtSign }),
+    .regex(/^(?!@).*/, { message: validation.noNeedAtSign }),
   youtube: z
     .string()
     .max(50, validation.youtubeMax)
-    .regex(/(^[^@].*|\s*)$/, { message: validation.noNeedAtSign }),
+    .regex(/^(?!@).*/, { message: validation.noNeedAtSign }),
   website: z
     .string()
     .max(255, validation.websiteMax)
