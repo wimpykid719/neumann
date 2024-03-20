@@ -6,8 +6,14 @@ export type AccountUpdateValidation = z.infer<typeof AccountUpdateValidationSche
 export const AccountUpdateValidationSchema = z
   .object({
     newEmail: z.string().min(1, validation.emailMin).max(255, validation.emailMax).email(validation.emailIncorect),
-    newPassword: z.string().min(0).max(72, validation.passwordMax),
-    newPasswordConfirm: z.string().min(0).max(72, validation.passwordMax),
+    newPassword: z
+      .string()
+      .regex(/^$|^.{8,}$/, { message: validation.passwordMin })
+      .max(72, validation.passwordMax),
+    newPasswordConfirm: z
+      .string()
+      .regex(/^$|^.{8,}$/, { message: validation.passwordMin })
+      .max(72, validation.passwordMax),
   })
   .refine(data => data.newPassword === data.newPasswordConfirm, {
     message: validation.passwordNoMatch,
