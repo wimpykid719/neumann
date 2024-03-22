@@ -12,6 +12,7 @@ import toastText from '@/text/toast.json'
 import { sleep } from '@/utils/sleep'
 import { toastStatus, toastTime } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
@@ -46,10 +47,10 @@ export default function SignupForm() {
 
   return (
     <section className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
-      <a href='#' className='flex items-center mb-6 text-2xl font-semibold'>
+      <Link href={'/'} className={'flex items-center mb-6 text-2xl font-semibold'}>
         <BizRankIcon className='mr-2 inline' />
         {app.title}
-      </a>
+      </Link>
       <div className='w-full rounded-lg shadow dark:border dark:border-gray-600 md:mt-0 sm:max-w-md xl:p-0 sub-bg-color'>
         <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
           <h1 className='text-xl font-bold leading-tight tracking-tight md:text-2xl'>新規会員登録</h1>
