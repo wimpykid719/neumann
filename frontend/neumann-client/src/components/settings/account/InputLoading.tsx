@@ -1,5 +1,5 @@
 export default function InputLoading() {
-  const loadingClass = 'mb-4 rounded dummy-bg-color animate-pulse dark:border dark:border-gray-600'
+  const loadingClass = 'mb-4 rounded item-bg-color animate-pulse dark:border dark:border-gray-600'
 
   return (
     <section className='flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0'>

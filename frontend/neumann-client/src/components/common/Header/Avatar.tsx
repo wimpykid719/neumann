@@ -54,7 +54,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
 
   if ((loginStatus && !user && !isRefreshed) || isLoading)
     return (
-      <div className='w-12 h-12 rounded-lg shadow dummy-bg-color animate-pulse dark:border dark:border-gray-600'></div>
+      <div className='w-12 h-12 rounded-lg shadow item-bg-color animate-pulse dark:border dark:border-gray-600'></div>
     )
 
   return (

@@ -38,7 +38,7 @@
   .main-border-color {
     @apply border-gray-900 dark:border-gray-50;
   }
-  .dummy-bg-color {
+  .item-bg-color {
     @apply bg-gray-300 dark:bg-gray-700;
   }
 }
