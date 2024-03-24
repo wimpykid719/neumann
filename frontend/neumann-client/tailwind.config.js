@@ -20,6 +20,9 @@ module.exports = {
           DEFAULT: 'rgb(var(--color-warning) / <alpha-value>)',
         },
       },
+      boxShadow: {
+        pagination: '0 2px 6px 0 rgb(var(--color-primary) / 0.6)',
+      },
     },
   },
   safelist: [
