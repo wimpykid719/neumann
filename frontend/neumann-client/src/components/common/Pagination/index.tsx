@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Ellipsis from './Ellipsis'
 import Navigation from './Navigation'
-import Page from './Page'
+import Number from './Number'
 
 type PaginationProps = {
   initialPage: number
@@ -105,7 +105,7 @@ export default function Pagination({
     switch (type) {
       case 'first':
         return (
-          <Page
+          <Number
             setPage={setPage}
             page={1}
             selected={1 === page}
@@ -119,7 +119,7 @@ export default function Pagination({
         return <Navigation icon={<>{'>'}</>} setPage={setPage} page={page + 1} disabled={buttonDisabled} />
       case 'last':
         return (
-          <Page
+          <Number
             setPage={setPage}
             page={lastPage}
             selected={lastPage === page}
@@ -135,7 +135,7 @@ export default function Pagination({
   // Convert the basic item list to PaginationItem props objects
   const items = itemList.map(item => {
     return typeof item === 'number' ? (
-      <Page
+      <Number
         setPage={setPage}
         page={item}
         selected={item === page}
