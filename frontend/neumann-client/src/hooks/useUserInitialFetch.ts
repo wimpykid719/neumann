@@ -1,6 +1,6 @@
 import { useUser } from '@/contexts/UserContext'
 import { FetchError } from '@/lib/errors'
-import { getUser } from '@/lib/wrappedFeatch/request/user'
+import { getUser } from '@/lib/wrappedFeatch/requests/user'
 import { AccessToken } from '@/types/accessToken'
 import { ToastType } from '@/types/toast'
 import { toastStatus } from '@/utils/toast'

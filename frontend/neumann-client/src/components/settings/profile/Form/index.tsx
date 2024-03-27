@@ -1,7 +1,7 @@
 import { useToast } from '@/contexts/ToastContext'
 import { useSilentRefresh } from '@/hooks/useSilentRefresh'
 import { FetchError } from '@/lib/errors'
-import { patchUserProfile } from '@/lib/wrappedFeatch/request/profile'
+import { patchUserProfile } from '@/lib/wrappedFeatch/requests/profile'
 import { ProfileUpdateValidation, ProfileUpdateValidationSchema } from '@/lib/zodSchema/profileUpdateValidation'
 import toastText from '@/text/toast.json'
 import toast from '@/text/toast.json'

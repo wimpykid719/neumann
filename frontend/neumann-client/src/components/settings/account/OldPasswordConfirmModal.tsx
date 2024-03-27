@@ -1,6 +1,6 @@
 import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { FetchError } from '@/lib/errors'
-import { AccountUpdateData, patchUserAccount } from '@/lib/wrappedFeatch/request/account'
+import { AccountUpdateData, patchUserAccount } from '@/lib/wrappedFeatch/requests/account'
 import { silentRefresh } from '@/lib/wrappedFeatch/silentRefresh'
 import { OldPasswordValidation, OldPasswordValidationSchema } from '@/lib/zodSchema/oldPasswordConfirmValidation'
 import toastText from '@/text/toast.json'
