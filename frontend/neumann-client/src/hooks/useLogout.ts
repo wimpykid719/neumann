@@ -1,6 +1,6 @@
 import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { useUser } from '@/contexts/UserContext'
-import { deleteRefreshToken } from '@/lib/wrappedFeatch/logoutRequest'
+import { deleteRefreshToken } from '@/lib/wrappedFeatch/request/logout'
 import { updateLogoutStatus } from '@/utils/localStorage'
 import { useRouter } from 'next/navigation'
 

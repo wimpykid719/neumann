@@ -2,7 +2,7 @@ import SignupPage from '@/app/signup/page'
 import { useAccessToken } from '@/contexts/AccessTokenContext'
 import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
-import { postUserCreate } from '@/lib/wrappedFeatch/signupRequest'
+import { postUserCreate } from '@/lib/wrappedFeatch/request/signup'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
 
@@ -18,7 +18,7 @@ jest.mock('@/contexts/ToastContext', () => ({
   useToast: jest.fn().mockReturnValue({ showToast: jest.fn() }),
 }))
 
-jest.mock('@/lib/wrappedFeatch/signupRequest', () => ({
+jest.mock('@/lib/wrappedFeatch/request/signup', () => ({
   postUserCreate: jest.fn(),
 }))
 
