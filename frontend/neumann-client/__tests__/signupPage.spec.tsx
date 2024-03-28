@@ -49,7 +49,7 @@ describe('SignupPage', () => {
       expect(useToast().showToast).not.toHaveBeenCalled()
 
       const userNameInput = screen.getByLabelText('ユーザ名')
-      fireEvent.change(userNameInput, { target: { value: 'こんどう ひろき' } })
+      fireEvent.change(userNameInput, { target: { value: 'kondou-hiroki' } })
 
       const emailInput = screen.getByLabelText('メールアドレス')
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
@@ -62,7 +62,7 @@ describe('SignupPage', () => {
 
       await waitFor(async () => {
         expect(mockPostUserCreate).toHaveBeenCalledWith({
-          name: 'こんどう ひろき',
+          name: 'kondou-hiroki',
           email: 'test@example.com',
           password: 'password',
         })
@@ -83,7 +83,7 @@ describe('SignupPage', () => {
       expect(useToast().showToast).not.toHaveBeenCalled()
 
       const userNameInput = screen.getByLabelText('ユーザ名')
-      fireEvent.change(userNameInput, { target: { value: 'こんどう ひろき' } })
+      fireEvent.change(userNameInput, { target: { value: 'kondou-hiroki' } })
 
       const emailInput = screen.getByLabelText('メールアドレス')
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
