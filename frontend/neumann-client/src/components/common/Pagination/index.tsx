@@ -1,5 +1,6 @@
 'use client'
 
+import { range } from '@/utils/range'
 import { useState } from 'react'
 import Ellipsis from './Ellipsis'
 import Navigation from './Navigation'
@@ -34,12 +35,6 @@ export default function Pagination({
   showLastButton = false,
 }: PaginationProps) {
   const [page, setPage] = useState(initialPage)
-
-  // https://dev.to/namirsab/comment/2050
-  const range = (start: number, end: number) => {
-    const length = end - start + 1
-    return Array.from({ length }, (_, i) => start + i)
-  }
 
   const startPages = range(1, Math.min(boundaryCount, lastPage))
   const endPages = range(Math.max(lastPage - boundaryCount + 1, boundaryCount + 1), lastPage)
