@@ -5,6 +5,7 @@ type Options<T = object> = {
   params?: T
   headers?: HeadersInit
   credentials?: Request['credentials']
+  revalidate?: number
 }
 
 /** 絶対URLかどうかを判定する　*/
@@ -85,14 +86,14 @@ function buildPathWithSearchParams<T = object>(path: string, params?: T) {
 }
 
 /** 通信処理を共通化した関数 */
-async function http<T>(path: string, config: RequestInit): Promise<T | FetchError> {
+async function http<T>(path: string, config: RequestInit, revalidate = 0): Promise<T | FetchError> {
   const request = new Request(
     // API_URLは必ず値が存在する想定なので `!` で型エラーを回避する
-    buildFullPath(process.env.NEXT_PUBLIC_API_URL!, path),
+    buildFullPath(process.env.API_URL_FROM_SERVER || process.env.NEXT_PUBLIC_API_URL!, path),
     config,
   )
 
-  const res = await fetch(request)
+  const res = await fetch(request, { next: { revalidate } })
 
   if (!res.ok) {
     try {
@@ -110,10 +111,14 @@ async function http<T>(path: string, config: RequestInit): Promise<T | FetchErro
 }
 
 export async function get<T, U = object>(path: string, options?: Options<U>): Promise<T | FetchError> {
-  return http<T>(buildPathWithSearchParams(path, options?.params ? options.params : undefined), {
-    headers: buildHeaders(options?.headers),
-    credentials: buildCredentials(options?.credentials),
-  })
+  return http<T>(
+    buildPathWithSearchParams(path, options?.params ? options.params : undefined),
+    {
+      headers: buildHeaders(options?.headers),
+      credentials: buildCredentials(options?.credentials),
+    },
+    options?.revalidate,
+  )
 }
 
 export async function post<T, U, V = object>(path: string, body: T, options?: Options<V>): Promise<U | FetchError> {
