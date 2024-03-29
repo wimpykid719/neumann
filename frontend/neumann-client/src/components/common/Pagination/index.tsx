@@ -1,13 +1,12 @@
 'use client'
 
 import { range } from '@/utils/range'
-import { useState } from 'react'
 import Ellipsis from './Ellipsis'
 import Navigation from './Navigation'
 import Number from './Number'
 
 type PaginationProps = {
-  initialPage: number
+  page: number
   lastPage: number
   disabled?: boolean
   // ページネーションの両端に絶対表示しておきたい数値の数
@@ -24,7 +23,7 @@ type PaginationProps = {
 type PageType = 'first' | 'previous' | 'next' | 'last' | 'start-ellipsis' | 'end-ellipsis'
 
 export default function Pagination({
-  initialPage,
+  page,
   lastPage,
   disabled = false,
   boundaryCount = 1,
@@ -34,7 +33,7 @@ export default function Pagination({
   showFirstButton = false,
   showLastButton = false,
 }: PaginationProps) {
-  const [page, setPage] = useState(initialPage)
+  const FIRST_PAGE = 1
 
   const startPages = range(1, Math.min(boundaryCount, lastPage))
   const endPages = range(Math.max(lastPage - boundaryCount + 1, boundaryCount + 1), lastPage)
@@ -101,21 +100,19 @@ export default function Pagination({
       case 'first':
         return (
           <Number
-            setPage={setPage}
-            page={1}
+            page={FIRST_PAGE}
             selected={1 === page}
             disabled={disabled}
             ariaCurrent={1 === page ? 'true' : undefined}
           />
         )
       case 'previous':
-        return <Navigation icon={<>{'<'}</>} setPage={setPage} page={page - 1} disabled={buttonDisabled} />
+        return <Navigation icon={<>{'<'}</>} page={page - 1} disabled={buttonDisabled} />
       case 'next':
-        return <Navigation icon={<>{'>'}</>} setPage={setPage} page={page + 1} disabled={buttonDisabled} />
+        return <Navigation icon={<>{'>'}</>} page={page + 1} disabled={buttonDisabled} />
       case 'last':
         return (
           <Number
-            setPage={setPage}
             page={lastPage}
             selected={lastPage === page}
             disabled={disabled}
@@ -131,7 +128,6 @@ export default function Pagination({
   const items = itemList.map(item => {
     return typeof item === 'number' ? (
       <Number
-        setPage={setPage}
         page={item}
         selected={item === page}
         disabled={disabled}
