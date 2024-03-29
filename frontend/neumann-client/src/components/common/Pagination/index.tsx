@@ -1,5 +1,6 @@
 'use client'
 
+import { FIRST_PAGE } from '@/utils/page'
 import { range } from '@/utils/range'
 import Ellipsis from './Ellipsis'
 import Navigation from './Navigation'
@@ -33,8 +34,6 @@ export default function Pagination({
   showFirstButton = false,
   showLastButton = false,
 }: PaginationProps) {
-  const FIRST_PAGE = 1
-
   const startPages = range(1, Math.min(boundaryCount, lastPage))
   const endPages = range(Math.max(lastPage - boundaryCount + 1, boundaryCount + 1), lastPage)
 
