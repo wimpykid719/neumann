@@ -1,7 +1,10 @@
 export type Book = {
-  id: string
+  id: number
   title: string
   img_url: string
+}
+
+export type BookDetail = Book & {
   description: string
   score: number
   page: number

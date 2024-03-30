@@ -1,5 +1,5 @@
 import * as fetch from '@/lib/wrappedFeatch'
-import { Book } from '@/types/book'
+import { Book, BookDetail } from '@/types/book'
 
 type ResponseBooks = {
   books: Book[]
@@ -10,7 +10,7 @@ type ResponseBooks = {
   }
 }
 
-type ResponseBook = Book
+type ResponseBook = BookDetail
 
 type PageParams = { page: number }
 
