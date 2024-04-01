@@ -3,6 +3,7 @@ import { Book, BookDetail } from '@/types/book'
 
 type ResponseBooks = {
   books: Book[]
+  rankings: number[]
   pages: {
     prev: number
     next: number
