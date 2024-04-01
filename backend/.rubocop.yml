@@ -113,3 +113,7 @@ RSpec/ExampleLength:
 
 Lint/RedundantCopDisableDirective:
   Enabled: false
+
+# book_size < 0 のような判定で出る警告を無視する
+Style/NumericPredicate:
+  Enabled: false
