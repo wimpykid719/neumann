@@ -4,10 +4,12 @@ class Api::V1::BooksController < ApplicationController
 
   def index
     pagy, books = pagy(Book.order('score DESC'))
+    ranking_array = ranking(page_params['page'], books)
     metadata = pagy_metadata(pagy)
 
     render json: {
       books: books.as_json(only: books_params_render),
+      rankings: ranking_array,
       pages: {
         prev: metadata[:prev],
         next: metadata[:next],
@@ -22,6 +24,18 @@ class Api::V1::BooksController < ApplicationController
   end
 
   private
+
+  def ranking(page, books)
+    books_size = books.size
+    return 0 if books_size < 0
+
+    initial_page_ranking = page ? (page.to_i - 1) * Pagy::DEFAULT[:items] : 0
+    (initial_page_ranking + 1..initial_page_ranking + books_size).to_a
+  end
+
+  def page_params
+    params.permit(:page)
+  end
 
   def books_params_render
     [:id, :title, :img_url]
