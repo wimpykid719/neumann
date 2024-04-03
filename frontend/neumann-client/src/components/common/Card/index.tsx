@@ -14,7 +14,7 @@ export default function Card({ title, img_url, ranking, detail = true }: CardPro
   const DISPLAY_WORDS = 50
 
   return (
-    <div className='w-48 h-72 sub-bg-color rounded-lg p-2'>
+    <div className={`w-48 ${detail ? 'h-72' : 'h-64'} sub-bg-color rounded-lg p-2`}>
       <div>
         <span
           className={`
