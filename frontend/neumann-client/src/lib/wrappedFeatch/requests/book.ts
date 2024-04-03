@@ -15,18 +15,19 @@ type ResponseBook = BookDetail
 
 type PageParams = { page: number }
 
-export async function getBooks(page = 1) {
-  const ONE_DAY = 86400
+const FOUR_HOURS = 14400
 
+export async function getBooks(page = 1) {
   return await fetch.get<ResponseBooks, PageParams>('/api/v1/books/', {
     params: { page },
     credentials: 'include',
-    revalidate: ONE_DAY,
+    revalidate: FOUR_HOURS,
   })
 }
 
-export async function getBook(id: number) {
-  return await fetch.get<ResponseBook>(`/api/v1/book/${id}`, {
+export async function getBook(id: string) {
+  return await fetch.get<ResponseBook>(`/api/v1/books/${id}`, {
     credentials: 'include',
+    revalidate: FOUR_HOURS,
   })
 }
