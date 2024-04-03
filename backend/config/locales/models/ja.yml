@@ -28,6 +28,8 @@ ja:
         author: 著者
         publisher: 出版社
         associate_url: アソシエイトリンク
+      like:
+        user_id: ユーザー
     errors:
       models:
         user:
@@ -56,3 +58,8 @@ ja:
               invalid: が不正な形式です
             associate_url:
               invalid: が不正な形式です
+        like:
+          attributes:
+            user_id:
+              taken: はこの書籍をいいね済みです
+

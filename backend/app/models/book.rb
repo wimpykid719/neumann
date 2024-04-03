@@ -1,4 +1,6 @@
 class Book < ApplicationRecord
+  has_many :likes, as: :likeable, dependent: :destroy
+
   validates :title, length: { maximum: 500 }
   validates :img_url, length: { maximum: 255 },
                       format: { with: Constants::Regexps::URL }
