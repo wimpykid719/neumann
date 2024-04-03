@@ -12,4 +12,8 @@ class Book < ApplicationRecord
   validates :publisher, length: { maximum: 50 }
   validates :associate_url, length: { maximum: 255 },
                             format: { with: Constants::Regexps::URL }
+
+  def liked_by_user?(user_id)
+    likes.exists?(user_id:)
+  end
 end

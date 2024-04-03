@@ -265,4 +265,24 @@ RSpec.describe Book do
       end
     end
   end
+
+  describe 'methods' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:user_not_liked) { FactoryBot.create(:user, name: 'not-liked') }
+    let(:like) { FactoryBot.create(:like, user:, likeable: book) }
+
+    context 'liked_by_user?' do
+      before do
+        like
+      end
+
+      it 'いいね済みの場合はtrueが返る' do
+        expect(book).to be_liked_by_user(user.id)
+      end
+
+      it 'いいね済みでない場合はfalseが返る' do
+        expect(book).not_to be_liked_by_user(user_not_liked.id)
+      end
+    end
+  end
 end
