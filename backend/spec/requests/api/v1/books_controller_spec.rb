@@ -180,7 +180,7 @@ RSpec.describe Api::V1::BooksController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(10)
+        expect(json.size).to eq(11)
         expect(json['id']).to be_present
         expect(json['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
         expect(json['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
@@ -191,6 +191,7 @@ RSpec.describe Api::V1::BooksController do
         expect(json['author']).to eq('高橋 昌一郎')
         expect(json['publisher']).to eq('講談社')
         expect(json['associate_url']).to eq('https://amzn.to/4c9f3R8')
+        expect(json['ranking']).to eq(1)
       end
     end
 

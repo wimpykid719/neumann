@@ -16,4 +16,8 @@ class Book < ApplicationRecord
   def liked_by_user?(user_id)
     likes.exists?(user_id:)
   end
+
+  def ranking
+    Book.where('score >= ?', score).count
+  end
 end

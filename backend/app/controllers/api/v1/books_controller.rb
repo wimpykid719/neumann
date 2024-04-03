@@ -4,12 +4,12 @@ class Api::V1::BooksController < ApplicationController
 
   def index
     pagy, books = pagy(Book.order('score DESC'))
-    ranking_array = ranking(page_params['page'], books)
+    rankings_array = rankings(page_params['page'], books)
     metadata = pagy_metadata(pagy)
 
     render json: {
       books: books.as_json(only: books_params_render),
-      rankings: ranking_array,
+      rankings: rankings_array,
       pages: {
         prev: metadata[:prev],
         next: metadata[:next],
@@ -20,12 +20,12 @@ class Api::V1::BooksController < ApplicationController
 
   def show
     book = Book.find(params[:id])
-    render json: book.as_json(only: book_params_render)
+    render json: book.as_json(only: book_params_render, methods: :ranking)
   end
 
   private
 
-  def ranking(page, books)
+  def rankings(page, books)
     books_size = books.size
     return 0 if books_size < 0
 

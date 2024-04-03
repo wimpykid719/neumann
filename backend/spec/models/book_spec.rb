@@ -2,6 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Book do
   let(:book) { FactoryBot.create(:book) }
+  let(:book_low_score) { FactoryBot.create(:book, score: 0.3) }
+  let(:book_middle_score) { FactoryBot.create(:book, score: 0.5) }
+  let(:book_high_score) { FactoryBot.create(:book, score: 0.9) }
+  let(:book_super_high_score) { FactoryBot.create(:book, score: 1) }
 
   it '有効なファクトリを持つこと' do
     expect(book).to be_valid
@@ -282,6 +286,27 @@ RSpec.describe Book do
 
       it 'いいね済みでない場合はfalseが返る' do
         expect(book).not_to be_liked_by_user(user_not_liked.id)
+      end
+    end
+
+    context 'ranking' do
+      before do
+        book_low_score
+        book_middle_score
+        book_high_score
+        book_super_high_score
+      end
+
+      it '書籍の順位を返す（最上位）' do
+        expect(book_super_high_score.ranking).to eq(1)
+      end
+
+      it '書籍の順位を返す（中間）' do
+        expect(book_middle_score.ranking).to eq(3)
+      end
+
+      it '書籍の順位を返す（最下位）' do
+        expect(book_low_score.ranking).to eq(4)
       end
     end
   end
