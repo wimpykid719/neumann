@@ -14,7 +14,7 @@ export default function Header() {
   const { isLoading } = useUserInitialFetch(accessToken, showToast)
 
   return (
-    <section className='flex justify-between py-7'>
+    <section className='flex justify-between'>
       <div>
         <Link href={'/'}>
           <h1 className='text-lg font-bold'>

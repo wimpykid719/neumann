@@ -1,3 +1,4 @@
+import Card from '@/components/common/Card'
 import Pagination from '@/components/common/Pagination'
 import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
@@ -10,17 +11,17 @@ export default async function Home() {
   if (res instanceof FetchError) return <p>{error.failedBooksFetch}</p>
 
   return (
-    <>
-      <section className='flex min-h-screen flex-col items-center justify-between p-24'>
-        <div>
-          <ul>
-            {res.books.map(book => (
-              <li key={book.id}>{book.title}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
-      <Pagination page={INITIAL_PAGE} lastPage={res.pages.last} siblingCount={2} />
-    </>
+    <section className='flex flex-col min-h-screen items-center justify-between space-y-8'>
+      <div className='w-full'>
+        <ul className='flex flex-wrap gap-12 w-full'>
+          {res.books.map((book, index) => (
+            <Card key={book.id.toString()} book={book} ranking={res.rankings[index]} />
+          ))}
+        </ul>
+      </div>
+      <div className='w-full'>
+        <Pagination page={INITIAL_PAGE} lastPage={res.pages.last} siblingCount={2} />
+      </div>
+    </section>
   )
 }
