@@ -12,4 +12,5 @@ export type BookDetail = Book & {
   author: string
   publisher: string
   associate_url: string
+  ranking: number
 }
