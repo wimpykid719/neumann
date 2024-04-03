@@ -15,7 +15,9 @@ export default async function Home() {
       <div className='w-full'>
         <ul className='flex flex-wrap gap-12 w-full'>
           {res.books.map((book, index) => (
-            <Card key={book.id.toString()} book={book} ranking={res.rankings[index]} />
+            <li key={book.id.toString()}>
+              <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />
+            </li>
           ))}
         </ul>
       </div>

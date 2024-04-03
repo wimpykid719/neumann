@@ -4,15 +4,17 @@ import Image from 'next/image'
 import Likes from './Likes'
 
 type CardProps = {
-  book: Book
+  title: Book['title']
+  img_url: Book['img_url']
   ranking: number
+  detail?: boolean
 }
 
-export default function Card({ book, ranking }: CardProps) {
+export default function Card({ title, img_url, ranking, detail = true }: CardProps) {
   const DISPLAY_WORDS = 50
 
   return (
-    <li className='w-48 h-72 sub-bg-color rounded-lg p-2'>
+    <div className='w-48 h-72 sub-bg-color rounded-lg p-2'>
       <div>
         <span
           className={`
@@ -31,8 +33,8 @@ export default function Card({ book, ranking }: CardProps) {
           <Image
             width={112}
             height={176}
-            src={book.img_url}
-            alt={`${book.title}の画像`}
+            src={img_url}
+            alt={`${title}の画像`}
             sizes='
               50vw,
               (min-width: 768px) 33vw,
@@ -42,10 +44,10 @@ export default function Card({ book, ranking }: CardProps) {
             className='rounded-lg object-cover mb-2 w-28 h-44'
             priority
           />
-          <Likes likes={120} />
+          {detail && <Likes likes={120} />}
         </div>
-        <p className='text-xs text-gray-500'>{textEllipsis(book.title, DISPLAY_WORDS)}</p>
+        {detail && <p className='text-xs text-gray-500'>{textEllipsis(title, DISPLAY_WORDS)}</p>}
       </div>
-    </li>
+    </div>
   )
 }
