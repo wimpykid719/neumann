@@ -5,6 +5,7 @@ import { getBooks } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
 import { FIRST_PAGE } from '@/utils/page'
 import { range } from '@/utils/range'
+import Link from 'next/link'
 
 type PathsProps = {
   params: {
@@ -37,9 +38,9 @@ export default async function Index({ params }: PathsProps) {
       <div className='w-full'>
         <ul className='flex flex-wrap gap-12 w-full'>
           {res.books.map((book, index) => (
-            <li key={book.id.toString()}>
+            <Link key={book.id.toString()} href={`books/${book.id}`}>
               <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />
-            </li>
+            </Link>
           ))}
         </ul>
       </div>

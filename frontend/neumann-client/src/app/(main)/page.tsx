@@ -3,6 +3,7 @@ import Pagination from '@/components/common/Pagination'
 import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
+import Link from 'next/link'
 
 export default async function Home() {
   const INITIAL_PAGE = 1
@@ -15,9 +16,9 @@ export default async function Home() {
       <div className='w-full'>
         <ul className='flex flex-wrap gap-12 w-full'>
           {res.books.map((book, index) => (
-            <li key={book.id.toString()}>
+            <Link key={book.id.toString()} href={`books/${book.id}`}>
               <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />
-            </li>
+            </Link>
           ))}
         </ul>
       </div>
