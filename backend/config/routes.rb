@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :users, only: [:show, :create, :update]
       resource :likes, only: [:create]
-      resources :likes, only: [:destroy]
+      resources :likes, only: [:show, :destroy]
       resource :profiles, only: [:update]
       resources :profiles, only: [:show]
       resources :books, only: [:index, :show]

@@ -1,10 +1,17 @@
 class Api::V1::LikesController < ApplicationController
-  before_action :authenticate_user, only: [:create, :destroy]
+  before_action :authenticate_user, only: [:show, :create, :destroy]
 
   rescue_from ActiveRecord::RecordInvalid do |error|
     status_unprocessable_entity(error.message)
   end
   rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_book
+
+  def show
+    book_liked = Book.find(params[:id])
+    user = @current_user
+
+    render status: :ok, json: { liked: book_liked.liked_by_user?(user.id) }
+  end
 
   def create
     book_liked = Book.find(liked_book_params[:id])

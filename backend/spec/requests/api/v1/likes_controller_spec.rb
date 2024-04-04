@@ -21,6 +21,50 @@ RSpec.describe Api::V1::LikesController do
     }
   end
 
+  describe 'GET #show' do
+    context '正常系' do
+      before do
+        like
+      end
+
+      it 'いいね状態、ステータスコード/200が返る' do
+        get api_v1_like_path(book.id), **headers_with_access_token
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'いいね済みと返る' do
+        get api_v1_like_path(book.id), **headers_with_access_token
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['liked']).to be_truthy
+      end
+
+      it 'いいねされていないと返る' do
+        get api_v1_like_path(book_not_liked.id), **headers_with_access_token
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['liked']).to be_falsy
+      end
+    end
+
+    context '異常系' do
+      it '存在しない書籍いいね確認' do
+        get api_v1_like_path(book_not_liked.id + 1), **headers_with_access_token
+
+        expect(response).to have_http_status(:not_found)
+
+        json = response.parsed_body
+
+        expect(json['error']['message']).to eq('登録されていない書籍です。')
+      end
+    end
+  end
+
   describe 'POST #create' do
     before do
       user
