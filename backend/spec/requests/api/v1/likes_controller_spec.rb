@@ -4,6 +4,7 @@ RSpec.describe Api::V1::LikesController do
   include_context 'user_authorities'
 
   let(:book) { FactoryBot.create(:book) }
+  let(:book_not_liked) { FactoryBot.create(:book) }
   let(:like) { FactoryBot.create(:like, user:, likeable: book) }
   let!(:liked_book_params) do
     {
@@ -82,13 +83,13 @@ RSpec.describe Api::V1::LikesController do
       end
 
       it 'いいね解除、ステータスコード/200が返る' do
-        delete api_v1_likes_path, **headers_with_access_token, params: liked_book_params
+        delete api_v1_like_path(book.id), **headers_with_access_token
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'いいね解除出来たと返る' do
-        delete api_v1_likes_path, **headers_with_access_token, params: liked_book_params
+        delete api_v1_like_path(book.id), **headers_with_access_token
 
         json = response.parsed_body
 
@@ -99,7 +100,7 @@ RSpec.describe Api::V1::LikesController do
 
     context '異常系' do
       it '存在しないいいねを解除した時' do
-        delete api_v1_likes_path, **headers_with_access_token, params: liked_book_params
+        delete api_v1_like_path(book_not_liked.id), **headers_with_access_token
 
         json = response.parsed_body
         expect(json['error']['message']).to eq('すでにいいね解除済みです。')

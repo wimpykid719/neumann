@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   namespace :api, format: "json" do
     namespace :v1 do
       resource :users, only: [:show, :create, :update]
-      resource :likes, only: [:create, :destroy]
+      resource :likes, only: [:create]
+      resources :likes, only: [:destroy]
       resource :profiles, only: [:update]
       resources :profiles, only: [:show]
       resources :books, only: [:index, :show]

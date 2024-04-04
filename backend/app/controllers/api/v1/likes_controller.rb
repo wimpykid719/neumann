@@ -16,7 +16,7 @@ class Api::V1::LikesController < ApplicationController
   end
 
   def destroy
-    book_liked = Book.find(liked_book_params[:id])
+    book_liked = Book.find(params[:id])
 
     user = @current_user
     user_liked = user.likes.find_by(likeable: book_liked)
