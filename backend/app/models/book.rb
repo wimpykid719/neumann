@@ -18,6 +18,7 @@ class Book < ApplicationRecord
   end
 
   def ranking
-    Book.where('score >= ?', score).count
+    rank = Book.where('score >= ?', score).count
+    rank > 0 ? rank : 1
   end
 end
