@@ -4,7 +4,6 @@ import { FetchError } from '@/lib/errors'
 import { patchUserProfile } from '@/lib/wrappedFeatch/requests/profile'
 import { ProfileUpdateValidation, ProfileUpdateValidationSchema } from '@/lib/zodSchema/profileUpdateValidation'
 import toastText from '@/text/toast.json'
-import toast from '@/text/toast.json'
 import { User } from '@/types/user'
 import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -21,7 +20,7 @@ export default function ProfileForm({ user, setUser }: Props) {
 
   const requestUpdate = async (data: ProfileUpdateValidation) => {
     const token = (await execSilentRefresh()) || accessToken
-    if (!token) return showToast(toast.no_access_token, toastStatus.error)
+    if (!token) return showToast(toastText.no_access_token, toastStatus.error)
 
     const res = await patchUserProfile(data, token)
     if (res instanceof FetchError) {
