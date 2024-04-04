@@ -2,6 +2,7 @@ export type Book = {
   id: number
   title: string
   img_url: string
+  likes: number
 }
 
 export type BookDetail = Book & {
