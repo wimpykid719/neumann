@@ -16,8 +16,8 @@ type BookLikeParams = {
   }
 }
 
-export async function getLike(bookLikeData: BookLikeData, accessToken: AccessToken) {
-  return await fetch.get<Response>(`/api/v1/likes/${bookLikeData.id}`, {
+export async function getLike(bookId: BookDetail['id'], accessToken: AccessToken) {
+  return await fetch.get<Response>(`/api/v1/likes/${bookId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     credentials: 'include',
   })

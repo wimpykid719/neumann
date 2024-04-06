@@ -2,14 +2,14 @@
 
 import HeartLikesIcon from '@/components/common/icon/HeartLikesIcon'
 import { useToast } from '@/contexts/ToastContext'
+import { useBookLikesInitialFetch } from '@/hooks/useBookLikesInitialFetch'
 import { useSilentRefresh } from '@/hooks/useSilentRefresh'
 import { FetchError } from '@/lib/errors'
-import { deleteLike, getLike, postLike } from '@/lib/wrappedFeatch/requests/like'
+import { deleteLike, postLike } from '@/lib/wrappedFeatch/requests/like'
 import toastText from '@/text/toast.json'
 import { BookDetail } from '@/types/book'
 import { toastStatus } from '@/utils/toast'
-import { useEffect, useState } from 'react'
-import useSWR from 'swr'
+import { useState } from 'react'
 
 type LikeButtonProps = {
   id: BookDetail['id']
@@ -19,24 +19,12 @@ type LikeButtonProps = {
 export default function LikeButton({ id, likes }: LikeButtonProps) {
   const { showToast } = useToast()
   const { accessToken, execSilentRefresh } = useSilentRefresh(showToast)
+  const { likeStatus, setLikeStatus } = useBookLikesInitialFetch(accessToken, showToast, id)
 
   const [likesCount, setLikesCount] = useState(likes)
-  const [likeStatus, setLikeStatus] = useState(false)
-
-  const bookData = { id }
-  const { data, isLoading } = useSWR(accessToken ? [bookData, accessToken] : null, ([bookData, accessToken]) =>
-    getLike(bookData, accessToken),
-  )
-
-  useEffect(() => {
-    if (data instanceof FetchError) {
-      showToast(data.message, toastStatus.error)
-    } else {
-      setLikeStatus(data?.liked || false)
-    }
-  }, [isLoading])
 
   const submitLike = async (id: BookDetail['id']) => {
+    const bookData = { id }
     const token = (await execSilentRefresh()) || accessToken
     if (!token) return showToast(toastText.no_access_token, toastStatus.error)
 
