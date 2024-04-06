@@ -28,7 +28,7 @@ export default function LikeButton({ id, likes }: LikeButtonProps) {
     const token = (await execSilentRefresh()) || accessToken
     if (!token) return showToast(toastText.no_access_token, toastStatus.error)
 
-    const res = likeStatus ? await deleteLike(bookData, token) : await postLike(bookData, token)
+    const res = likeStatus ? await deleteLike(id, token) : await postLike(bookData, token)
 
     if (res instanceof FetchError) {
       showToast(res.message, toastStatus.error)

@@ -31,8 +31,8 @@ export async function postLike(bookLikeData: BookLikeData, accessToken: AccessTo
   })
 }
 
-export async function deleteLike(bookLikeData: BookLikeData, accessToken: AccessToken) {
-  return await fetch.destroy<Response>(`/api/v1/likes/${bookLikeData.id}`, {
+export async function deleteLike(bookId: BookDetail['id'], accessToken: AccessToken) {
+  return await fetch.destroy<Response>(`/api/v1/likes/${bookId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     credentials: 'include',
   })
