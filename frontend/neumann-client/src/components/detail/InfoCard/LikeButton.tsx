@@ -1,6 +1,6 @@
 'use client'
 
-import HurtIcon from '@/components/common/icon/HurtIcon'
+import HeartLikesIcon from '@/components/common/icon/HeartLikesIcon'
 import { useToast } from '@/contexts/ToastContext'
 import { useSilentRefresh } from '@/hooks/useSilentRefresh'
 import { FetchError } from '@/lib/errors'
@@ -57,12 +57,16 @@ export default function LikeButton({ id, likes }: LikeButtonProps) {
         onClick={() => submitLike(id)}
         className={`
           h-8 w-8
-          ${likeStatus ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-400'}
-          text-gray-500 pt-1.5
-          flex justify-center rounded-full mr-2
+          ${likeStatus ? 'bg-primary bg-opacity-10 dark:bg-opacity-30' : 'bg-gray-300 dark:bg-gray-400'}
+          flex justify-center items-center rounded-full mr-2
         `}
       >
-        <HurtIcon width={22} height={22} />
+        <HeartLikesIcon
+          width={22}
+          height={22}
+          heratOutLineStyle={likeStatus ? 'text-primary' : 'text-gray-500'}
+          heratInLineStyle={likeStatus ? 'text-primary' : 'text-gray-300 dark:text-gray-400'}
+        />
       </button>
       <span className='text-xs'>{likesCount}</span>
     </div>
