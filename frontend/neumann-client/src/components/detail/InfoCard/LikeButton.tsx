@@ -9,6 +9,7 @@ import { deleteLike, postLike } from '@/lib/wrappedFeatch/requests/like'
 import toastText from '@/text/toast.json'
 import { BookDetail } from '@/types/book'
 import { toastStatus } from '@/utils/toast'
+import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 type LikeButtonProps = {
@@ -20,6 +21,11 @@ export default function LikeButton({ id, likes }: LikeButtonProps) {
   const { showToast } = useToast()
   const { accessToken, execSilentRefresh } = useSilentRefresh(showToast)
   const { likeStatus, setLikeStatus } = useBookLikesInitialFetch(accessToken, showToast, id)
+  const [isClicked, setIsClicked] = useState(false)
+  const variants = {
+    clicked: { scale: [1.2, 1] },
+    notClicked: { scale: 1 },
+  }
 
   const [likesCount, setLikesCount] = useState(likes)
 
@@ -36,12 +42,19 @@ export default function LikeButton({ id, likes }: LikeButtonProps) {
       const count = likeStatus ? -1 : 1
       setLikeStatus(res.liked)
       setLikesCount(prelikesCount => prelikesCount + count)
+      setIsClicked(true)
+      setTimeout(() => {
+        setIsClicked(false)
+      }, 1000)
     }
   }
 
   return (
     <div className='flex items-center'>
-      <button
+      <motion.button
+        transition={{ ease: 'easeOut', duration: 0.3 }}
+        variants={variants}
+        animate={isClicked && likeStatus ? 'clicked' : 'notClicked'}
         onClick={() => submitLike(id)}
         className={`
           h-8 w-8
@@ -50,12 +63,13 @@ export default function LikeButton({ id, likes }: LikeButtonProps) {
         `}
       >
         <HeartLikesIcon
+          className='overflow-visible'
           width={22}
           height={22}
-          heratOutLineStyle={likeStatus ? 'text-primary' : 'text-gray-500'}
-          heratInLineStyle={likeStatus ? 'text-primary' : 'text-gray-300 dark:text-gray-400'}
+          likeStatus={likeStatus}
+          isClicked={isClicked}
         />
-      </button>
+      </motion.button>
       <span className='text-xs'>{likesCount}</span>
     </div>
   )
