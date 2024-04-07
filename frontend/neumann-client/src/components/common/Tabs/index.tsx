@@ -20,14 +20,14 @@ export default function Tabs(props: NavigationProps) {
   const getTabStyle = (href: string) => (pathname.startsWith(href) ? 'border-b-2 main-border-color' : 'text-gray-300')
 
   return (
-    <section className=''>
+    <div className='border-b border-gray-300'>
       <ul className='flex'>
         {navigation.map(item => (
-          <li key={item.key} className={`w-28 h-8 text-center ${getTabStyle(item.href)}`}>
+          <li key={item.key} className={`max-h-60 px-2 h-8 text-center ${getTabStyle(item.href)}`}>
             <Link href={item.href}>{item.name}</Link>
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   )
 }

@@ -1,5 +1,7 @@
 import Card from '@/components/common/Card'
 import Pagination from '@/components/common/Pagination'
+import Tabs from '@/components/common/Tabs'
+import { booksNavigation } from '@/components/common/Tabs/Navigations'
 import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
@@ -35,14 +37,17 @@ export default async function Index({ params }: PathsProps) {
 
   return (
     <section className='flex min-h-screen flex-col items-center justify-between space-y-8'>
-      <div className='w-full'>
-        <ul className='flex flex-wrap gap-12 w-full'>
-          {res.books.map((book, index) => (
-            <Link key={book.id.toString()} href={`books/${book.id}`}>
-              <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />
-            </Link>
-          ))}
-        </ul>
+      <div className='w-full space-y-8'>
+        <Tabs navigation={booksNavigation} />
+        <div>
+          <ul className='flex flex-wrap gap-12 w-full'>
+            {res.books.map((book, index) => (
+              <Link key={book.id.toString()} href={`books/${book.id}`}>
+                <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />
+              </Link>
+            ))}
+          </ul>
+        </div>
       </div>
       <div className='w-full'>
         <Pagination page={page} lastPage={res.pages.last} siblingCount={2} />
