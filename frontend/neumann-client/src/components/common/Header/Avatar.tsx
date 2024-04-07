@@ -74,7 +74,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                 animate={{ top: '64px', opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ ease: 'easeOut', duration: 0.2 }}
-                className='absolute rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
+                className='absolute z-10 rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
                 ref={menuRef}
               >
                 <div className='font-bold p-3'>{user.profile.name || user.name}</div>
