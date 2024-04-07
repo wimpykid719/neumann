@@ -89,7 +89,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                     いいねした本
                   </li>
                   <Link
-                    href={'settings/account'}
+                    href={'/settings/account'}
                     key={keys.accountSettings}
                     className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'
                   >
