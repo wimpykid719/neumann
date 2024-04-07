@@ -19,8 +19,8 @@ type LikeButtonProps = {
 
 export default function LikeButton({ id, likes }: LikeButtonProps) {
   const { showToast } = useToast()
-  const { accessToken, execSilentRefresh } = useSilentRefresh(showToast)
-  const { likeStatus, setLikeStatus } = useBookLikesInitialFetch(accessToken, showToast, id)
+  const { accessToken, execSilentRefresh, isRefreshed } = useSilentRefresh(showToast)
+  const { likeStatus, setLikeStatus } = useBookLikesInitialFetch(isRefreshed ? accessToken : undefined, showToast, id)
   const [isClicked, setIsClicked] = useState(false)
   const variants = {
     clicked: { scale: [1.2, 1] },
