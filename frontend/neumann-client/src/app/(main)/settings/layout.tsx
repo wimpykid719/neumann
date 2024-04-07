@@ -1,12 +1,11 @@
-
-import Tabs from "@/components/settings/tabs"
+import Tabs from '@/components/common/Tabs'
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const settingsNavigation =  [
+  const settingsNavigation = [
     { name: 'アカウント', key: 'account', href: '/settings/account' },
     { name: 'プロフィール', key: 'profile', href: '/settings/profile' },
   ]
