@@ -11,7 +11,7 @@ import Avatar from './Avatar'
 export default function Header() {
   const { showToast } = useToast()
   const { accessToken, isRefreshed } = useSilentRefresh(showToast)
-  const { isLoading } = useUserInitialFetch(accessToken, showToast)
+  const { isLoading } = useUserInitialFetch(isRefreshed ? accessToken : undefined, showToast)
 
   return (
     <section className='flex justify-between'>
