@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 type Navigation = {
   name: string
   key: string
-  href: string
+  href: string | undefined
 }
 
 type NavigationProps = {
@@ -22,11 +22,15 @@ export default function Tabs(props: NavigationProps) {
   return (
     <div className='border-b border-gray-300'>
       <ul className='flex'>
-        {navigation.map(item => (
-          <li key={item.key} className={`max-h-60 px-2 h-8 text-center ${getTabStyle(item.href)}`}>
-            <Link href={item.href}>{item.name}</Link>
-          </li>
-        ))}
+        {navigation.map(item =>
+          item.href ? (
+            <Link key={item.key} className={`max-h-60 px-2 h-8 text-center ${getTabStyle(item.href)}`} href={item.href}>
+              {item.name}
+            </Link>
+          ) : (
+            <li className='max-h-60 px-2 h-8 text-center border-b-2 main-border-color'>{item.name}</li>
+          ),
+        )}
       </ul>
     </div>
   )
