@@ -8,3 +8,5 @@ export const booksNavigation = [
   { name: 'いいね数  (｡♥‿♥｡)', key: 'likes', href: '#' },
   { name: '発見 (ﾉﾟοﾟ)ﾉ', key: 'new', href: '#' },
 ]
+
+export const bookNavigation = [{ name: '本について', key: 'about', href: undefined }]

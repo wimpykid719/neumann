@@ -1,4 +1,6 @@
 import Card from '@/components/common/Card'
+import Tabs from '@/components/common/Tabs'
+import { bookNavigation } from '@/components/common/Tabs/Navigations'
 import InfoCard from '@/components/detail/InfoCard'
 import { FetchError } from '@/lib/errors'
 import { getBook, getBooks } from '@/lib/wrappedFeatch/requests/book'
@@ -55,21 +57,24 @@ export default async function Detail({ params }: { params: SlugsProps }) {
   }
 
   return (
-    <section className='flex flex-wrap gap-7'>
-      <Card title={res.title} img_url={res.img_url} ranking={res.ranking} detail={false} />
-      <div className='space-y-8 flex-1'>
-        <h2 className='font-bold text-lg'>{res.title}</h2>
-        <article className='whitespace-pre-wrap'>{replaceNewlines(res.description)}</article>
+    <section className='space-y-8'>
+      <Tabs navigation={bookNavigation} />
+      <div className='flex flex-wrap gap-7'>
+        <Card title={res.title} img_url={res.img_url} ranking={res.ranking} detail={false} />
+        <div className='space-y-8 flex-1'>
+          <h2 className='font-bold text-lg'>{res.title}</h2>
+          <article className='whitespace-pre-wrap'>{replaceNewlines(res.description)}</article>
+        </div>
+        <InfoCard
+          id={res.id}
+          associate_url={res.associate_url}
+          score={res.score}
+          likes={120}
+          page={res.page}
+          launched={res.launched}
+          publisher={res.publisher}
+        />
       </div>
-      <InfoCard
-        id={res.id}
-        associate_url={res.associate_url}
-        score={res.score}
-        likes={120}
-        page={res.page}
-        launched={res.launched}
-        publisher={res.publisher}
-      />
     </section>
   )
 }
