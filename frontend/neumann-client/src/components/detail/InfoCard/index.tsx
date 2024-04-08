@@ -40,7 +40,7 @@ export default function InfoCard({ id, associate_url, score, likes, page, launch
           </div>
         </a>
         <p className='text-gray-500 text-xs'>
-          売り上げの10%は本のプレゼントキャンペーンに当て、
+          広告収益の10%は本のプレゼントキャンペーンに当て、
           <br />
           クリックして下さるユーザに還元できるように努めます。
         </p>
