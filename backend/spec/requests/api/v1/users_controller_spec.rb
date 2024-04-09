@@ -13,6 +13,8 @@ RSpec.describe Api::V1::UsersController do
   let!(:update_params_wrong_password) { { user: { new_email: 'new@new.com', new_password: '2222222q', old_password: 'wrong_password' } } }
   let!(:update_params_empty) { { user: { new_email: '', new_password: '', old_password: '' } } }
   let!(:update_params_space_password) { { user: { new_email: 'space@space.com', new_password: ' ', old_password: '1111111q' } } }
+  let(:book) { FactoryBot.create(:book) }
+  let(:like) { FactoryBot.create(:like, user:, likeable: book) }
 
   describe 'GET #show' do
     context '正常系' do
@@ -234,6 +236,54 @@ RSpec.describe Api::V1::UsersController do
 
       it 'アクセストークンなし' do
         patch api_v1_users_path, **headers, params: update_params
+
+        expect(response).to have_http_status(:unauthorized)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before do
+      profile
+      like
+    end
+
+    context '正常系' do
+      it 'ユーザ削除、ステータスコード/204が返る、リフレッシュトークン削除、ユーザ情報、登録したいいね、プロフィールデータ削除' do
+        expect(User.find(user.id)).to be_present
+        expect(Like.find_by(user:, likeable: book)).to be_present
+        expect(Profile.find_by(user_id: user.id)).to be_present
+
+        delete api_v1_users_path, **headers_with_access_token
+
+        expect(response).to have_http_status(:no_content)
+        expect(response.cookies['refresh_token']).to be_nil
+        expect(User.find_by(id: user.id)).to be_nil
+        expect(Like.find_by(user:, likeable: book)).to be_nil
+        expect(Profile.find_by(user_id: user.id)).to be_nil
+      end
+    end
+
+    context '異常系' do
+      it 'アクセストークンなしで削除出来ない' do
+        delete api_v1_users_path, **headers
+
+        expect(response).to have_http_status(:unauthorized)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
+      end
+
+      it '存在しないユーザ削除' do
+        user.destroy
+        delete api_v1_users_path, **headers_with_access_token
 
         expect(response).to have_http_status(:unauthorized)
 

@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_user, only: [:show, :update]
+  before_action :authenticate_user, only: [:show, :update, :destroy]
   include LoginResponseConcern
 
   rescue_from Constants::Exceptions::TokenVersion do |error|
@@ -55,6 +55,13 @@ class Api::V1::UsersController < ApplicationController
     end
 
     update_user_response(user, update_hash)
+  end
+
+  def destroy
+    user = @current_user
+    delete_session if user.destroy
+
+    head(:no_content) if cookies[UserAuthConfig.session_key].nil?
   end
 
   private
