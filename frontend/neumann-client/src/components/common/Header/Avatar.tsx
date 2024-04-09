@@ -77,11 +77,15 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                 className='absolute z-10 rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
                 ref={menuRef}
               >
-                <div className='font-bold p-3'>{user.profile.name || user.name}</div>
+                <div className='font-bold p-3 rounded-t-lg dark:hover:bg-gray-600 hover:bg-gray-100'>
+                  <Link className='block w-full' href={`/users/${user.name}`}>
+                    {user.profile.name || user.name}
+                  </Link>
+                </div>
                 <ul>
                   <li
                     key={keys.goodBooks}
-                    className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'
+                    className='flex items-center cursor-pointer p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
                   >
                     <span className='inline-flex items-center w-7'>
                       <HurtIcon />
@@ -91,7 +95,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                   <Link
                     href={'/settings/account'}
                     key={keys.accountSettings}
-                    className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100'
+                    className='flex items-center p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
                   >
                     <span className='inline-flex items-center w-7'>
                       <SettingsIcon />
@@ -101,7 +105,7 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                 </ul>
                 <button
                   onClick={logout}
-                  className='flex items-center p-3 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 rounded-b-lg w-full'
+                  className='flex items-center p-3 dark:hover:bg-gray-600 hover:bg-gray-100 rounded-b-lg w-full'
                 >
                   <span className='inline-flex items-center w-7'>
                     <LogoutIcon />
