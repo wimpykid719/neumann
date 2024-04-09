@@ -17,7 +17,7 @@ export const useUserInitialFetch = (
   useEffect(() => {
     if (data instanceof FetchError) {
       showToast(data.message, toastStatus.error)
-    } else {
+    } else if (data) {
       setUser(data)
     }
   }, [data])
