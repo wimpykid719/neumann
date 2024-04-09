@@ -1,19 +1,14 @@
 import * as fetch from '@/lib/wrappedFeatch'
 import { Book, BookDetail } from '@/types/book'
+import { PageParams, PagyMeta } from '@/types/pagy'
 
 type ResponseBooks = {
   books: Book[]
   rankings: number[]
-  pages: {
-    prev: number
-    next: number
-    last: number
-  }
+  pages: PagyMeta
 }
 
 type ResponseBook = BookDetail
-
-type PageParams = { page: number }
 
 const FOUR_HOURS = 14400
 
