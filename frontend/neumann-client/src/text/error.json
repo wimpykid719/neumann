@@ -1,3 +1,6 @@
 {
-  "failedBooksFetch": "本の取得に失敗しました。"
+  "failedBooksFetch": "本の取得に失敗しました。",
+  "failedBookFetch": "本の詳細情報取得に失敗しました。",
+  "failedUserNamesFetch": "ユーザ名一覧の取得に失敗しました。",
+  "failedUserProfileFetch": "プロフィールの取得に失敗しました。"
 }

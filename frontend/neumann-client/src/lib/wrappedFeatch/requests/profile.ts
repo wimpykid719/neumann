@@ -1,5 +1,6 @@
 import * as fetch from '@/lib/wrappedFeatch'
 import { ProfileUpdateValidation } from '@/lib/zodSchema/profileUpdateValidation'
+import { User } from '@/types/user'
 
 export type ProfileUpdateData = ProfileUpdateValidation
 
@@ -17,6 +18,12 @@ type Response = {
 
 type UpdateParams = {
   profile: ProfileUpdateData
+}
+
+export async function getUserProfile(userName: User['name']) {
+  return await fetch.get<Response>(`/api/v1/profiles/${userName}`, {
+    revalidate: 0,
+  })
 }
 
 export async function patchUserProfile(updateData: ProfileUpdateData, accessToken: string) {
