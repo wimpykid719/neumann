@@ -4,6 +4,8 @@ RSpec.describe Api::V1::LikesController do
   include_context 'user_authorities'
 
   let(:book) { FactoryBot.create(:book) }
+  # 上で本を一つ作成しているため234になる
+  let(:books) { FactoryBot.build_list(:book, 233) }
   let(:book_not_liked) { FactoryBot.create(:book) }
   let(:like) { FactoryBot.create(:like, user:, likeable: book) }
   let!(:liked_book_params) do
@@ -19,6 +21,118 @@ RSpec.describe Api::V1::LikesController do
         id: book.id + 1
       }
     }
+  end
+
+  describe 'GET #index' do
+    context '正常系' do
+      it 'リクエスト成功、ステータスコード/200が返る' do
+        get api_v1_likes_path, **headers_with_access_token
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      context '大量のいいねが存在する場合' do
+        before do
+          # rubocop:disable Rails/SkipsModelValidations:
+          Book.insert_all books.map(&:attributes)
+          Like.insert_all(Book.all.map { |book| FactoryBot.build(:like, user:, likeable: book).attributes })
+          # rubocop:enable Rails/SkipsModelValidations:
+        end
+
+        it 'ユーザがいいね登録した書籍一覧が返る' do
+          get api_v1_likes_path, **headers_with_access_token
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(2)
+          expect(json['books'].size).to eq(100)
+          expect(json['books'][0].size).to eq(3)
+          expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+          expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+
+          expect(json['pages'].size).to eq(3)
+          expect(json['pages']['prev']).to be_nil
+          expect(json['pages']['next']).to eq(2)
+          expect(json['pages']['last']).to eq(3)
+        end
+
+        it 'ユーザがいいね登録した書籍一覧が返る（2ページ目）' do
+          get api_v1_likes_path, **headers_with_access_token, params: { page: 2 }
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(2)
+          expect(json['books'].size).to eq(100)
+          expect(json['books'][0].size).to eq(3)
+          expect(json['books'].size).to eq(100)
+          expect(json['books'][0].size).to eq(3)
+          expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+          expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+
+          expect(json['pages'].size).to eq(3)
+          expect(json['pages']['prev']).to eq(1)
+          expect(json['pages']['next']).to eq(3)
+          expect(json['pages']['last']).to eq(3)
+        end
+
+        it 'ユーザがいいね登録した書籍一覧が返る（3ページ目 - 中途半端な数になる）' do
+          get api_v1_likes_path, **headers_with_access_token, params: { page: 3 }
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(2)
+          expect(json['books'].size).to eq(34)
+          expect(json['books'][0].size).to eq(3)
+          expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+          expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+
+          expect(json['pages'].size).to eq(3)
+          expect(json['pages']['prev']).to eq(2)
+          expect(json['pages']['next']).to be_nil
+          expect(json['pages']['last']).to eq(3)
+        end
+
+        it 'アクセストークンなし、ステータスコード/401が返る' do
+          get api_v1_likes_path, **headers
+
+          expect(response).to have_http_status(:unauthorized)
+
+          json = response.parsed_body
+          expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
+        end
+
+        it 'ユーザがいいね登録した書籍一覧が返る（存在しないページ）' do
+          get api_v1_likes_path, **headers_with_access_token, params: { page: 4 }
+
+          json = response.parsed_body
+
+          expect(json.size).to eq(1)
+          expect(json['error']['message']).to eq('存在しないページです。')
+        end
+      end
+    end
+
+    context '異常系' do
+      before do
+        Like.destroy_all
+      end
+
+      it 'いいねが1件も登録されていない' do
+        get api_v1_likes_path, **headers_with_access_token
+
+        expect(response).to have_http_status(:ok)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(2)
+        expect(json['books'].size).to eq(0)
+
+        expect(json['pages'].size).to eq(3)
+        expect(json['pages']['prev']).to be_nil
+        expect(json['pages']['next']).to be_nil
+        expect(json['pages']['last']).to eq(1)
+      end
+    end
   end
 
   describe 'GET #show' do

@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_one :profile, dependent: :destroy
   has_secure_password
   has_many :likes, dependent: :destroy
+  has_many :books, through: :likes, source: :likeable, source_type: Book.name
 
   validates :name, presence: true, length: { maximum: 50 },
                    format: { with: Constants::Regexps::NAME },

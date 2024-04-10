@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       resource :users, only: [:show, :create, :update, :destroy]
       resources :users_name, only: [:index]
       resource :likes, only: [:create]
-      resources :likes, only: [:show, :destroy]
+      resources :likes, only: [:index, :show, :destroy]
       resource :profiles, only: [:update]
       resources :profiles, only: [:show]
       resources :books, only: [:index, :show]

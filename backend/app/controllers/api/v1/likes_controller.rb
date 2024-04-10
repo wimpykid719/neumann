@@ -1,10 +1,27 @@
 class Api::V1::LikesController < ApplicationController
-  before_action :authenticate_user, only: [:show, :create, :destroy]
+  before_action :authenticate_user, only: [:index, :show, :create, :destroy]
 
   rescue_from ActiveRecord::RecordInvalid do |error|
     status_unprocessable_entity(error.message)
   end
   rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_book
+  rescue_from Pagy::OverflowError, with: :status_not_found_pages
+
+  def index
+    user = @current_user
+
+    pagy, user_book_likes = pagy(user.books)
+    metadata = pagy_metadata(pagy)
+
+    render json: {
+      books: user_book_likes.as_json(only: books_params_render),
+      pages: {
+        prev: metadata[:prev],
+        next: metadata[:next],
+        last: metadata[:last]
+      }
+    }
+  end
 
   def show
     book_liked = Book.find(params[:id])
@@ -40,5 +57,9 @@ class Api::V1::LikesController < ApplicationController
 
   def liked_book_params
     params.require(:book).permit(:id)
+  end
+
+  def books_params_render
+    [:id, :title, :img_url]
   end
 end
