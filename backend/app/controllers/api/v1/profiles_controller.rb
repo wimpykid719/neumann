@@ -4,6 +4,7 @@ class Api::V1::ProfilesController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid do |error|
     status_unprocessable_entity(error.message)
   end
+  rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_user
 
   def show
     # params[:id]には一意性で登録されたユーザ名が入る

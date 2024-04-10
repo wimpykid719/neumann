@@ -49,6 +49,19 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['website']).to eq('https://neuman.com')
       end
     end
+
+    context '異常系' do
+      it '存在しないプロフィール、ステータスコード/404が返る' do
+        get api_v1_profile_path('user-not-found'), **headers
+
+        expect(response).to have_http_status(:not_found)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('存在しないユーザです。')
+      end
+    end
   end
 
   describe 'PATCH #update' do
