@@ -1,5 +1,5 @@
 import Card from '@/components/common/Card'
-import Pagination from '@/components/common/Pagination'
+import Pagination, { INITIAL_PAGE } from '@/components/common/Pagination'
 import Tabs from '@/components/common/Tabs'
 import { booksNavigation } from '@/components/common/Tabs/Navigations'
 import { FetchError } from '@/lib/errors'
@@ -8,7 +8,6 @@ import error from '@/text/error.json'
 import Link from 'next/link'
 
 export default async function Home() {
-  const INITIAL_PAGE = 1
   const res = await getBooks()
 
   if (res instanceof FetchError) return <p>{error.failedBooksFetch}</p>

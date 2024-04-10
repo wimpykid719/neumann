@@ -23,6 +23,8 @@ type PaginationProps = {
 
 type PageType = 'first' | 'previous' | 'next' | 'last' | 'start-ellipsis' | 'end-ellipsis'
 
+export const INITIAL_PAGE = 1
+
 export default function Pagination({
   page,
   lastPage,
