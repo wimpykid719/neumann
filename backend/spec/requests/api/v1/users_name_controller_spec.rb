@@ -13,7 +13,7 @@ RSpec.describe Api::V1::UsersNameController do
         expect(response).to have_http_status(:ok)
       end
 
-      context 'ユーザ名一覧が返る' do
+      context '大量のユーザが存在する場合' do
         before do
           # rubocop:disable Rails/SkipsModelValidations:
           User.insert_all(users.map.with_index { |user, index| user.attributes.merge(name: "#{index}-#{user.name}") })
