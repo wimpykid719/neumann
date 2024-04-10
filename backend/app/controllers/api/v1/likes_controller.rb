@@ -1,5 +1,5 @@
 class Api::V1::LikesController < ApplicationController
-  before_action :authenticate_user, only: [:index, :show, :create, :destroy]
+  before_action :authenticate_user, only: [:show, :create, :destroy]
 
   rescue_from ActiveRecord::RecordInvalid do |error|
     status_unprocessable_entity(error.message)
@@ -8,19 +8,22 @@ class Api::V1::LikesController < ApplicationController
   rescue_from Pagy::OverflowError, with: :status_not_found_pages
 
   def index
-    user = @current_user
+    user = User.find_by(name: params[:user_name])
+    if user
+      pagy, user_book_likes = pagy(user.books)
+      metadata = pagy_metadata(pagy)
 
-    pagy, user_book_likes = pagy(user.books)
-    metadata = pagy_metadata(pagy)
-
-    render json: {
-      books: user_book_likes.as_json(only: books_params_render),
-      pages: {
-        prev: metadata[:prev],
-        next: metadata[:next],
-        last: metadata[:last]
+      render json: {
+        books: user_book_likes.as_json(only: books_params_render),
+        pages: {
+          prev: metadata[:prev],
+          next: metadata[:next],
+          last: metadata[:last]
+        }
       }
-    }
+    else
+      status_not_found_user
+    end
   end
 
   def show

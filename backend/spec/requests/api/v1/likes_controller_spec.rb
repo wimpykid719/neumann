@@ -26,7 +26,7 @@ RSpec.describe Api::V1::LikesController do
   describe 'GET #index' do
     context '正常系' do
       it 'リクエスト成功、ステータスコード/200が返る' do
-        get api_v1_likes_path, **headers_with_access_token
+        get api_v1_likes_path, **headers, params: { user_name: user.name }
 
         expect(response).to have_http_status(:ok)
       end
@@ -40,7 +40,7 @@ RSpec.describe Api::V1::LikesController do
         end
 
         it 'ユーザがいいね登録した書籍一覧が返る' do
-          get api_v1_likes_path, **headers_with_access_token
+          get api_v1_likes_path, **headers, params: { user_name: user.name }
 
           json = response.parsed_body
 
@@ -57,7 +57,7 @@ RSpec.describe Api::V1::LikesController do
         end
 
         it 'ユーザがいいね登録した書籍一覧が返る（2ページ目）' do
-          get api_v1_likes_path, **headers_with_access_token, params: { page: 2 }
+          get api_v1_likes_path, **headers, params: { user_name: user.name, page: 2 }
 
           json = response.parsed_body
 
@@ -76,7 +76,7 @@ RSpec.describe Api::V1::LikesController do
         end
 
         it 'ユーザがいいね登録した書籍一覧が返る（3ページ目 - 中途半端な数になる）' do
-          get api_v1_likes_path, **headers_with_access_token, params: { page: 3 }
+          get api_v1_likes_path, **headers, params: { user_name: user.name, page: 3 }
 
           json = response.parsed_body
 
@@ -92,17 +92,17 @@ RSpec.describe Api::V1::LikesController do
           expect(json['pages']['last']).to eq(3)
         end
 
-        it 'アクセストークンなし、ステータスコード/401が返る' do
-          get api_v1_likes_path, **headers
+        it '存在しないユーザ、ステータスコード/401が返る' do
+          get api_v1_likes_path, **headers, params: { user_name: 'user-not-fond', page: 3 }
 
-          expect(response).to have_http_status(:unauthorized)
+          expect(response).to have_http_status(:not_found)
 
           json = response.parsed_body
-          expect(json['error']['message']).to eq('認証に失敗しました。再度ログインをして下さい。')
+          expect(json['error']['message']).to eq('存在しないユーザです。')
         end
 
         it 'ユーザがいいね登録した書籍一覧が返る（存在しないページ）' do
-          get api_v1_likes_path, **headers_with_access_token, params: { page: 4 }
+          get api_v1_likes_path, **headers, params: { user_name: user.name, page: 4 }
 
           json = response.parsed_body
 
@@ -118,7 +118,7 @@ RSpec.describe Api::V1::LikesController do
       end
 
       it 'いいねが1件も登録されていない' do
-        get api_v1_likes_path, **headers_with_access_token
+        get api_v1_likes_path, **headers, params: { user_name: user.name }
 
         expect(response).to have_http_status(:ok)
 
