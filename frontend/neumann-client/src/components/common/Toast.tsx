@@ -37,7 +37,7 @@ export default function Toast({ isShowToast, message, toastType, closeToast }: T
       variants={variants}
       transition={{ ease: 'easeOut', duration: 0.4 }}
       id='toast-default'
-      className={`text-${color} main-bg-color rounded-lg shadow border-2 border-${color}`}
+      className={`text-${color} z-10 main-bg-color rounded-lg shadow border-2 border-${color}`}
       role='alert'
     >
       <div className={`flex items-center max-w-xs sm:max-w-md w-full p-4 bg-${color} bg-opacity-20`}>
