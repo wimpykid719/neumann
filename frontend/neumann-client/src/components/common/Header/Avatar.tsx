@@ -77,11 +77,13 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                 className='absolute z-10 rounded-lg shadow sub-bg-color dark:border dark:border-gray-600 min-w-56'
                 ref={menuRef}
               >
-                <div className='font-bold p-3 rounded-t-lg dark:hover:bg-gray-600 hover:bg-gray-100'>
-                  <Link className='block w-full' href={`/users/${user.name}`}>
-                    {user.profile.name || user.name}
-                  </Link>
-                </div>
+                <Link
+                  className='block w-full font-bold p-3 rounded-t-lg dark:hover:bg-gray-600 hover:bg-gray-100'
+                  href={`/users/${user.name}`}
+                >
+                  {user.profile.name || user.name}
+                </Link>
+
                 <ul>
                   <li
                     key={keys.goodBooks}
@@ -92,16 +94,17 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
                     </span>
                     いいねした本
                   </li>
-                  <Link
-                    href={'/settings/account'}
-                    key={keys.accountSettings}
-                    className='flex items-center p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
-                  >
-                    <span className='inline-flex items-center w-7'>
-                      <SettingsIcon />
-                    </span>
-                    アカウント設定
-                  </Link>
+                  <li key={keys.accountSettings}>
+                    <Link
+                      href={'/settings/account'}
+                      className='flex items-center p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
+                    >
+                      <span className='inline-flex items-center w-7'>
+                        <SettingsIcon />
+                      </span>
+                      アカウント設定
+                    </Link>
+                  </li>
                 </ul>
                 <button
                   onClick={logout}
