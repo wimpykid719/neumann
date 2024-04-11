@@ -6,7 +6,7 @@ import Likes from './Likes'
 type CardProps = {
   title: Book['title']
   img_url: Book['img_url']
-  ranking: number
+  ranking?: number
   detail?: boolean
 }
 
@@ -14,20 +14,26 @@ export default function Card({ title, img_url, ranking, detail = true }: CardPro
   const DISPLAY_WORDS = 50
 
   return (
-    <div className={`w-48 ${detail ? 'h-72' : 'h-64'} sub-bg-color rounded-lg p-2`}>
-      <div>
-        <span
-          className={`
-          inline-block h-5 ${ranking < 100 ? 'w-5' : 'px-1'}
-          text-center leading-5 text-xs text-gray-500
-          rounded-full main-bg-color
-          dark:border dark:border-gray-800
-          mb-2
-        `}
-        >
-          {ranking}
-        </span>
-      </div>
+    <div
+      className={`w-48 ${detail ? 'h-72' : 'h-64'} sub-bg-color rounded-lg p-2 ${
+        !ranking && 'flex flex-col justify-center items-center'
+      }`}
+    >
+      {ranking && (
+        <div>
+          <span
+            className={`
+            inline-block h-5 ${ranking < 100 ? 'w-5' : 'px-1'}
+            text-center leading-5 text-xs text-gray-500
+            rounded-full main-bg-color
+            dark:border dark:border-gray-800
+            mb-2
+          `}
+          >
+            {ranking}
+          </span>
+        </div>
+      )}
       <div className='flex flex-col items-center justify-between'>
         <div className='relative'>
           <Image

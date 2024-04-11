@@ -10,3 +10,4 @@ export const booksNavigation = [
 ]
 
 export const bookNavigation = [{ name: '本について', key: 'about', href: undefined }]
+export const profileNavigation = [{ name: 'いいねした本', key: 'userLikes', href: undefined }]
