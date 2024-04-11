@@ -1,13 +1,14 @@
 import Link from 'next/link'
 
 type NumberProps = {
+  path?: string
   page: number
   selected: boolean
   disabled: boolean
-  ariaCurrent: 'true' | undefined
+  ariaCurrent?: 'true'
 }
 
-export default function Number({ page, disabled, selected, ariaCurrent }: NumberProps) {
+export default function Number({ path, page, disabled, selected, ariaCurrent }: NumberProps) {
   const variants = {
     default: 'text-gray-500 item-bg-color bg-opacity-0',
     selected: 'sub-text-color bg-primary shadow-pagination',
@@ -29,7 +30,7 @@ export default function Number({ page, disabled, selected, ariaCurrent }: Number
     </button>
   ) : (
     <Link
-      href={`/${page}`}
+      href={`${path || ''}${page}`}
       aria-current={ariaCurrent}
       className={`
         ${selected ? variants.selected : variants.default}

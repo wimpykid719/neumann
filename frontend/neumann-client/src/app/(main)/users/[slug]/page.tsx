@@ -26,7 +26,7 @@ export default async function UserLikesPage({ params }: { params: SlugProps }) {
         </ul>
       </div>
       <div className='w-full'>
-        <Pagination page={INITIAL_PAGE} lastPage={res.pages.last} siblingCount={2} />
+        <Pagination path={`${params.slug}/likes/`} page={INITIAL_PAGE} lastPage={res.pages.last} siblingCount={2} />
       </div>
     </section>
   )

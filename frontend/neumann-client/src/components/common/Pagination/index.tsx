@@ -7,6 +7,7 @@ import Navigation from './Navigation'
 import Number from './Number'
 
 type PaginationProps = {
+  path?: string
   page: number
   lastPage: number
   disabled?: boolean
@@ -26,6 +27,7 @@ type PageType = 'first' | 'previous' | 'next' | 'last' | 'start-ellipsis' | 'end
 export const INITIAL_PAGE = 1
 
 export default function Pagination({
+  path,
   page,
   lastPage,
   disabled = false,
@@ -101,6 +103,7 @@ export default function Pagination({
       case 'first':
         return (
           <Number
+            path={path}
             page={FIRST_PAGE}
             selected={1 === page}
             disabled={disabled}
@@ -114,6 +117,7 @@ export default function Pagination({
       case 'last':
         return (
           <Number
+            path={path}
             page={lastPage}
             selected={lastPage === page}
             disabled={disabled}
@@ -129,6 +133,7 @@ export default function Pagination({
   const items = itemList.map(item => {
     return typeof item === 'number' ? (
       <Number
+        path={path}
         page={item}
         selected={item === page}
         disabled={disabled}
