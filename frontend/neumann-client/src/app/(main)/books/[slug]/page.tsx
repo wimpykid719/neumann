@@ -59,7 +59,7 @@ export default async function Detail({ params }: { params: SlugsProps }) {
   return (
     <section className='space-y-8'>
       <Tabs navigation={bookNavigation} />
-      <div className='flex flex-wrap gap-7'>
+      <div className='flex lg:flex-row flex-col lg:flex-wrap lg:gap-7 lg:space-y-0 space-y-6 justify-center lg:items-start items-center'>
         <Card title={res.title} img_url={res.img_url} ranking={res.ranking} detail={false} />
         <div className='space-y-8 flex-1'>
           <h2 className='font-bold text-lg'>{res.title}</h2>
