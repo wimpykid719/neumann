@@ -17,7 +17,7 @@ export default async function Home() {
       <div className='w-full space-y-8'>
         <Tabs navigation={booksNavigation} />
         <div>
-          <ul className='flex flex-wrap gap-12 w-full'>
+          <ul className='flex flex-wrap lg:gap-12 gap-8 md:justify-normal justify-center w-full'>
             {res.books.map((book, index) => (
               <Link key={book.id.toString()} href={`books/${book.id}`}>
                 <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />

@@ -21,7 +21,7 @@ export default function Tabs(props: NavigationProps) {
 
   return (
     <div className='border-b border-gray-300'>
-      <ul className='flex'>
+      <ul className='flex overflow-x-scroll whitespace-nowrap hidden-scrollbar'>
         {navigation.map(item =>
           item.href ? (
             <Link key={item.key} className={`max-h-60 px-2 h-8 text-center ${getTabStyle(item.href)}`} href={item.href}>
