@@ -16,10 +16,10 @@ export default async function Home() {
     <section className='flex flex-col min-h-screen items-center justify-between space-y-8'>
       <div className='w-full space-y-8'>
         <Tabs navigation={booksNavigation} />
-        <div className='lg:max-w-5xl md:max-w-2xl m-auto'>
-          <ul className='flex flex-wrap sm:justify-normal justify-center lg:gap-12 md:gap-8 sm:gap-2'>
+        <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto'>
+          <ul className='sm:flex sm:flex-wrap lg:gap-12 sm:gap-10'>
             {res.books.map((book, index) => (
-              <li key={book.id.toString()} className='sm:mb-0 mb-8'>
+              <li key={book.id.toString()} className='sm:mb-0 mb-8 flex justify-center items-center'>
                 <Link href={`books/${book.id}`}>
                   <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />
                 </Link>
