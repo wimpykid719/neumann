@@ -145,12 +145,12 @@ export default function Pagination({
   })
 
   return (
-    <section className='flex justify-center flex-col items-center w-full'>
-      <ul className='flex justify-between max-w-96 w-full'>
+    <div className='flex justify-center flex-col items-center w-full'>
+      <ul className='flex flex-wrap space-x-3 justify-center items-center max-w-96 w-full'>
         {items.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
       </ul>
-    </section>
+    </div>
   )
 }
