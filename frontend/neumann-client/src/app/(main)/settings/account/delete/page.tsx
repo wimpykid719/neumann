@@ -38,7 +38,7 @@ export default function AccountDeletePage() {
           </div>
           <div className='flex gap-9 items-center max-w-64 mx-auto'>
             <Link
-              className='w-28 rounded-lg item-bg-color bg-opacity-0 hover:bg-opacity-70 text-center py-2.5'
+              className='w-28 text-sm rounded-lg item-bg-color bg-opacity-0 hover:bg-opacity-70 text-center py-2.5'
               href={'/'}
             >
               キャンセル
