@@ -1,9 +1,8 @@
 'use client'
 
-import AccountForm from "@/components/settings/account/Form"
+import AccountForm from '@/components/settings/account/Form'
+import InputLoading from '@/components/settings/account/InputLoading'
 import { useUser } from '@/contexts/UserContext'
-import InputLoading from "@/components/settings/account/InputLoading"
-
 
 export default function AccountPage() {
   const { user, setUser } = useUser()
