@@ -1,3 +1,4 @@
+import RightArrowIcon from '@/components/common/icon/RightArrowIcon'
 import { useModal } from '@/contexts/ModalContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useSilentRefresh } from '@/hooks/useSilentRefresh'
@@ -9,6 +10,7 @@ import toast from '@/text/toast.json'
 import { User } from '@/types/user'
 import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import OldPasswordConfirmModal from '../OldPasswordConfirmModal'
 
@@ -75,7 +77,7 @@ export default function AccountForm({ user, setUser }: Props) {
       <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md xl:p-0'>
         <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
           <div>
-            <span>ユーザ名</span>
+            <span className='block mb-2 text-sm font-medium'>ユーザ名</span>
             <p>{user.name}</p>
           </div>
           <form onSubmit={handleSubmit(updateAccount)}>
@@ -111,10 +113,10 @@ export default function AccountForm({ user, setUser }: Props) {
                 {errors.newEmail?.message && <p className='text-sm text-primary'>{errors.newEmail?.message}</p>}
               </div>
               <div>
-                <span>パスワード</span>
+                <span className='block mb-2 text-sm font-medium'>パスワード</span>
                 <div className='lg:flex justify-between'>
                   <div className='w-60'>
-                    <label htmlFor='newPassword' className='block mb-2 text-sm font-medium text-gray-500'>
+                    <label htmlFor='newPassword' className='block mb-2 text-sm text-gray-500'>
                       新しいパスワード
                     </label>
                     <input
@@ -146,7 +148,7 @@ export default function AccountForm({ user, setUser }: Props) {
                     )}
                   </div>
                   <div className='w-60'>
-                    <label htmlFor='newPasswordConfirm' className='block mb-2 text-sm font-medium text-gray-500'>
+                    <label htmlFor='newPasswordConfirm' className='block mb-2 text-sm text-gray-500'>
                       再入力してください
                     </label>
                     <input
@@ -178,6 +180,15 @@ export default function AccountForm({ user, setUser }: Props) {
                     )}
                   </div>
                 </div>
+              </div>
+              <div>
+                <span className='block text-sm font-medium mb-2'>アカウントの削除</span>
+                <Link href={'account/delete'} className='flex items-center text-xs text-gray-500 hover:opacity-70'>
+                  <span className='border-b border-gray-500'>アカウントを削除する</span>
+                  <span>
+                    <RightArrowIcon width={13} height={13} />
+                  </span>
+                </Link>
               </div>
             </div>
             <div className='lg:flex justify-center'>

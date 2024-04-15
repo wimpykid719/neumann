@@ -1,5 +1,5 @@
 export default function InputLoading() {
-  const loadingClass = 'mb-4 rounded item-bg-color animate-pulse dark:border dark:border-gray-600'
+  const loadingClass = 'mb-2 rounded item-bg-color animate-pulse dark:border dark:border-gray-600'
 
   return (
     <section className='flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0'>
@@ -26,6 +26,10 @@ export default function InputLoading() {
                   <div className={`w-full h-11 ${loadingClass}`}></div>
                 </div>
               </div>
+            </div>
+            <div>
+              <div className={`w-16 h-5 ${loadingClass}`}></div>
+              <div className={`w-20 h-5 ${loadingClass}`}></div>
             </div>
           </div>
           <div className='lg:flex justify-center'>
