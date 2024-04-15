@@ -7,3 +7,7 @@ export const isLoggedInBefore = () => {
 export const updateLogoutStatus = () => {
   localStorage.setItem('isLoggedIn', '0')
 }
+
+export const deleteLogoutStatus = () => {
+  localStorage.removeItem('isLoggedIn')
+}

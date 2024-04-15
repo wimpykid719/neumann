@@ -31,3 +31,10 @@ export async function getUserLikes(userName: User['name'], page = 1) {
     params: { page, user_name: userName },
   })
 }
+
+export async function deleteUser(accessToken: string) {
+  return await fetch.destroy<{}>('/api/v1/users/', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    credentials: 'include',
+  })
+}

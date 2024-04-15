@@ -1,11 +1,40 @@
 'use client'
 
 import InputLoading from '@/components/settings/account/InputLoading'
+import { useAccessToken } from '@/contexts/AccessTokenContext'
+import { useToast } from '@/contexts/ToastContext'
 import { useUser } from '@/contexts/UserContext'
+import { useSilentRefresh } from '@/hooks/useSilentRefresh'
+import { FetchError } from '@/lib/errors'
+import { deleteUser } from '@/lib/wrappedFeatch/requests/user'
+import toast from '@/text/toast.json'
+import { deleteLogoutStatus } from '@/utils/localStorage'
+import { toastStatus } from '@/utils/toast'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function AccountDeletePage() {
   const { user, setUser } = useUser()
+  const { showToast } = useToast()
+  const { accessToken, execSilentRefresh } = useSilentRefresh(showToast)
+  const { setAccessToken } = useAccessToken()
+  const router = useRouter()
+
+  const onClick = async () => {
+    const token = (await execSilentRefresh()) || accessToken
+    if (!token) return showToast(toast.no_access_token, toastStatus.error)
+
+    const res = await deleteUser(accessToken || '')
+    if (res instanceof FetchError) {
+      showToast(res.message, toastStatus.error)
+    } else if (Object.keys(res).length === 0) {
+      deleteLogoutStatus()
+      setUser(undefined)
+      setAccessToken('')
+      showToast(toast.user_deleted, toastStatus.success)
+      router.push('/')
+    }
+  }
 
   if (user)
     return (
@@ -44,7 +73,7 @@ export default function AccountDeletePage() {
               キャンセル
             </Link>
             <button
-              onClick={() => {}}
+              onClick={onClick}
               className='
                 w-28 bg-primary
                 hover:bg-opacity-70
