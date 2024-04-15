@@ -9,8 +9,7 @@ import { SignupData, postUserCreate } from '@/lib/wrappedFeatch/requests/signup'
 import { SignupValidation, SignupValidationSchema } from '@/lib/zodSchema/signupValidation'
 import app from '@/text/app.json'
 import toastText from '@/text/toast.json'
-import { sleep } from '@/utils/sleep'
-import { toastStatus, toastTime } from '@/utils/toast'
+import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -38,7 +37,6 @@ export default function SignupForm() {
       showToast(res.message, toastStatus.error)
     } else {
       showToast(toastText.user_created, toastStatus.success)
-      await sleep(toastTime.succeeded)
       setAccessToken(res.token)
       localStorage.setItem('isLoggedIn', '1')
       router.push('/')
