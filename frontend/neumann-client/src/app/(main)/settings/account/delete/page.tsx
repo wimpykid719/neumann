@@ -66,7 +66,7 @@ export default function AccountDeletePage() {
         <div className='flex gap-9 items-center max-w-64 mx-auto'>
           <Link
             className='w-28 text-sm rounded-lg item-bg-color bg-opacity-0 hover:bg-opacity-70 text-center py-2.5'
-            href={'/'}
+            href={'/settings/account'}
           >
             キャンセル
           </Link>
