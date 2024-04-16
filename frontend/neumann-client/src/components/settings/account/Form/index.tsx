@@ -73,7 +73,7 @@ export default function AccountForm({ user, setUser }: Props) {
   })
 
   return (
-    <section className='flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0'>
+    <section className='flex flex-col items-center justify-center px-6 mx-auto'>
       <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md xl:p-0'>
         <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
           <div>
