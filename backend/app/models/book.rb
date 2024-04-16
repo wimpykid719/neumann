@@ -5,6 +5,7 @@ class Book < ApplicationRecord
   validates :img_url, length: { maximum: 255 },
                       format: { with: Constants::Regexps::URL }
   validates :description, length: { maximum: 10_000 }
+  validates :price, numericality: { in: 0..9_999_999 }
   validates :score, numericality: { in: 0..1 }
   validates :page, numericality: { in: 1..5000 }
   validates :launched, format: { with: Constants::Regexps::DATE }
@@ -20,5 +21,9 @@ class Book < ApplicationRecord
   def ranking
     rank = Book.where('score >= ?', score).count
     rank > 0 ? rank : 1
+  end
+
+  def price_delimited
+    price.to_fs(:delimited)
   end
 end

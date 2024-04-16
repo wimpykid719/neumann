@@ -22,6 +22,7 @@ ja:
         title: タイトル
         img_url: 画像のURL
         description: 説明文
+        price: 価格
         score: 評価ポイント
         page: ページ数
         launched: 発売日

@@ -95,6 +95,30 @@ RSpec.describe Book do
       end
     end
 
+    context 'price' do
+      it '登録可能' do
+        expect(book.price).to be_present
+      end
+
+      it 'nilの場合エラー' do
+        b = FactoryBot.build(:book, price: nil)
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:price).first).to eq('価格は数値で入力してください')
+      end
+
+      it '0入力可' do
+        b = FactoryBot.build(:book, price: 0)
+        expect(b).to be_valid
+        expect(b.price).to eq(0)
+      end
+
+      it 'ページ数が1~5000範囲外の場合エラー' do
+        b = FactoryBot.build(:book, price: 99_999_999)
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:price).first).to eq('価格は0..9999999の範囲に含めてください')
+      end
+    end
+
     context 'score' do
       it '登録可能' do
         expect(book.score).to be_present
@@ -307,6 +331,20 @@ RSpec.describe Book do
 
       it '書籍の順位を返す（最下位）' do
         expect(book_low_score.ranking).to eq(4)
+      end
+    end
+
+    context 'price_delimited' do
+      it '3桁ごとにカンマが入る' do
+        b = FactoryBot.build(:book, price: 1_234_567)
+        expect(b).to be_valid
+        expect(b.price_delimited).to eq('1,234,567')
+      end
+
+      it '3桁以下の場合カンマは入らない' do
+        b = FactoryBot.build(:book, price: 123)
+        expect(b).to be_valid
+        expect(b.price_delimited).to eq('123')
       end
     end
   end

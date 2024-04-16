@@ -158,11 +158,12 @@ RSpec.describe Api::V1::BooksController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(11)
+        expect(json.size).to eq(12)
         expect(json['id']).to be_present
         expect(json['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
         expect(json['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
         expect(json['description']).to be_present
+        expect(json['price_delimited']).to be_present
         expect(json['score']).to be_present
         expect(json['page']).to be_present
         expect(json['launched']).to eq('2021-02-17')
