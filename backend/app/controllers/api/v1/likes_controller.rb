@@ -14,7 +14,7 @@ class Api::V1::LikesController < ApplicationController
       metadata = pagy_metadata(pagy)
 
       render json: {
-        books: user_book_likes.as_json(only: books_params_render),
+        books: user_book_likes.as_json(only: books_params_render, methods: :likes_count),
         pages: {
           prev: metadata[:prev],
           next: metadata[:next],

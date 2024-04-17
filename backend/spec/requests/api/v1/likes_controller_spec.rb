@@ -46,9 +46,11 @@ RSpec.describe Api::V1::LikesController do
 
           expect(json.size).to eq(2)
           expect(json['books'].size).to eq(100)
-          expect(json['books'][0].size).to eq(3)
+          expect(json['books'][0].size).to eq(4)
+          expect(json['books'][0]['id']).to be_present
           expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
           expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+          expect(json['books'][0]['likes_count']).to eq(1)
 
           expect(json['pages'].size).to eq(3)
           expect(json['pages']['prev']).to be_nil
@@ -63,11 +65,13 @@ RSpec.describe Api::V1::LikesController do
 
           expect(json.size).to eq(2)
           expect(json['books'].size).to eq(100)
-          expect(json['books'][0].size).to eq(3)
+          expect(json['books'][0].size).to eq(4)
           expect(json['books'].size).to eq(100)
-          expect(json['books'][0].size).to eq(3)
+          expect(json['books'][0].size).to eq(4)
+          expect(json['books'][0]['id']).to be_present
           expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
           expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+          expect(json['books'][0]['likes_count']).to eq(1)
 
           expect(json['pages'].size).to eq(3)
           expect(json['pages']['prev']).to eq(1)
@@ -82,9 +86,11 @@ RSpec.describe Api::V1::LikesController do
 
           expect(json.size).to eq(2)
           expect(json['books'].size).to eq(34)
-          expect(json['books'][0].size).to eq(3)
+          expect(json['books'][0].size).to eq(4)
+          expect(json['books'][0]['id']).to be_present
           expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
           expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
+          expect(json['books'][0]['likes_count']).to eq(1)
 
           expect(json['pages'].size).to eq(3)
           expect(json['pages']['prev']).to eq(2)
