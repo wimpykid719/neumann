@@ -11,14 +11,15 @@ import LikeButton from './LikeButton'
 type InfoCardProps = {
   id: BookDetail['id']
   associate_url: BookDetail['associate_url']
+  price: BookDetail['price_delimited']
   score: BookDetail['score']
-  likes: BookDetail['likes']
+  likes: BookDetail['likes_count']
   page: BookDetail['page']
   launched: BookDetail['launched']
   publisher: BookDetail['publisher']
 }
 
-export default function InfoCard({ id, associate_url, score, likes, page, launched, publisher }: InfoCardProps) {
+export default function InfoCard({ id, associate_url, price, score, likes, page, launched, publisher }: InfoCardProps) {
   const ICON_SIZE = 16
   const X_SHARE_URL = `https://twitter.com/intent/tweet?hashtags=BizRank&url=${'#'}&related=BizRank`
 
@@ -35,7 +36,7 @@ export default function InfoCard({ id, associate_url, score, likes, page, launch
             </div>
             <div>
               <span className='text-xs mr-1'>¥</span>
-              1,540
+              {price}
             </div>
           </div>
         </a>

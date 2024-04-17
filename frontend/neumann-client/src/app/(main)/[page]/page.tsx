@@ -44,7 +44,12 @@ export default async function Index({ params }: PathsProps) {
             {res.books.map((book, index) => (
               <li key={book.id.toString()} className='sm:mb-0 mb-8 flex justify-center items-center'>
                 <Link href={`books/${book.id}`}>
-                  <Card title={book.title} img_url={book.img_url} ranking={res.rankings[index]} />
+                  <Card
+                    title={book.title}
+                    img_url={book.img_url}
+                    ranking={res.rankings[index]}
+                    likes={book.likes_count}
+                  />
                 </Link>
               </li>
             ))}

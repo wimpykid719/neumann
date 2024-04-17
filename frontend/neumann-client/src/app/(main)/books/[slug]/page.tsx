@@ -60,7 +60,7 @@ export default async function Detail({ params }: { params: SlugsProps }) {
     <section className='space-y-8'>
       <Tabs navigation={bookNavigation} />
       <div className='flex lg:flex-row flex-col lg:flex-wrap lg:gap-7 lg:space-y-0 space-y-6 justify-center lg:items-start items-center'>
-        <Card title={res.title} img_url={res.img_url} ranking={res.ranking} detail={false} />
+        <Card title={res.title} img_url={res.img_url} ranking={res.ranking} likes={res.likes_count} detail={false} />
         <div className='space-y-8 flex-1'>
           <h2 className='font-bold text-lg'>{res.title}</h2>
           <article className='whitespace-pre-wrap'>{replaceNewlines(res.description)}</article>
@@ -68,8 +68,9 @@ export default async function Detail({ params }: { params: SlugsProps }) {
         <InfoCard
           id={res.id}
           associate_url={res.associate_url}
+          price={res.price_delimited}
           score={res.score}
-          likes={120}
+          likes={res.likes_count}
           page={res.page}
           launched={res.launched}
           publisher={res.publisher}

@@ -43,7 +43,7 @@ export default async function UserLikesPage({ params }: { params: UserLikesProps
         <ul className='flex flex-wrap gap-12 w-full'>
           {res.books.map(book => (
             <Link key={book.id.toString()} href={`/books/${book.id}`}>
-              <Card title={book.title} img_url={book.img_url} />
+              <Card title={book.title} img_url={book.img_url} likes={book.likes_count} />
             </Link>
           ))}
         </ul>

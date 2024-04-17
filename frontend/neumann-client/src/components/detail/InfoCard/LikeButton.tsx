@@ -14,7 +14,7 @@ import { useState } from 'react'
 
 type LikeButtonProps = {
   id: BookDetail['id']
-  likes: BookDetail['likes']
+  likes: BookDetail['likes_count']
 }
 
 export default function LikeButton({ id, likes }: LikeButtonProps) {

@@ -6,11 +6,12 @@ import Likes from './Likes'
 type CardProps = {
   title: Book['title']
   img_url: Book['img_url']
+  likes: Book['likes_count']
   ranking?: number
   detail?: boolean
 }
 
-export default function Card({ title, img_url, ranking, detail = true }: CardProps) {
+export default function Card({ title, img_url, ranking, likes, detail = true }: CardProps) {
   const DISPLAY_WORDS = 50
 
   return (
@@ -50,7 +51,7 @@ export default function Card({ title, img_url, ranking, detail = true }: CardPro
             className='rounded-lg object-cover mb-2 w-28 h-44'
             priority
           />
-          {detail && <Likes likes={120} />}
+          {detail && <Likes likes={likes} />}
         </div>
         {detail && <p className='text-xs text-gray-500'>{textEllipsis(title, DISPLAY_WORDS)}</p>}
       </div>
