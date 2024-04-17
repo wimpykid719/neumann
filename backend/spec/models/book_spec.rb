@@ -6,6 +6,7 @@ RSpec.describe Book do
   let(:book_middle_score) { FactoryBot.create(:book, score: 0.5) }
   let(:book_high_score) { FactoryBot.create(:book, score: 0.9) }
   let(:book_super_high_score) { FactoryBot.create(:book, score: 1) }
+  let(:like) { FactoryBot.create(:like, user:, likeable: book) }
 
   it '有効なファクトリを持つこと' do
     expect(book).to be_valid
@@ -345,6 +346,22 @@ RSpec.describe Book do
         b = FactoryBot.build(:book, price: 123)
         expect(b).to be_valid
         expect(b.price_delimited).to eq('123')
+      end
+    end
+
+    context 'likes_count' do
+      before do
+        like
+      end
+
+      it 'いいね数が返る' do
+        expect(book.likes_count).to eq(1)
+      end
+
+      it 'いいね削除後はいいね数が減る' do
+        user.likes.find_by(likeable: book).destroy
+
+        expect(book.likes_count).to eq(0)
       end
     end
   end

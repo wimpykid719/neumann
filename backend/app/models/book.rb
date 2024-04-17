@@ -26,4 +26,8 @@ class Book < ApplicationRecord
   def price_delimited
     price.to_fs(:delimited)
   end
+
+  def likes_count
+    likes.size
+  end
 end

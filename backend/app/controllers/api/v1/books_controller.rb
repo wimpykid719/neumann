@@ -8,7 +8,7 @@ class Api::V1::BooksController < ApplicationController
     metadata = pagy_metadata(pagy)
 
     render json: {
-      books: books.as_json(only: books_params_render),
+      books: books.as_json(only: books_params_render, methods: :likes_count),
       rankings: rankings_array,
       pages: {
         prev: metadata[:prev],
@@ -20,7 +20,7 @@ class Api::V1::BooksController < ApplicationController
 
   def show
     book = Book.find(params[:id])
-    render json: book.as_json(only: book_params_render, methods: [:ranking, :price_delimited])
+    render json: book.as_json(only: book_params_render, methods: [:ranking, :price_delimited, :likes_count])
   end
 
   private
