@@ -15,13 +15,15 @@ export default async function UserLikesPage({ params }: { params: SlugProps }) {
   if (res instanceof FetchError) return <p>{error.failedUserLikes}</p>
 
   return (
-    <section>
-      <div>
-        <ul className='flex flex-wrap gap-12 w-full'>
+    <section className='space-y-8'>
+      <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto'>
+        <ul className='sm:flex sm:flex-wrap lg:gap-12 sm:gap-10'>
           {res.books.map(book => (
-            <Link key={book.id.toString()} href={`/books/${book.id}`}>
-              <Card title={book.title} img_url={book.img_url} likes={book.likes_count} />
-            </Link>
+            <li key={book.id.toString()} className='sm:mb-0 mb-8 flex justify-center items-center'>
+              <Link href={`/books/${book.id}`}>
+                <Card title={book.title} img_url={book.img_url} likes={book.likes_count} />
+              </Link>
+            </li>
           ))}
         </ul>
       </div>
