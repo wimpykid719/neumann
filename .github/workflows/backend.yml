@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /backend
+        working-directory: ./backend
     timeout-minutes: 10
     services:
       db:
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /backend
+        working-directory: ./backend
     timeout-minutes: 10
     steps:
       - name: Checkout code
