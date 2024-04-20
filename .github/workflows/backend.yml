@@ -14,12 +14,11 @@ jobs:
         working-directory: ./backend
     timeout-minutes: 10
     services:
-      mysql:
+      db:
         image: mysql:8.0
         ports:
           - 3306:3306
         env:
-          DATABASE_HOST: db
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           TZ: Asia/Tokyo
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
