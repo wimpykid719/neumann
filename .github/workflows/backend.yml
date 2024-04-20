@@ -33,6 +33,9 @@ jobs:
           ruby-version: 3.2.2
           bundler-cache: true
 
+      - name: List files
+        run: ls -al
+
       - name: Database create and migrate
         run: |
           bundle exec rails db:create RAILS_ENV=test
