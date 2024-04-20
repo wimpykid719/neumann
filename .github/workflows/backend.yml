@@ -19,7 +19,8 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: neumann_test
+          MYSQL_ROOT_PASSWORD: password
           TZ: Asia/Tokyo
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
 
