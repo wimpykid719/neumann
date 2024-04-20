@@ -19,7 +19,6 @@ jobs:
         ports:
           - 3306:3306
         env:
-          NEUMANN_DATABASE_HOST: 127.0.0.1
           MYSQL_DATABASE: neumann_test
           MYSQL_ROOT_PASSWORD: password
           TZ: Asia/Tokyo
@@ -37,6 +36,7 @@ jobs:
 
       - name: Database create and migrate
         env:
+          NEUMANN_DATABASE_HOST: 127.0.0.1
           FRONT_ORIGINS: localhost:3000
           ALLOW_HOST_PORT: backend:8080
         run: |
