@@ -35,7 +35,6 @@ jobs:
 
       - name: Database create and migrate
         run: |
-          cp config/database.yml.ci config/database.yml
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
 
@@ -44,6 +43,9 @@ jobs:
 
   rubocop:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     timeout-minutes: 10
     steps:
       - name: Checkout code
