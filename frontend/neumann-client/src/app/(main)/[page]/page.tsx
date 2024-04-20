@@ -1,5 +1,7 @@
 import Card from '@/components/common/Card'
 import Pagination from '@/components/common/Pagination'
+import Tabs from '@/components/common/Tabs'
+import { booksNavigation } from '@/components/common/Tabs/Navigations'
 import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
@@ -36,6 +38,7 @@ export default async function Index({ params }: PathsProps) {
   return (
     <section className='w-full'>
       <div className='space-y-8 lg:mb-32 md:mb-16 mb-8'>
+        <Tabs navigation={booksNavigation} />
         <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto'>
           <ul className='sm:flex sm:flex-wrap lg:gap-12 sm:gap-10'>
             {res.books.map((book, index) => (
