@@ -33,11 +33,12 @@ jobs:
           ruby-version: 3.2.2
           bundler-cache: true
 
-      - name: Install Gems
-        run: bundle install
-
       - name: Database create and migrate
+        env:
+          FRONT_ORIGINS: localhost:3000
+          ALLOW_HOST_PORT: backend:8080
         run: |
+          bundle install
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
 
@@ -61,4 +62,6 @@ jobs:
           bundler-cache: true
 
       - name: Run rubocop
-        run: bundle exec rubocop
+        run: |
+          bundle install
+          bundle exec rubocop
