@@ -2,15 +2,9 @@ name: Run rspec, rubocop
 
 on:
   pull_request:
-    paths:
-      - app/**/*
-      - spec/**/*
   push:
     branches:
       - master
-    paths:
-      - app/**/*
-      - spec/**/*
 
 jobs:
   rspec:
