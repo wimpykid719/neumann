@@ -19,6 +19,7 @@ jobs:
         ports:
           - 3306:3306
         env:
+          MYSQL_DATABASE: neumann_test
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           TZ: Asia/Tokyo
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
@@ -35,6 +36,7 @@ jobs:
 
       - name: Database create and migrate
         env:
+          MYSQL_DATABASE: neumann_test
           FRONT_ORIGINS: localhost:3000
           ALLOW_HOST_PORT: backend:8080
         run: |
