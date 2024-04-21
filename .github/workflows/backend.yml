@@ -8,6 +8,8 @@ on:
 
 env:
   FRONT_ORIGINS: localhost:3000
+  ALLOW_HOST_PORT: backend:8080
+  NEUMANN_DATABASE_HOST: 127.0.0.1
 
 jobs:
   rspec:
@@ -38,9 +40,6 @@ jobs:
           bundler-cache: true
 
       - name: Database create and migrate
-        env:
-          NEUMANN_DATABASE_HOST: 127.0.0.1
-          ALLOW_HOST_PORT: backend:8080
         run: |
           bundle install
           bundle exec rails db:create RAILS_ENV=test
