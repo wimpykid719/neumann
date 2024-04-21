@@ -10,6 +10,8 @@ env:
   FRONT_ORIGINS: localhost:3000
   ALLOW_HOST_PORT: backend:8080
   NEUMANN_DATABASE_HOST: 127.0.0.1
+  RAILS_ENV: test
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
 jobs:
   rspec:
@@ -42,8 +44,8 @@ jobs:
       - name: Database create and migrate
         run: |
           bundle install
-          bundle exec rails db:create RAILS_ENV=test
-          bundle exec rails db:migrate RAILS_ENV=test
+          bundle exec rails db:create
+          bundle exec rails db:migrate
 
       - name: Run rspec
         run: bundle exec rspec
@@ -65,4 +67,6 @@ jobs:
           bundler-cache: true
 
       - name: Run rubocop
-        run: bundle exec rubocop
+        run: |
+          bundle install
+          bundle exec rubocop
