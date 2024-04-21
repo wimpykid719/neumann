@@ -6,6 +6,9 @@ on:
     branches:
       - master
 
+env:
+  FRONT_ORIGINS: localhost:3000
+
 jobs:
   rspec:
     runs-on: ubuntu-latest
@@ -44,8 +47,6 @@ jobs:
           bundle exec rails db:migrate RAILS_ENV=test
 
       - name: Run rspec
-        env:
-          FRONT_ORIGINS: localhost:3000
         run: bundle exec rspec
 
   rubocop:
