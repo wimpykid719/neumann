@@ -1,10 +1,16 @@
 name: Run rspec, rubocop
 
 on:
-  pull_request:
   push:
     branches:
       - master
+      - feat/*
+      - fix/*
+      - refactor/*
+    paths:
+      - 'backend/app/**/*'
+      - 'backend/spec/**/*'
+      - 'backend/config/**/*'
 
 env:
   FRONT_ORIGINS: localhost:3000
