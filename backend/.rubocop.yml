@@ -12,6 +12,12 @@ AllCops:
     - "bin/*"
     - "node_modules/**/*"
     - "spec/rails_helper.rb"
+    - "Rakefile"
+    - "config.ru"
+    - "app/mailers/**/*"
+    - "spec/spec_helper.rb"
+    - "Gemfile"
+
 
   # 新ルールを有効化
   NewCops: enable
