@@ -9,7 +9,7 @@ on:
       - refactor/*
 
 jobs:
-  deploy:
+  auth-and-checkout:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -17,11 +17,42 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
-      - name: check artifacts
-        run: gcloud artifacts repositories list
+
+  create-artifact-repository:
+    needs: auth-and-checkout
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - id: artifact-registry
+        name: Check Artifact Registry
+        run: |-
+          ARTIFACT=$(gcloud artifacts repositories list --location=${{ env.REGION }} --format=yaml --filter=name:projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ vars.REGION }}/repositories/${{ vars.BACKEND_REPOSITORY_NAME }})
+          echo "ARTIFACT_LENGTH=${#ARTIFACT}" >> $GITHUB_OUTPUT
+      - name: Create Artifact Registry
+        if : steps.artifact-registry.outputs.ARTIFACT_LENGTH == 0
+        run: |-
+          gcloud artifacts repositories create ${{ vars.BACKEND_REPOSITORY_NAME }} --repository-format=docker --location=${{ vars.REGION }}
+
+  docker-build-push-artifact-repository:
+    needs: create-artifact-repository
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    permissions:
+      contents: read
+    steps:
+      - name: docker auth
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
+      - name: docker build
+        run: docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/repositories/${{ vars.BACKEND_REPOSITORY_NAME }} .
+      - name: docker push to Artifact Registry
+        run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/repositories/${{ vars.BACKEND_REPOSITORY_NAME }} .
+
