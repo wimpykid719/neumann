@@ -56,4 +56,4 @@ jobs:
       - name: docker build
         run: docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }} .
       - name: docker push to Artifact Registry
-        run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}
+        run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api
