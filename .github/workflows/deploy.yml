@@ -23,5 +23,5 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
-        name: check artifacts
+      - name: check artifacts
         run: gcloud artifacts repositories list
