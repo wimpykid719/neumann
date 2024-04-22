@@ -9,7 +9,7 @@ on:
       - refactor/*
 
 jobs:
-  auth-and-checkout:
+  create-artifact-repository:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -23,13 +23,6 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
-
-  create-artifact-repository:
-    needs: auth-and-checkout
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
       - id: artifact-registry
         name: Check Artifact Registry
         run: |-
@@ -47,12 +40,20 @@ jobs:
       run:
         working-directory: ./backend
     permissions:
+      id-token: write
       contents: read
     steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
       - name: docker auth
         run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
       - name: docker build
         run: docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/repositories/${{ vars.BACKEND_REPOSITORY_NAME }} .
       - name: docker push to Artifact Registry
         run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/repositories/${{ vars.BACKEND_REPOSITORY_NAME }} .
-
