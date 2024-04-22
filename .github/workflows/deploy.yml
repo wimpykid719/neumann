@@ -1,0 +1,27 @@
+name: deploy backend, frontend
+
+on:
+  push:
+    branches:
+      - master
+      - feat/*
+      - fix/*
+      - refactor/*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+        name: check artifacts
+        run: gcloud artifacts repositories list
