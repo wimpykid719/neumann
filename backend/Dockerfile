@@ -1,7 +1,7 @@
 FROM ruby:3.2.2
 WORKDIR /backend
 
-ARG RAILS_ENV
+ENV RAILS_ENV="production"
 
 RUN set -eux && \
     apt-get update -qq && \
