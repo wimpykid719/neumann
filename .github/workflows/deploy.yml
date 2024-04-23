@@ -80,7 +80,7 @@ jobs:
             --set-env-vars FRONT_ORIGINS=${{ secrets.FRONT_DOMAIN }}:${{ secrets.FRONT_PORT }} \
             --set-env-vars ALLOW_HOST_PORT=backend:8080 \
             --set-env-vars NEUMANN_DATABASE_HOST=127.0.0.1 \
-            --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+            --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --region=${{ vars.REGION }} \
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
             --port=${{ secrets.BACK_PORT }} \
