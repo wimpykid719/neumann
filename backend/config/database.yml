@@ -13,7 +13,7 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   host: <%= ENV.fetch("NEUMANN_DATABASE_HOST", 'db') %>
-  username: root
+  username: root <%= ENV.fetch("MYSQL_USER", 'root') %>
   password: <%= ENV.fetch("NEUMANN_DATABASE_PASSWORD", 'password') %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
@@ -52,5 +52,6 @@ test:
 #
 production:
   <<: *default
-  database: neumann_production
-  password: <%= ENV["BACKEND_DATABASE_PASSWORD"] %>
+  database: <%= ENV['MYSQL_DATABASE'] %>
+  host: localhost
+  socket: <%= ENV.fetch("NEUMANN_DATABASE_SOCKET") %>
