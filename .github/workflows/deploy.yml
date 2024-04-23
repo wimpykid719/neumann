@@ -83,6 +83,7 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy bizrank-api \
+            --update-env-vars RAILS_ENV=production \
             --region=${{ vars.REGION }} \
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
             --port=${{ secrets.BACK_PORT }} \
