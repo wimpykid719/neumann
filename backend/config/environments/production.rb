@@ -86,5 +86,4 @@ Rails.application.configure do
 
   # Allow Cloud Run domains
   config.hosts << '.run.app'
-  config.hosts << 'bizrank-api-dzf73m754q-an.a.run.app'
 end
