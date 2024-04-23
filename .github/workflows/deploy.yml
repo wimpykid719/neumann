@@ -87,4 +87,5 @@ jobs:
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
             --port=${{ secrets.BACK_PORT }} \
             --max-instances=1 \
+            --memory=1024Mi \
             --allow-unauthenticated
