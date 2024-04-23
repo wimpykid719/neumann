@@ -8,6 +8,7 @@ RUN set -eux && \
 
 
 COPY Gemfile Gemfile.lock* /backend/
+COPY . /backend/
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
