@@ -53,4 +53,3 @@ test:
 production:
   <<: *default
   database: <%= ENV.fetch('MYSQL_DATABASE', 'neumann_production') %>
-  host: <%= ENV.fetch('NEUMANN_DATABASE_HOST', 'db') %>
