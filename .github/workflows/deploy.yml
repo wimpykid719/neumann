@@ -8,6 +8,13 @@ on:
       - fix/*
       - refactor/*
 
+env:
+  FRONT_ORIGINS: ${{ secrets.FRONT_DOMAIN }}:${{ secrets.FRONT_PORT }}
+  ALLOW_HOST_PORT: backend:8080
+  NEUMANN_DATABASE_HOST: 127.0.0.1
+  RAILS_ENV: production
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
 jobs:
   create-artifact-repository:
     runs-on: ubuntu-latest
@@ -57,3 +64,26 @@ jobs:
         run: docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api .
       - name: docker push to Artifact Registry
         run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api
+
+  deploy:
+    needs: docker-build-push-artifact-repository
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - name: Deploy to Cloud Run
+        run: gcloud run deploy bizrank-api \
+              --region=${{ vars.REGION }} \
+              --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
+              --port=${{ secrets.BACK_PORT }} \
+              --max-instances=1 \
+              --allow-unauthenticated
