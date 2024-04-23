@@ -1,6 +1,5 @@
 FROM ruby:3.2.2
 WORKDIR /backend
-ARG FRONT_ORIGINS
 
 RUN set -eux && \
     apt-get update -qq && \
