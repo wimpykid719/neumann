@@ -81,9 +81,10 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
       - name: Deploy to Cloud Run
-        run: gcloud run deploy bizrank-api \
-              --region ${{ vars.REGION }} \
-              --image ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
-              --port ${{ secrets.BACK_PORT }} \
-              --max-instances 1 \
-              --allow-unauthenticated
+        run: |
+          gcloud run deploy bizrank-api \
+            --region=${{ vars.REGION }} \
+            --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
+            --port=${{ secrets.BACK_PORT }} \
+            --max-instances=1 \
+            --allow-unauthenticated
