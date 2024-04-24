@@ -81,4 +81,5 @@ jobs:
             --port=${{ secrets.BACK_PORT }} \
             --max-instances=1 \
             --memory=1024Mi \
+            --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --allow-unauthenticated
