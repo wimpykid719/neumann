@@ -1,4 +1,4 @@
-BOOKS_COUNT = 1000
+BOOKS_COUNT = 1
 
 def create_books(num)
   num.times do |n|
