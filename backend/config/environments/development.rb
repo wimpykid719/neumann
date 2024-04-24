@@ -21,7 +21,7 @@ Rails.application.configure do
   config.hosts << ENV.fetch('ALLOW_HOST_PORT')
 
   # Allow Cloud Run domains
-  config.hosts << ".run.app"
+  config.hosts << "bizrank-api-dzf73m754q-an.a.run.app"
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
