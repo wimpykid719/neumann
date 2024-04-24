@@ -11,7 +11,7 @@ RUN \
 
 FROM base AS builder
 WORKDIR /frontend
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /frontend/node_modules ./node_modules
 COPY . .
 
 RUN npm run build
