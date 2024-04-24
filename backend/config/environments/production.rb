@@ -85,5 +85,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Allow Cloud Run domains
-  config.hosts << '.run.app'
+  config.hosts << /.*\.run\.app/
 end
