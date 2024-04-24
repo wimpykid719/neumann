@@ -44,6 +44,7 @@ jobs:
         with:
           ruby-version: 3.2.2
           bundler-cache: true
+          working-directory: ./backend
       - run: |
           bundle exec rails db:create
           bundle exec rails db:migrate
@@ -63,6 +64,7 @@ jobs:
         with:
           ruby-version: 3.2.2
           bundler-cache: true
+          working-directory: ./backend
 
       - name: Run rubocop
         run: bundle exec rubocop
