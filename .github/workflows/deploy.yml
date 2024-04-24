@@ -108,5 +108,5 @@ jobs:
             --region=${{ vars.REGION }} \
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
             --cpu=1 \
-            --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
+            --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --execute-now
