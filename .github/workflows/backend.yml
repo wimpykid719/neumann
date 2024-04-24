@@ -11,8 +11,6 @@ on:
       - 'backend/app/**/*'
       - 'backend/spec/**/*'
       - 'backend/config/**/*'
-      - '.github/**/*'
-      - 'backend/Gemfile'
 
 env:
   FRONT_ORIGINS: localhost:3000
