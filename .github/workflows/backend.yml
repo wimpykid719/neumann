@@ -39,15 +39,12 @@ jobs:
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Database create and migrate
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
           bundler-cache: true
-        run: |
+      - run: |
           bundle exec rails db:create
           bundle exec rails db:migrate
 
@@ -61,12 +58,11 @@ jobs:
         working-directory: ./backend
     timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run rubocop
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
           bundler-cache: true
+
+      - name: Run rubocop
         run: bundle exec rubocop
