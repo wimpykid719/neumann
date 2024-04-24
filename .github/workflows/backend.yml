@@ -11,6 +11,7 @@ on:
       - 'backend/app/**/*'
       - 'backend/spec/**/*'
       - 'backend/config/**/*'
+      - '.github/**/*'
 
 env:
   FRONT_ORIGINS: localhost:3000
@@ -41,20 +42,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
+      - name: Database create and migrate
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
           bundler-cache: true
-
-      - name: Database create and migrate
         run: |
-          bundle install
           bundle exec rails db:create
           bundle exec rails db:migrate
 
-      - name: Run rspec
-        run: bundle exec rspec
+        - name: Run rspec
+          run: bundle exec rspec
 
   rubocop:
     runs-on: ubuntu-latest
@@ -66,13 +64,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
+      - name: Run rubocop
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
           bundler-cache: true
-
-      - name: Run rubocop
-        run: |
-          bundle install
-          bundle exec rubocop
+        run: bundle exec rubocop
