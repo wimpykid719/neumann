@@ -111,8 +111,7 @@ jobs:
       - name: Excute Cloud Run Jobs
         run: |
           gcloud run jobs create add-books-db \
-            --command=bundle,exec,rails,runner \
-            --args=scripts/amount_of_book.rb \
+            --args=bundle,exec,rails,runner,scripts/amount_of_book.rb \
             --quiet \
             --region=${{ vars.REGION }} \
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
