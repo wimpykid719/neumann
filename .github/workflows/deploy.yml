@@ -83,3 +83,30 @@ jobs:
             --memory=1024Mi \
             --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --allow-unauthenticated
+
+  create-books:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - name: Excute Cloud Run Jobs
+        run: |
+          gcloud run jobs create add-books-db \
+            --command=bundle,exec,rails,runner \
+            --args=scripts/amount_of_book.rb \
+            --quiet \
+            --region=${{ vars.REGION }} \
+            --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
+            --cpu=1 \
+            --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
+            --execute-now
