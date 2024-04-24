@@ -19,4 +19,4 @@ def create_books(num)
 end
 
 create_books(BOOKS_COUNT)
-Rails.logger.info("書籍を#{BOOKS_COUNT}冊追加しました！！")
+puts "書籍を#{BOOKS_COUNT}冊追加しました！！"
