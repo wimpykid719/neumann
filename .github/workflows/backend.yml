@@ -51,8 +51,8 @@ jobs:
           bundle exec rails db:create
           bundle exec rails db:migrate
 
-        - name: Run rspec
-          run: bundle exec rspec
+      - name: Run rspec
+        run: bundle exec rspec
 
   rubocop:
     runs-on: ubuntu-latest
