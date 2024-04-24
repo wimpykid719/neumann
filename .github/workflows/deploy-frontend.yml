@@ -1,0 +1,84 @@
+name: deploy frontend
+
+on:
+  push:
+    branches:
+      - master
+      - feat/*
+      - fix/*
+      - refactor/*
+
+jobs:
+  create-artifact-repository:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - id: artifact-registry
+        name: Check Artifact Registry
+        run: |-
+          ARTIFACT=$(gcloud artifacts repositories list --location=${{ env.REGION }} --format=yaml --filter=name:projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ vars.REGION }}/repositories/${{ vars.FRONTEND_REPOSITORY_NAME }})
+          echo "ARTIFACT_LENGTH=${#ARTIFACT}" >> $GITHUB_OUTPUT
+      - name: Create Artifact Registry
+        if : steps.artifact-registry.outputs.ARTIFACT_LENGTH == 0
+        run: |-
+          gcloud artifacts repositories create ${{ vars.FRONTEND_REPOSITORY_NAME }} --repository-format=docker --location=${{ vars.REGION }}
+
+  docker-build-push-artifact-repository:
+    needs: create-artifact-repository
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - name: docker auth
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
+      - name: docker build
+        run: docker build -f Dockerfile.prd -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs
+      - name: docker push to Artifact Registry
+        run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs
+
+  deploy:
+    needs: docker-build-push-artifact-repository
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy bizrank-front \
+            --set-env-vars NEXT_PUBLIC_API_URL=${{ secrets.BACK_URL }}:${{ secrets.BACK_PORT }} \
+            --region=${{ vars.REGION }} \
+            --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs \
+            --port=${{ secrets.FRONT_PORT }} \
+            --max-instances=1 \
+            --allow-unauthenticated
