@@ -21,8 +21,7 @@ export const generateStaticParams = async ({ params }: { params: SlugProps }) =>
   const res = await getUserLikes(params.slug)
 
   if (res instanceof FetchError) {
-    console.error(error.failedUserLikes)
-    return
+    throw error.failedUserLikes
   }
 
   const paths = range(FIRST_PAGE, res.pages.last).map(num => ({

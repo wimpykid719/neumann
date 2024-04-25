@@ -19,8 +19,7 @@ export const generateStaticParams = async () => {
   const res = await getBooks()
 
   if (res instanceof FetchError) {
-    console.error(error.failedBooksFetch)
-    return
+    throw error.failedBooksFetch
   }
 
   const paths = range(FIRST_PAGE, res.pages.last).map(num => ({
