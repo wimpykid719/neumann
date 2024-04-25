@@ -144,7 +144,15 @@ export default function Pagination({
 
   return (
     <div className='flex justify-center flex-col items-center w-full'>
-      <ul className='flex flex-wrap space-x-3 justify-center items-center max-w-96 w-full'>
+      <ul
+        className='
+        flex
+        sm:space-x-3 space-x-2
+        justify-center items-center
+        max-w-96 w-full
+        overflow-x-scroll whitespace-nowrap hidden-scrollbar
+      '
+      >
         {items.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
