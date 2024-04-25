@@ -5,7 +5,7 @@ import Base from './Base'
 import { PaginationProps } from './Base'
 
 type ResponsiblePagination = {
-  path: PaginationProps['path']
+  path?: PaginationProps['path']
   page: PaginationProps['page']
   lastPage: PaginationProps['lastPage']
   siblingCount: PaginationProps['siblingCount']
