@@ -10,8 +10,8 @@ RUN \
   fi
 
 FROM base AS builder
-WORKDIR /frontend
-COPY --from=deps /frontend/node_modules ./node_modules
+WORKDIR /frontend/neumann-client
+COPY --from=deps /neumann-client/frontend/node_modules ./node_modules
 COPY . .
 
 RUN npm run build
@@ -19,16 +19,16 @@ RUN npm run build
 FROM base AS runner
 ENV NODE_ENV production
 
-WORKDIR /frontend
+WORKDIR /frontend/neumann-client
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /frontend/public ./public
+COPY --from=builder /neumann-client/frontend/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-COPY --from=builder --chown=nextjs:nodejs /frontend/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /frontend/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /neumann-client/frontend/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /neumann-clientfrontend/.next/static ./.next/static
 
 USER nextjs
 
