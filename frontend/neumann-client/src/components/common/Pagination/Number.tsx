@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import { PaginationProps } from './Base'
 
 type NumberProps = {
-  path?: string
-  page: number
+  path?: PaginationProps['path']
+  page: PaginationProps['page']
   selected: boolean
   disabled: boolean
   ariaCurrent?: 'true'
@@ -34,7 +35,7 @@ export default function Number({ path, page, disabled, selected, ariaCurrent }: 
       aria-current={ariaCurrent}
       className={`
         ${selected ? variants.selected : variants.default}
-        w-6 h-6
+        ${page < 100 ? 'w-6' : 'px-1'} h-6
         text-xs
         rounded font-bold
         flex justify-center items-center
