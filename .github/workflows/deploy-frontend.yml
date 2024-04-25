@@ -54,7 +54,7 @@ jobs:
       - name: docker auth
         run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
       - name: docker build
-        run: docker build -f Dockerfile.prd -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs .
+        run: docker build --build-arg API_URL_FROM_SERVER=${{ vars.NEXT_PUBLIC_API_URL }} -f Dockerfile.prd -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs .
       - name: docker push to Artifact Registry
         run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs
 
@@ -76,7 +76,7 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy bizrank-front \
-            --set-env-vars NEXT_PUBLIC_API_URL=${{ secrets.BACK_URL }}:${{ secrets.BACK_PORT }} \
+            --set-env-vars NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }} \
             --region=${{ vars.REGION }} \
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs \
             --port=${{ secrets.FRONT_PORT }} \
