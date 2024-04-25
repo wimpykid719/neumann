@@ -14,20 +14,20 @@ type ResponseUserLikes = {
 }
 
 export async function getUser(accessToken: string) {
-  return await fetch.get<Response>('/api/v1/users/', {
+  return await fetch.get<Response>('/api/v1/users', {
     headers: { Authorization: `Bearer ${accessToken}` },
     credentials: 'include',
   })
 }
 
 export async function getUserNames(page = 1) {
-  return await fetch.get<ResponseUserNames, PageParams>('/api/v1/users_name/', {
+  return await fetch.get<ResponseUserNames, PageParams>('/api/v1/users_name', {
     params: { page },
   })
 }
 
 export async function getUserLikes(userName: User['name'], page = 1) {
-  return await fetch.get<ResponseUserLikes>('/api/v1/likes/', {
+  return await fetch.get<ResponseUserLikes>('/api/v1/likes', {
     params: { page, user_name: userName },
   })
 }
