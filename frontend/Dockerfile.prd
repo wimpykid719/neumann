@@ -13,6 +13,7 @@ FROM base AS builder
 WORKDIR /frontend/neumann-client
 COPY --from=deps /frontend/neumann-client/node_modules ./node_modules
 ARG NEXT_PUBLIC_API_URL
+RUN echo "届いてますか: ${NEXT_PUBLIC_API_URL}"
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 COPY /neumann-client .
 
