@@ -12,8 +12,8 @@ RUN \
 FROM base AS builder
 WORKDIR /frontend/neumann-client
 COPY --from=deps /frontend/neumann-client/node_modules ./node_modules
-ARG API_URL_FROM_SERVER
-ENV API_URL_FROM_SERVER=${API_URL_FROM_SERVER}
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 COPY /neumann-client .
 
 RUN npm run build
