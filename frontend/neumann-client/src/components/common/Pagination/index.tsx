@@ -18,10 +18,14 @@ export default function ResponsiblePagination({ page, lastPage, siblingCount }: 
   const device = useDeviceWindow()
 
   return (
-    <Base
-      page={page}
-      lastPage={lastPage}
-      siblingCount={device.width < SM || 100 < lastPage ? SMALL_DEVICE_SIBLING : siblingCount}
-    />
+    <>
+      {INITIAL_PAGE < lastPage && (
+        <Base
+          page={page}
+          lastPage={lastPage}
+          siblingCount={device.width < SM || 100 < lastPage ? SMALL_DEVICE_SIBLING : siblingCount}
+        />
+      )}
+    </>
   )
 }
