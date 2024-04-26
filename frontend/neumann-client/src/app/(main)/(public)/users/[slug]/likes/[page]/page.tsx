@@ -1,5 +1,5 @@
 import Card from '@/components/common/Card'
-import Pagination, { INITIAL_PAGE } from '@/components/common/Pagination'
+import Pagination from '@/components/common/Pagination'
 import { FetchError } from '@/lib/errors'
 import { getUserLikes } from '@/lib/wrappedFeatch/requests/user'
 import error from '@/text/error.json'
@@ -31,8 +31,8 @@ export const generateStaticParams = async ({ params }: { params: SlugProps }) =>
 }
 
 export default async function UserLikesPage({ params }: { params: UserLikesProps }) {
-  const { slug, page } = params
-  const res = await getUserLikes(slug, Number(page))
+  const page = Number(params.page)
+  const res = await getUserLikes(params.slug, page)
 
   if (res instanceof FetchError) return <p>{error.failedUserLikes}</p>
 
@@ -50,7 +50,7 @@ export default async function UserLikesPage({ params }: { params: UserLikesProps
         </ul>
       </div>
       <div className='w-full'>
-        <Pagination page={INITIAL_PAGE} lastPage={res.pages.last} siblingCount={2} />
+        <Pagination page={page} lastPage={res.pages.last} siblingCount={2} />
       </div>
     </section>
   )

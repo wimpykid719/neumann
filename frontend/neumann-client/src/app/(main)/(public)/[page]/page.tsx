@@ -35,11 +35,11 @@ export default async function Index({ params }: PathsProps) {
   if (res instanceof FetchError) return <p>{error.failedBooksFetch}</p>
 
   return (
-    <section className='w-full'>
-      <div className='space-y-8 lg:mb-32 md:mb-16 mb-8'>
+    <section className='space-y-8'>
+      <div className='space-y-8'>
         <Tabs navigation={booksNavigation} />
         <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto'>
-          <ul className='sm:flex sm:flex-wrap lg:gap-12 sm:gap-10'>
+          <ul className='sm:flex sm:flex-wrap lg:gap-12 sm:gap-10 lg:mb-24 md:mb-16 mb-8'>
             {res.books.map((book, index) => (
               <li key={book.id.toString()} className='sm:mb-0 mb-8 flex justify-center items-center'>
                 <Link href={`books/${book.id}`}>
@@ -53,10 +53,8 @@ export default async function Index({ params }: PathsProps) {
               </li>
             ))}
           </ul>
+          <Pagination page={page} lastPage={res.pages.last} siblingCount={2} />
         </div>
-      </div>
-      <div>
-        <Pagination page={page} lastPage={res.pages.last} siblingCount={2} />
       </div>
     </section>
   )
