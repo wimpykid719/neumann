@@ -119,7 +119,7 @@ jobs:
             --memory=1024Mi \
             --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --set-env-vars RAILS_ENV=${{ vars.RAILS_ENV }} \
-            --set-env-vars FRONT_ORIGINS=${{ secrets.FRONT_DOMAIN }}:${{ secrets.FRONT_PORT }} \
+            --set-env-vars FRONT_ORIGINS=${{ vars.FRONT_ORIGINS }} \
             --set-env-vars ALLOW_HOST_PORT=${{ secrets.ALLOW_HOST }}:${{ secrets.BACK_PORT }} \
             --set-env-vars NEUMANN_DATABASE_HOST=${{ secrets.NEUMANN_DATABASE_HOST }} \
             --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
