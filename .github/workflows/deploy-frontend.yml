@@ -1,12 +1,8 @@
 name: deploy frontend
 
 on:
-  push:
-    branches:
-      - master
-      - feat/*
-      - fix/*
-      - refactor/*
+  release:
+    types: [published]
 
 jobs:
   create-artifact-repository:
