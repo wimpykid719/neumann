@@ -54,9 +54,9 @@ jobs:
       - name: docker auth
         run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
       - name: docker build
-        run: docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/bizrank-api .
+        run: docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api .
       - name: docker push to Artifact Registry
-        run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/bizrank-api
+        run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api
 
   deploy:
     needs: docker-build-push-artifact-repository
