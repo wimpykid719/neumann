@@ -82,13 +82,13 @@ export default function OldPasswordConfirmModal({
   }
 
   return (
-    <div className='w-full rounded-lg shadow dark:border dark:border-gray-600 md:mt-0 sm:max-w-md xl:p-0 sub-bg-color'>
+    <div className='w-full rounded-lg shadow dark:border dark:border-gray-600 md:mt-0 lg:max-w-md sub-bg-color'>
       <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
         <div className='text-xl font-bold leading-tight tracking-tight text-center'>変更前のパスワード</div>
         <p className='text-sm text-gray-500'>パスワード変更があるため、変更前のパスワード入力をお願いします。</p>
         <form onSubmit={handleSubmit(updatePassword)}>
           <div className='space-y-4 md:space-y-6'>
-            <div className='w-80 mx-auto'>
+            <div className='max-w-80 mx-auto'>
               <label htmlFor='oldPassword' className='block mb-2 text-sm font-medium'>
                 変更前のパスワード
               </label>

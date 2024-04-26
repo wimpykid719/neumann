@@ -75,7 +75,7 @@ export default function AccountForm({ user, setUser }: Props) {
   return (
     <section className='flex flex-col items-center justify-center px-6 mx-auto'>
       <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md xl:p-0'>
-        <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
+        <div className='lg:p-6 space-y-4 md:space-y-6 sm:p-8'>
           <div>
             <span className='block mb-2 text-sm font-medium'>ユーザ名</span>
             <p>{user.name}</p>
@@ -113,10 +113,10 @@ export default function AccountForm({ user, setUser }: Props) {
                 {errors.newEmail?.message && <p className='text-sm text-primary'>{errors.newEmail?.message}</p>}
               </div>
               <div>
-                <span className='block mb-2 text-sm font-medium'>パスワード</span>
+                <span className='block text-sm font-medium'>パスワード</span>
                 <div className='lg:flex justify-between'>
-                  <div className='w-60'>
-                    <label htmlFor='newPassword' className='block mb-2 text-sm text-gray-500'>
+                  <div className='lg:w-60'>
+                    <label htmlFor='newPassword' className='block my-2 text-sm text-gray-500'>
                       新しいパスワード
                     </label>
                     <input
@@ -147,8 +147,8 @@ export default function AccountForm({ user, setUser }: Props) {
                       <p className='text-sm text-primary'>{errors.newPassword?.message}</p>
                     )}
                   </div>
-                  <div className='w-60'>
-                    <label htmlFor='newPasswordConfirm' className='block mb-2 text-sm text-gray-500'>
+                  <div className='lg:w-60'>
+                    <label htmlFor='newPasswordConfirm' className='block my-2 text-sm text-gray-500'>
                       再入力してください
                     </label>
                     <input
@@ -195,7 +195,7 @@ export default function AccountForm({ user, setUser }: Props) {
               <button
                 type='submit'
                 className='
-                    w-60 bg-secondary
+                    lg:w-60 w-full bg-secondary
                     hover:bg-opacity-70
                     focus:ring-4
                     focus:outline-none

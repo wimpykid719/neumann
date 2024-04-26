@@ -40,10 +40,10 @@ export default function Modal({ isShowModal, closeModal, modalDOM }: ModalProps)
           transition={{ ease: 'easeOut', duration: 0.2 }}
           id='modal-background'
           className={
-            'bg-gray-900 bg-opacity-80\
-              fixed flex top-0 right-0 left-0 z-50 justify-center items-center\
-              w-full md:inset-0 max-h-full\
-              bg-backdrop backdrop-filter backdrop-blur-sm\
+            'bg-gray-900 bg-opacity-80 \
+              fixed flex top-0 right-0 left-0 z-50 justify-center items-center \
+              w-full md:inset-0 min-h-screen \
+              bg-backdrop backdrop-filter backdrop-blur-sm \
             '
           }
         >
@@ -54,7 +54,7 @@ export default function Modal({ isShowModal, closeModal, modalDOM }: ModalProps)
             exit={{ opacity: 0 }}
             transition={{ ease: 'easeOut', duration: 0.2 }}
             id='modal-default'
-            className={'relative p-4 max-w-2xl flex justify-center'}
+            className={'lg:max-w-2xl max-w-80 flex justify-center items-center'}
             role='dialog'
             aria-modal='true'
             aria-labelledby='dialogTitle'
