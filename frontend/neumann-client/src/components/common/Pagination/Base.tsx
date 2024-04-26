@@ -109,9 +109,9 @@ export default function Pagination({
           />
         )
       case 'previous':
-        return <Navigation icon={<>{'<'}</>} page={page - 1} disabled={buttonDisabled} />
+        return <Navigation path={path} icon={<>{'<'}</>} page={page - 1} disabled={buttonDisabled} />
       case 'next':
-        return <Navigation icon={<>{'>'}</>} page={page + 1} disabled={buttonDisabled} />
+        return <Navigation path={path} icon={<>{'>'}</>} page={page + 1} disabled={buttonDisabled} />
       case 'last':
         return (
           <Number
