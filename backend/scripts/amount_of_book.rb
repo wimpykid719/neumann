@@ -1,3 +1,5 @@
+BOOKS_COUNT = 1
+
 def create_books(num)
   num.times do |n|
     Book.create({
@@ -16,4 +18,5 @@ def create_books(num)
   end
 end
 
-create_books(1000)
+create_books(BOOKS_COUNT)
+puts "書籍を#{BOOKS_COUNT}冊追加しました！！"

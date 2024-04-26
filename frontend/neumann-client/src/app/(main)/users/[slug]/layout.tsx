@@ -30,8 +30,7 @@ export const generateStaticParams = async () => {
   const getUserSlugs = async (page: number) => {
     const res = await getUserNames(page)
     if (res instanceof FetchError) {
-      console.error(error.failedUserNamesFetch)
-      return
+      throw error.failedUserNamesFetch
     }
 
     return res.user_names.map(user => user.name)
@@ -40,8 +39,7 @@ export const generateStaticParams = async () => {
   const res = await getUserNames()
 
   if (res instanceof FetchError) {
-    console.error(error.failedBooksFetch)
-    return
+    throw error.failedBooksFetch
   }
 
   const pages = range(FIRST_PAGE, res.pages.last).map(num => num)

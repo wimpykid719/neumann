@@ -1,0 +1,126 @@
+name: deploy backend
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  create-artifact-repository:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - id: artifact-registry
+        name: Check Artifact Registry
+        run: |-
+          ARTIFACT=$(gcloud artifacts repositories list --location=${{ env.REGION }} --format=yaml --filter=name:projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ vars.REGION }}/repositories/${{ vars.BACKEND_REPOSITORY_NAME }})
+          echo "ARTIFACT_LENGTH=${#ARTIFACT}" >> $GITHUB_OUTPUT
+      - name: Create Artifact Registry
+        if : steps.artifact-registry.outputs.ARTIFACT_LENGTH == 0
+        run: |-
+          gcloud artifacts repositories create ${{ vars.BACKEND_REPOSITORY_NAME }} --repository-format=docker --location=${{ vars.REGION }}
+
+  docker-build-push-artifact-repository:
+    needs: create-artifact-repository
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - name: docker auth
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
+      - name: docker build
+        run: docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api .
+      - name: docker push to Artifact Registry
+        run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api
+
+  deploy:
+    needs: docker-build-push-artifact-repository
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy bizrank-api \
+            --set-env-vars RAILS_ENV=${{ vars.RAILS_ENV }} \
+            --set-env-vars FRONT_ORIGINS=${{ vars.FRONT_ORIGINS }} \
+            --set-env-vars ALLOW_HOST_PORT=${{ secrets.ALLOW_HOST }}:${{ secrets.BACK_PORT }} \
+            --set-env-vars NEUMANN_DATABASE_HOST=${{ secrets.NEUMANN_DATABASE_HOST }} \
+            --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
+            --set-env-vars MYSQL_USER=${{ secrets.MYSQL_USER }} \
+            --set-env-vars NEUMANN_DATABASE_PASSWORD=${{ secrets.NEUMANN_DATABASE_PASSWORD }} \
+            --set-env-vars MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+            --set-env-vars NEUMANN_DATABASE_SOCKET=${{ secrets.NEUMANN_DATABASE_SOCKET }} \
+            --region=${{ vars.REGION }} \
+            --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
+            --port=${{ secrets.BACK_PORT }} \
+            --max-instances=1 \
+            --memory=1024Mi \
+            --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
+            --allow-unauthenticated
+
+  create-books:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      - name: Excute Cloud Run Jobs
+        run: |
+          gcloud run jobs create add-books-db \
+            --args=bundle,exec,rails,runner,scripts/amount_of_book.rb \
+            --quiet \
+            --region=${{ vars.REGION }} \
+            --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
+            --cpu=1 \
+            --memory=1024Mi \
+            --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
+            --set-env-vars RAILS_ENV=${{ vars.RAILS_ENV }} \
+            --set-env-vars FRONT_ORIGINS=${{ vars.FRONT_ORIGINS }} \
+            --set-env-vars ALLOW_HOST_PORT=${{ secrets.ALLOW_HOST }}:${{ secrets.BACK_PORT }} \
+            --set-env-vars NEUMANN_DATABASE_HOST=${{ secrets.NEUMANN_DATABASE_HOST }} \
+            --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
+            --set-env-vars MYSQL_USER=${{ secrets.MYSQL_USER }} \
+            --set-env-vars NEUMANN_DATABASE_PASSWORD=${{ secrets.NEUMANN_DATABASE_PASSWORD }} \
+            --set-env-vars MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+            --set-env-vars NEUMANN_DATABASE_SOCKET=${{ secrets.NEUMANN_DATABASE_SOCKET }} \
+            --execute-now

@@ -1,6 +1,5 @@
 FROM node:21
 WORKDIR /frontend
-ARG NEXT_PUBLIC_API_URL
 
 COPY /neumann-client /frontend/
 
