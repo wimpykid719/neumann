@@ -63,8 +63,8 @@ export default function ProfileForm({ user, setUser }: Props) {
 
   return (
     <section className='flex flex-col items-center justify-center px-6 mx-auto'>
-      <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md xl:p-0'>
-        <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
+      <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md'>
+        <div className='lg:p-6 space-y-4 md:space-y-6 sm:p-8'>
           <form onSubmit={handleSubmit(updateProfile)}>
             <div className='space-y-4 md:space-y-6'>
               <div>
@@ -108,7 +108,7 @@ export default function ProfileForm({ user, setUser }: Props) {
                   id='bio'
                   className={`
                         resize-none
-                        h-24
+                        lg:h-24 md:h-32 h-40
                         border
                         ${
                           errors.bio?.message
@@ -130,8 +130,8 @@ export default function ProfileForm({ user, setUser }: Props) {
                 {errors.bio?.message && <p className='text-sm text-primary'>{errors.bio?.message}</p>}
               </div>
               <div>
-                <div className='lg:flex justify-between'>
-                  <div className='w-60'>
+                <div className='lg:flex lg:space-y-0 space-y-4 justify-between'>
+                  <div className='lg:w-60'>
                     <label htmlFor='xTwitter' className='block mb-2 text-sm font-medium'>
                       X（Twitter） ユーザ名
                     </label>
@@ -160,7 +160,7 @@ export default function ProfileForm({ user, setUser }: Props) {
                     />
                     {errors.xTwitter?.message && <p className='text-sm text-primary'>{errors.xTwitter?.message}</p>}
                   </div>
-                  <div className='w-60'>
+                  <div className='lg:w-60'>
                     <label htmlFor='instagram' className='block mb-2 text-sm font-medium'>
                       instagram ユーザ名
                     </label>
@@ -192,8 +192,8 @@ export default function ProfileForm({ user, setUser }: Props) {
                 </div>
               </div>
               <div>
-                <div className='lg:flex justify-between'>
-                  <div className='w-60'>
+                <div className='lg:flex lg:space-y-0 space-y-4 justify-between'>
+                  <div className='lg:w-60'>
                     <label htmlFor='facebook' className='block mb-2 text-sm font-medium'>
                       Facebook ユーザ名
                     </label>
@@ -222,7 +222,7 @@ export default function ProfileForm({ user, setUser }: Props) {
                     />
                     {errors.facebook?.message && <p className='text-sm text-primary'>{errors.facebook?.message}</p>}
                   </div>
-                  <div className='w-60'>
+                  <div className='lg:w-60'>
                     <label htmlFor='linkedin' className='block mb-2 text-sm font-medium'>
                       LinkedIn ユーザ名
                     </label>
@@ -254,8 +254,8 @@ export default function ProfileForm({ user, setUser }: Props) {
                 </div>
               </div>
               <div>
-                <div className='lg:flex justify-between'>
-                  <div className='w-60'>
+                <div className='lg:flex lg:space-y-0 space-y-4 justify-between'>
+                  <div className='lg:w-60'>
                     <label htmlFor='tiktok' className='block mb-2 text-sm font-medium'>
                       TikTok ユーザ名
                     </label>
@@ -284,7 +284,7 @@ export default function ProfileForm({ user, setUser }: Props) {
                     />
                     {errors.tiktok?.message && <p className='text-sm text-primary'>{errors.tiktok?.message}</p>}
                   </div>
-                  <div className='w-60'>
+                  <div className='lg:w-60'>
                     <label htmlFor='youtube' className='block mb-2 text-sm font-medium'>
                       YouTube ユーザ名
                     </label>
@@ -353,7 +353,7 @@ export default function ProfileForm({ user, setUser }: Props) {
               <button
                 type='submit'
                 className='
-                    w-60 bg-secondary
+                    lg:w-60 w-full bg-secondary
                     hover:bg-opacity-70
                     focus:ring-4
                     focus:outline-none
