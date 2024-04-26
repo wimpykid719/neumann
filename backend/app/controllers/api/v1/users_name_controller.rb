@@ -2,7 +2,7 @@ class Api::V1::UsersNameController < ApplicationController
   rescue_from Pagy::OverflowError, with: :status_not_found_pages
 
   def index
-    pagy, users = pagy(User)
+    pagy, users = pagy(User, items: 100)
     metadata = pagy_metadata(pagy)
 
     render json: {

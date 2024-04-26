@@ -4,8 +4,7 @@ RSpec.describe Api::V1::LikesController do
   include_context 'user_authorities'
 
   let(:book) { FactoryBot.create(:book) }
-  # 上で本を一つ作成しているため234になる
-  let(:books) { FactoryBot.build_list(:book, 233) }
+  let(:books) { FactoryBot.build_list(:book, 27) }
   let(:book_not_liked) { FactoryBot.create(:book) }
   let(:like) { FactoryBot.create(:like, user:, likeable: book) }
   let!(:liked_book_params) do
@@ -34,6 +33,7 @@ RSpec.describe Api::V1::LikesController do
       context '大量のいいねが存在する場合' do
         before do
           # rubocop:disable Rails/SkipsModelValidations:
+          Book.destroy_all
           Book.insert_all books.map(&:attributes)
           Like.insert_all(Book.all.map { |book| FactoryBot.build(:like, user:, likeable: book).attributes })
           # rubocop:enable Rails/SkipsModelValidations:
@@ -45,7 +45,7 @@ RSpec.describe Api::V1::LikesController do
           json = response.parsed_body
 
           expect(json.size).to eq(2)
-          expect(json['books'].size).to eq(100)
+          expect(json['books'].size).to eq(12)
           expect(json['books'][0].size).to eq(4)
           expect(json['books'][0]['id']).to be_present
           expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
@@ -64,9 +64,7 @@ RSpec.describe Api::V1::LikesController do
           json = response.parsed_body
 
           expect(json.size).to eq(2)
-          expect(json['books'].size).to eq(100)
-          expect(json['books'][0].size).to eq(4)
-          expect(json['books'].size).to eq(100)
+          expect(json['books'].size).to eq(12)
           expect(json['books'][0].size).to eq(4)
           expect(json['books'][0]['id']).to be_present
           expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
@@ -85,7 +83,7 @@ RSpec.describe Api::V1::LikesController do
           json = response.parsed_body
 
           expect(json.size).to eq(2)
-          expect(json['books'].size).to eq(34)
+          expect(json['books'].size).to eq(3)
           expect(json['books'][0].size).to eq(4)
           expect(json['books'][0]['id']).to be_present
           expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
