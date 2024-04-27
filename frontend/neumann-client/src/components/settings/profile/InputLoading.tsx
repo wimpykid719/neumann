@@ -2,7 +2,7 @@ export default function InputLoading() {
   const loadingClass = 'mb-4 rounded item-bg-color animate-pulse dark:border dark:border-gray-600'
 
   return (
-    <section className='flex flex-col items-center justify-center px-6 mx-auto lg:py-0'>
+    <section className='flex flex-col items-center justify-center px-6 pb-8 mx-auto lg:py-0'>
       <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md'>
         <div className='lg:p-6 space-y-4 md:space-y-6 sm:p-8'>
           <div className='space-y-4 md:space-y-6'>

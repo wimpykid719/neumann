@@ -62,7 +62,7 @@ export default function ProfileForm({ user, setUser }: Props) {
   })
 
   return (
-    <section className='flex flex-col items-center justify-center px-6 mx-auto'>
+    <section className='flex flex-col items-center justify-center px-6 pb-8 mx-auto'>
       <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md'>
         <div className='lg:p-6 space-y-4 md:space-y-6 sm:p-8'>
           <form onSubmit={handleSubmit(updateProfile)}>
