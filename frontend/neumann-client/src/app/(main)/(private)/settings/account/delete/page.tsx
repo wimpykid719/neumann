@@ -36,14 +36,14 @@ export default function AccountDeletePage() {
   }
 
   return (
-    <section className='space-y-12'>
+    <section>
       <div className='text-center'>
         <h2 className='text-3xl mb-4'>アカウントを削除する</h2>
         <p>
           アカウントを削除すると書籍のいいね登録は出来なくなり、BizRankアカウントの <br /> データは全て削除されます。
         </p>
       </div>
-      <div className='space-y-8 max-w-md p-8 mx-auto border border-gray-900 dark:border-gray-400 rounded-lg'>
+      <div className='my-12 space-y-8 max-w-md p-8 mx-auto border border-gray-900 dark:border-gray-400 rounded-lg'>
         <div className='flex gap-4 justify-center mx-auto'>
           <div className='w-12 h-12 rounded-lg shadow-sm sub-bg-color py-4 text-xs font-medium text-center dark:border dark:border-gray-600'>
             (,,0‸0,,)
