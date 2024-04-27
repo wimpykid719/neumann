@@ -48,7 +48,7 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
       </div>
       <div className='flex items-center justify-between'>
         <ul className='w-full text-xs space-y-3'>
-          <li className='flex justify-between'>
+          <li key={'score'} className='flex justify-between'>
             <div className='flex'>
               <span className='mr-1'>
                 <OcticonGraphIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -57,7 +57,7 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
             </div>
             <div>{score}</div>
           </li>
-          <li className='flex justify-between'>
+          <li key={'likes'} className='flex justify-between'>
             <div className='flex'>
               <span className='mr-1'>
                 <HurtIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -66,7 +66,7 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
             </div>
             <div>{likes}</div>
           </li>
-          <li className='flex justify-between'>
+          <li key={'page'} className='flex justify-between'>
             <div className='flex'>
               <span className='mr-1'>
                 <PageIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -75,7 +75,7 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
             </div>
             <div>{page}</div>
           </li>
-          <li className='flex justify-between'>
+          <li key={'launched'} className='flex justify-between'>
             <div className='flex'>
               <span className='mr-1'>
                 <CalendarIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -84,7 +84,7 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
             </div>
             <time>{new Date(launched).toLocaleDateString('ja-JP')}</time>
           </li>
-          <li className='flex justify-between'>
+          <li key={'publisher'} className='flex justify-between'>
             <div className='flex'>
               <span className='mr-1'>
                 <CompanyIcon width={ICON_SIZE} height={ICON_SIZE} />

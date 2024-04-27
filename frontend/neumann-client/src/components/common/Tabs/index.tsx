@@ -28,7 +28,9 @@ export default function Tabs(props: NavigationProps) {
               {item.name}
             </Link>
           ) : (
-            <li className='max-h-60 px-2 h-8 text-center border-b-2 main-border-color'>{item.name}</li>
+            <li key={item.key} className='max-h-60 px-2 h-8 text-center border-b-2 main-border-color'>
+              {item.name}
+            </li>
           ),
         )}
       </ul>
