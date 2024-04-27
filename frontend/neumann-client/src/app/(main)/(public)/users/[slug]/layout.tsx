@@ -70,11 +70,11 @@ export default async function ProfileLayout({ children, params }: { children: Re
 
   return (
     <section className='space-y-8'>
-      <div className='flex flex-wrap space-x-4'>
+      <div className='md:flex  md:space-x-4 md:space-y-0 space-y-4'>
         <div className='w-16 h-16 rounded-lg py-6 shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'>
           (,,0‸0,,)
         </div>
-        <div className='max-w-80 space-y-4'>
+        <div className='max-w-80 space-y-2'>
           <h2 className='font-bold'>{res.name}</h2>
           <p className='text-gray-500 whitespace-pre-wrap'>{res.bio}</p>
           <div>
