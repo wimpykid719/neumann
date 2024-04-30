@@ -5,9 +5,7 @@ class Api::V1::UsersController < ApplicationController
   rescue_from Constants::Exceptions::TokenVersion do |error|
     unauthorized_user(error.message)
   end
-  rescue_from Constants::Exceptions::OldPassword do |error|
-    unauthorized_user(error.message)
-  end
+  rescue_from Constants::Exceptions::OldPassword, with: :old_password_wrong
   rescue_from ActiveRecord::RecordInvalid do |error|
     status_unprocessable_entity(error.message)
   end
@@ -105,6 +103,10 @@ class Api::V1::UsersController < ApplicationController
   def check_password(user, password)
     return if user&.authenticate(password)
 
-    raise Constants::Exceptions::OldPassword, I18n.t('errors.request.old_password_wrong')
+    raise Constants::Exceptions::OldPassword
+  end
+
+  def old_password_wrong
+    render status: :unauthorized, json: { error: { message: I18n.t('errors.request.old_password_wrong') } }
   end
 end

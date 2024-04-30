@@ -209,6 +209,14 @@ RSpec.describe Api::V1::UsersController do
         expect(json.size).to eq(1)
         expect(json['error']['message']).to eq('以前のパスワードが間違っています。')
       end
+
+      it '以前のパスワードが間違えても、Cookieが削除されない' do
+        cookies[:refresh_token] = 'fake_refresh_token'
+        patch api_v1_users_path, **headers_with_access_token, params: update_params_wrong_password
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.cookies).not_to have_key('refresh_token')
+      end
     end
 
     context '異常系' do
