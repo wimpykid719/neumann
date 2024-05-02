@@ -124,6 +124,7 @@ ja:
       not_found_pages: 存在しないページです。
       not_found_book: 登録されていない書籍です。
       not_found_like: すでにいいね解除済みです。
+      not_signedup_google: Google認証以外の方法でアカウント作成済みです。
   helpers:
     select:
       prompt: 選択してください

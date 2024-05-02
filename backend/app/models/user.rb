@@ -1,6 +1,11 @@
 class User < ApplicationRecord
   include Token::TokenService
 
+  enum :provider, {
+    default: 0,
+    google_oauth2: 1
+  }, validate: true
+
   has_one :profile, dependent: :destroy
   has_secure_password
   has_many :likes, dependent: :destroy
@@ -15,6 +20,7 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8 },
                        format: { with: Constants::Regexps::VALID_PASSWORD_REGEX },
                        if: :password_required?
+  validates :provider, presence: true, inclusion: { in: User.providers.keys }
 
   def update_token_version(token_version)
     update!(current_token_version: token_version)
@@ -35,6 +41,31 @@ class User < ApplicationRecord
       raise UserAuthConfig.not_found_exception_class unless user_registered&.authenticate(password)
 
       user_registered
+    end
+
+    def from_omniauth(access_token)
+      data = access_token['info']
+      user = User.where(email: data['email']).first
+
+      if user
+        raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user.google_oauth2?
+      else
+        user = User.create!(
+          name: SecureRandom.uuid,
+          email: data['email'],
+          password: User.auto_create_password,
+          provider: User.providers[:google_oauth2]
+        )
+        user.create_profile(avatar_url: data['image'])
+      end
+      user
+    end
+
+    def auto_create_password(length = 20)
+      # To calculate real characters, we must perform this operation.
+      # See SecureRandom.urlsafe_base64
+      rlength = (length * 3) / 4
+      SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
     end
   end
 

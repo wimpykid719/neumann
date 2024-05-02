@@ -45,6 +45,8 @@ ja:
             password:
               invalid: は半角英数字、ハイフン、アンダーバーで入力してください
               password_too_long: は72文字以内で入力してください
+            provider:
+              inclusion: が範囲外の値です
         profile:
           attributes:
             website:

@@ -2,6 +2,32 @@ require 'rails_helper'
 
 RSpec.describe User do
   let(:user) { FactoryBot.build(:user) }
+  let(:omniauth_google) do
+    {
+      'provider' => 'google_oauth2',
+      'uid' => '100000000000000000000',
+      'info' => {
+        'name' => 'John Smith',
+        'email' => 'john@gmail.com',
+        'first_name' => 'John',
+        'last_name' => 'Smith',
+        'image' => 'https://lh4.googleusercontent.com/photo.jpg',
+        'urls' => {
+          'google' => 'https://plus.google.com/+JohnSmith'
+        }
+      }
+    }
+  end
+  let(:user_default_signed_up) { FactoryBot.create(:user, email: omniauth_google['info']['email']) }
+  let(:user_google_signed_up) do
+    FactoryBot.create(
+      :user,
+      name: SecureRandom.uuid,
+      email: omniauth_google['info']['email'],
+      password: described_class.auto_create_password,
+      provider: described_class.providers[:google_oauth2]
+    )
+  end
 
   it '有効なファクトリを持つこと' do
     expect(user).to be_valid
@@ -142,6 +168,32 @@ RSpec.describe User do
 
         user_searched.update!(name: 'hiroki')
         expect(user_searched.name).to eq('hiroki')
+      end
+    end
+
+    context 'provider' do
+      it '登録可能' do
+        expect(user).to be_valid
+        expect(user.provider).to eq('default')
+      end
+
+      it 'google_oauth2で登録可能' do
+        u = FactoryBot.build(:user, provider: 1)
+        expect(u).to be_valid
+        expect(u.provider).to eq('google_oauth2')
+      end
+
+      it 'nilの場合エラー' do
+        expect { FactoryBot.create(:user, provider: nil) }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message).to eq '認証サービス名が範囲外の値です, 認証サービス名を入力してください'
+        end)
+      end
+
+      it '範囲外の値の場合エラー' do
+        u = FactoryBot.build(:user, provider: 99)
+        expect(u).not_to be_valid
+        expect(u.errors.full_messages_for(:provider).first).to eq('認証サービス名が範囲外の値です')
       end
     end
   end
@@ -294,6 +346,50 @@ RSpec.describe User do
           expect { described_class.logged_in_user(email: user_created.email, password: nil) }
             .to raise_error(ActiveRecord::RecordNotFound)
         end
+      end
+    end
+
+    context 'auto_create_password' do
+      it '自動で生成されたパスワードが返る' do
+        expect(described_class.auto_create_password).to be_present
+      end
+
+      it 'デフォルトは文字数が20文字' do
+        expect(described_class.auto_create_password.size).to eq(20)
+      end
+
+      it '引数に数値を渡して文字数を設定可能' do
+        expect(described_class.auto_create_password(72).size).to eq(72)
+      end
+    end
+
+    context 'from_omniauth' do
+      it 'google認証によるアカウント作成可能' do
+        u = described_class.from_omniauth(omniauth_google)
+        expect(u).to be_valid
+        expect(u.provider).to eq('google_oauth2')
+      end
+
+      it 'google認証によるログイン可能' do
+        user_all_count = described_class.all.size
+        user_google_signed_up
+        expect(described_class.all.size).to eq(user_all_count + 1)
+
+        u = described_class.from_omniauth(omniauth_google)
+        expect(u).to be_valid
+        expect(u.provider).to eq('google_oauth2')
+        expect(u.email).to eq(omniauth_google['info']['email'])
+      end
+
+      it 'google認証以外のアカウント作成の場合、google認証によるログイン不可' do
+        user_all_count = described_class.all.size
+        user_default_signed_up
+
+        expect(described_class.all.size).to eq(user_all_count + 1)
+        expect { described_class.from_omniauth(omniauth_google) }.to(raise_error do |error|
+          expect(error).to be_a(Constants::Exceptions::SignUp)
+          expect(error.message).to eq 'Google認証以外の方法でアカウント作成済みです。'
+        end)
       end
     end
   end
