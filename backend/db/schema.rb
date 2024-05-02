@@ -61,7 +61,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_02_024752) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "current_token_version"
-    t.string "provider", default: "", null: false
+    t.integer "provider", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["name"], name: "index_users_on_name", unique: true
   end
