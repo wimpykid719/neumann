@@ -17,6 +17,9 @@ services:
     environment:
       FRONT_ORIGINS: "$FRONT_DOMAIN:$FRONT_PORT"
       ALLOW_HOST_PORT: "$ALLOW_HOST:$BACK_PORT"
+      GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+      GOOGLE_CLIENT_SECRET: $GOOGLE_CLIENT_SECRET
+      GOOGLE_REDIRECT_URL: $GOOGLE_REDIRECT_URL
     build:
       context: ./backend/
       dockerfile: Dockerfile
