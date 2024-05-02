@@ -8,6 +8,7 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: 確認用パスワード
+        provider: 認証サービス名
       profile:
         name: 表示名
         bio: 自己紹介
@@ -18,6 +19,7 @@ ja:
         tiktok: TikTokのユーザ名
         youtube: YouTubeのユーザ名
         website: ウェブサイトのURL
+        avatar_url: プロフィール画像
       book:
         title: タイトル
         img_url: 画像のURL
@@ -46,6 +48,8 @@ ja:
         profile:
           attributes:
             website:
+              invalid: が不正な形式です
+            avatar_url:
               invalid: が不正な形式です
             tiktok:
               invalid: は先頭の@不要です
