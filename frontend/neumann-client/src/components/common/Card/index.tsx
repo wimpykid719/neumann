@@ -35,7 +35,7 @@ export default function Card({ title, img_url, ranking, likes, detail = true }: 
           </span>
         </div>
       )}
-      <div className='flex flex-col items-center justify-between'>
+      <div className='flex flex-col items-center justify-between px-3'>
         <div className='relative'>
           <Image
             width={112}
