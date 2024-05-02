@@ -7,10 +7,10 @@ on:
       - feat/*
       - fix/*
       - refactor/*
-    # paths:
-    #   - 'backend/app/**/*'
-    #   - 'backend/spec/**/*'
-    #   - 'backend/config/**/*'
+    paths:
+      - 'backend/app/**/*'
+      - 'backend/spec/**/*'
+      - 'backend/config/**/*'
 
 env:
   FRONT_ORIGINS: localhost:3000
