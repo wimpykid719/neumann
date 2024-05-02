@@ -20,4 +20,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get 'auth/:provider/callback', to: 'api/v1/google_oauth2#create'
+  get 'auth/failure', to: redirect('/')
 end
