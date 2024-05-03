@@ -58,7 +58,7 @@ export default function SignupForm() {
             className='w-full border font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:opacity-70 sub-bg-color main-border-color'
           >
             <GoogleIcon className='w-5 h-5 mr-2 inline' />
-            Sing Up With Google
+            Sign Up With Google
           </button>
           <div className='border border-x-0 border-t-0 relative main-border-color'>
             <span className='px-3 absolute right-2/4 translate-x-1/2 -translate-y-1/2 sub-bg-color'>or</span>
