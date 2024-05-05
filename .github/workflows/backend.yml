@@ -18,9 +18,6 @@ env:
   NEUMANN_DATABASE_HOST: 127.0.0.1
   RAILS_ENV: test
   RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-  GOOGLE_CLIENT_ID: fake_id
-  GOOGLE_CLIENT_SECRET: fake_secret
-  GOOGLE_REDIRECT_URL: http://localhost:3000
 
 jobs:
   rspec:

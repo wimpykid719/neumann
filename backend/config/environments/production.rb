@@ -86,7 +86,4 @@ Rails.application.configure do
 
   # Allow Cloud Run domains
   config.hosts << /.*\.run\.app/
-
-  # googleログインの設定
-  OmniAuth.config.full_host = ENV.fetch('GOOGLE_REDIRECT_URL')
 end
