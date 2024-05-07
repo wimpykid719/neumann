@@ -24,6 +24,7 @@ class Profile < ApplicationRecord
 
     img_types = %w[jpg jpeg png gif webp]
     extension = File.extname(avatar_url).delete('.')
+    return if extension.blank?
     return if img_types.include?(extension)
 
     errors.add(:avatar_url, I18n.t('errors.messages.wrong_img_extension'))
