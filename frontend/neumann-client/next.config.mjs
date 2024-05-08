@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh*.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   output: 'standalone',
