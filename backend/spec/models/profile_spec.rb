@@ -256,6 +256,11 @@ RSpec.describe Profile do
         expect(profile.avatar_url).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
 
+      it '通常のURL形式登録可能' do
+        profile.update!(avatar_url: 'https://lh4.googleusercontent.com/user_profile', user:)
+        expect(profile.avatar_url).to eq('https://lh4.googleusercontent.com/user_profile')
+      end
+
       it '暗号化されていないURLは登録不可' do
         expect { profile.update!(avatar_url: 'http://lh4.googleusercontent.com/photo.jpg', user:) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
@@ -266,7 +271,7 @@ RSpec.describe Profile do
       it '不正な形式は登録不可' do
         expect { profile.update!(avatar_url: 'https://-@{}$$%%&&[]#', user:) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
-          expect(error.message).to eq('プロフィール画像が不正な形式です, プロフィール画像の拡張子をjpg, jpeg, png, gif, webpにしてください')
+          expect(error.message).to eq('プロフィール画像が不正な形式です')
         end)
       end
 
