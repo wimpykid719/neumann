@@ -3,11 +3,14 @@
 import BizRankIcon from '@/components/common/icon/BizRankIcon'
 import GoogleIcon from '@/components/common/icon/GoogleIcon'
 import { useAccessToken } from '@/contexts/AccessTokenContext'
+import { useLoginHistory } from '@/contexts/LoginHistoryContext'
 import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
+import { googleOauth2AuthorizationUrl } from '@/lib/wrappedFeatch/requests/googleOauth2'
 import { LoginData, postAuthToken } from '@/lib/wrappedFeatch/requests/login'
 import { LoginValidation, loginValidationSchema } from '@/lib/zodSchema/loginValidation'
 import app from '@/text/app.json'
+import { history, updateLogoutStatus } from '@/utils/localStorage'
 import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -18,6 +21,7 @@ export default function LoginForm() {
   const { showToast } = useToast()
   const { setAccessToken } = useAccessToken()
   const router = useRouter()
+  const { setLoginHistory } = useLoginHistory()
 
   const {
     register,
@@ -36,8 +40,19 @@ export default function LoginForm() {
       showToast(res.message, toastStatus.error)
     } else {
       setAccessToken(res.token)
-      localStorage.setItem('isLoggedIn', '1')
+      updateLogoutStatus()
+      setLoginHistory(history.loggedInBefore)
       router.push('/')
+    }
+  }
+
+  const oauth2 = async () => {
+    const res = await googleOauth2AuthorizationUrl()
+
+    if (res instanceof FetchError) {
+      showToast(res.message, toastStatus.error)
+    } else {
+      router.push(res.authorization_url)
     }
   }
 
@@ -52,7 +67,7 @@ export default function LoginForm() {
           <h1 className='text-xl font-bold leading-tight tracking-tight md:text-2xl'>ログイン</h1>
           <button
             type='button'
-            onClick={() => {}}
+            onClick={oauth2}
             className='w-full border font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:opacity-70 sub-bg-color main-border-color'
           >
             <GoogleIcon className='w-5 h-5 mr-2 inline' />

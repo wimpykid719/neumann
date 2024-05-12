@@ -13,7 +13,7 @@ const isValidExp = (exp: number) => {
 }
 
 export async function refreshToken(accessToken: AccessToken) {
-  if (!isLoggedInBefore()) return
+  if (!isLoggedInBefore(localStorage.getItem('isLoggedIn'))) return
 
   // ローカルストレージに過去にログインした形跡がある場合、そしてアクセストークンがないサイレントリフレッシュ
   if (!accessToken)

@@ -1,3 +1,4 @@
+import { useLoginHistory } from '@/contexts/LoginHistoryContext'
 import { useUser } from '@/contexts/UserContext'
 import { useLogout } from '@/hooks/useLogout'
 import { isLoggedInBefore } from '@/utils/localStorage'
@@ -8,25 +9,20 @@ import HurtIcon from '../icon/HurtIcon'
 import LogoutIcon from '../icon/LogoutIcon'
 import SettingsIcon from '../icon/SettingsIcon'
 
-type AvatarProps = {
-  isRefreshed: boolean
-  isLoading: boolean
-}
-
-export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
+export default function Avatar() {
   const { user } = useUser()
   const { execLogout } = useLogout()
   const [isOpen, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const documentClickHandler = useRef<(e: MouseEvent) => void>(() => {})
-  const [loginStatus, setLoginStatus] = useState(true)
+  const { loginHistory, setLoginHistory } = useLoginHistory()
   const keys = {
     goodBooks: 'goodBooks',
     accountSettings: 'accountSettings',
   }
 
   useEffect(() => {
-    setLoginStatus(isLoggedInBefore())
+    setLoginHistory(localStorage.getItem('isLoggedIn'))
     documentClickHandler.current = e => {
       if (e.target === null) return
       // メニューの内側をクリックした場合何もしない、as Nodeに関してはクリックされる要素の型を推論するのは難しいため
@@ -52,9 +48,13 @@ export default function Avatar({ isRefreshed, isLoading }: AvatarProps) {
     await execLogout('/')
   }
 
-  if ((loginStatus && !user && !isRefreshed) || isLoading)
+  // ログインしてないユーザに対しても一瞬ローディング状態が表示されてしまうため微妙だが、
+  // 実装するにはサーバサイドでの判定が必要になると思われる
+  if (isLoggedInBefore(loginHistory) && !user)
     return (
-      <div className='w-12 h-12 rounded-lg shadow item-bg-color animate-pulse dark:border dark:border-gray-600'></div>
+      <>
+        <div className='w-12 h-12 rounded-lg shadow item-bg-color animate-pulse dark:border dark:border-gray-600'></div>
+      </>
     )
 
   return (

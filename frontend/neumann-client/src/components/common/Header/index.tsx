@@ -1,6 +1,7 @@
 'use client'
 
 import { useToast } from '@/contexts/ToastContext'
+import { useOauth2 } from '@/hooks/useOauth2'
 import { useSilentRefresh } from '@/hooks/useSilentRefresh'
 import { useUserInitialFetch } from '@/hooks/useUserInitialFetch'
 import app from '@/text/app.json'
@@ -10,8 +11,10 @@ import Avatar from './Avatar'
 
 export default function Header() {
   const { showToast } = useToast()
-  const { accessToken, isRefreshed } = useSilentRefresh(showToast)
-  const { isLoading } = useUserInitialFetch(isRefreshed ? accessToken : undefined, showToast)
+  const { accessToken: accessTokenFromGoogleOauth2 } = useOauth2(showToast)
+  const { accessToken: accessTokenFromEmail, isRefreshed } = useSilentRefresh(showToast)
+  const accessToken = accessTokenFromGoogleOauth2 || accessTokenFromEmail
+  useUserInitialFetch(isRefreshed ? accessToken : undefined, showToast)
 
   return (
     <section className='flex justify-between'>
@@ -23,7 +26,7 @@ export default function Header() {
           </h1>
         </Link>
       </div>
-      <Avatar isRefreshed={isRefreshed} isLoading={isLoading} />
+      <Avatar />
     </section>
   )
 }
