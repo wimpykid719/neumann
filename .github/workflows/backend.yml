@@ -8,6 +8,7 @@ on:
       - fix/*
       - refactor/*
     paths:
+      - '.github/workflows/backend.yml'
       - 'backend/app/**/*'
       - 'backend/spec/**/*'
       - 'backend/config/**/*'
