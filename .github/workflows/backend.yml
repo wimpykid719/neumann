@@ -8,6 +8,7 @@ on:
       - fix/*
       - refactor/*
     paths:
+      - '.github/workflows/backend.yml'
       - 'backend/app/**/*'
       - 'backend/spec/**/*'
       - 'backend/config/**/*'
@@ -17,6 +18,11 @@ env:
   ALLOW_HOST_PORT: backend:8080
   NEUMANN_DATABASE_HOST: 127.0.0.1
   RAILS_ENV: test
+  GOOGLE_CLIENT_ID: fake.apps.googleusercontent.com
+  GOOGLE_CLIENT_SECRET: fake_secret
+  FRONT_REDIRECT_URI: http://localhost:3000
+  STATE_SECRET: ${{ secrets.STATE_SECRET }}
+  BASE_URL: http://localhost
   RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
 jobs:

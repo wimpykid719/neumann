@@ -89,7 +89,9 @@ function buildPathWithSearchParams<T = object>(path: string, params?: T) {
 async function http<T>(path: string, config: RequestInit, revalidate = 0): Promise<T | FetchError> {
   const request = new Request(
     // API_URLは必ず値が存在する想定なので `!` で型エラーを回避する
-    buildFullPath(process.env.API_URL_FROM_SERVER || process.env.NEXT_PUBLIC_API_URL!, path),
+    path.startsWith('http')
+      ? path
+      : buildFullPath(process.env.API_URL_FROM_SERVER || process.env.NEXT_PUBLIC_API_URL!, path),
     config,
   )
 
