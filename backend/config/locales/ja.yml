@@ -125,6 +125,7 @@ ja:
       not_found_book: 登録されていない書籍です。
       not_found_like: すでにいいね解除済みです。
       not_signedup_google: Google認証以外の方法でアカウント作成済みです。
+      state_lifetime: 長時間の操作のため、最初から認証操作を行なってください。
   helpers:
     select:
       prompt: 選択してください

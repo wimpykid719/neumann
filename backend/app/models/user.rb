@@ -3,7 +3,7 @@ class User < ApplicationRecord
 
   enum :provider, {
     default: 0,
-    google_oauth2: 1
+    google: 1
   }, validate: true
 
   has_one :profile, dependent: :destroy
@@ -43,20 +43,19 @@ class User < ApplicationRecord
       user_registered
     end
 
-    def from_omniauth(access_token)
-      data = access_token['info']
-      user = User.where(email: data['email']).first
+    def from_google_oauth2(oauth2_params)
+      user = User.where(email: oauth2_params[:email]).first
 
       if user
-        raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user.google_oauth2?
+        raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user.google?
       else
         user = User.create!(
           name: SecureRandom.uuid,
-          email: data['email'],
+          email: oauth2_params[:email],
           password: User.auto_create_password,
-          provider: User.providers[:google_oauth2]
+          provider: User.providers[oauth2_params[:provider]]
         )
-        user.create_profile(avatar_url: data['image'])
+        user.create_profile!(name: oauth2_params[:name], avatar_url: oauth2_params[:picture])
       end
       user
     end

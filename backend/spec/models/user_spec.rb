@@ -2,30 +2,22 @@ require 'rails_helper'
 
 RSpec.describe User do
   let(:user) { FactoryBot.build(:user) }
-  let(:omniauth_google) do
+  let(:google_oauth2_params) do
     {
-      'provider' => 'google_oauth2',
-      'uid' => '100000000000000000000',
-      'info' => {
-        'name' => 'John Smith',
-        'email' => 'john@gmail.com',
-        'first_name' => 'John',
-        'last_name' => 'Smith',
-        'image' => 'https://lh4.googleusercontent.com/photo.jpg',
-        'urls' => {
-          'google' => 'https://plus.google.com/+JohnSmith'
-        }
-      }
+      provider: 'google',
+      name: 'John Smith',
+      email: 'john@gmail.com',
+      picture: 'https://lh4.googleusercontent.com/photo.jpg'
     }
   end
-  let(:user_default_signed_up) { FactoryBot.create(:user, email: omniauth_google['info']['email']) }
+  let(:user_default_signed_up) { FactoryBot.create(:user, email: google_oauth2_params[:email]) }
   let(:user_google_signed_up) do
     FactoryBot.create(
       :user,
       name: SecureRandom.uuid,
-      email: omniauth_google['info']['email'],
+      email: google_oauth2_params[:email],
       password: described_class.auto_create_password,
-      provider: described_class.providers[:google_oauth2]
+      provider: described_class.providers[:google]
     )
   end
 
@@ -180,7 +172,7 @@ RSpec.describe User do
       it 'google_oauth2で登録可能' do
         u = FactoryBot.build(:user, provider: 1)
         expect(u).to be_valid
-        expect(u.provider).to eq('google_oauth2')
+        expect(u.provider).to eq('google')
       end
 
       it 'nilの場合エラー' do
@@ -363,11 +355,11 @@ RSpec.describe User do
       end
     end
 
-    context 'from_omniauth' do
+    context 'from_google_oauth2' do
       it 'google認証によるアカウント作成可能' do
-        u = described_class.from_omniauth(omniauth_google)
+        u = described_class.from_google_oauth2(google_oauth2_params)
         expect(u).to be_valid
-        expect(u.provider).to eq('google_oauth2')
+        expect(u.provider).to eq('google')
       end
 
       it 'google認証によるログイン可能' do
@@ -375,10 +367,10 @@ RSpec.describe User do
         user_google_signed_up
         expect(described_class.all.size).to eq(user_all_count + 1)
 
-        u = described_class.from_omniauth(omniauth_google)
+        u = described_class.from_google_oauth2(google_oauth2_params)
         expect(u).to be_valid
-        expect(u.provider).to eq('google_oauth2')
-        expect(u.email).to eq(omniauth_google['info']['email'])
+        expect(u.provider).to eq('google')
+        expect(u.email).to eq(google_oauth2_params[:email])
       end
 
       it 'google認証以外のアカウント作成の場合、google認証によるログイン不可' do
@@ -386,9 +378,18 @@ RSpec.describe User do
         user_default_signed_up
 
         expect(described_class.all.size).to eq(user_all_count + 1)
-        expect { described_class.from_omniauth(omniauth_google) }.to(raise_error do |error|
+        expect { described_class.from_google_oauth2(google_oauth2_params) }.to(raise_error do |error|
           expect(error).to be_a(Constants::Exceptions::SignUp)
           expect(error.message).to eq 'Google認証以外の方法でアカウント作成済みです。'
+        end)
+      end
+
+      it 'メールアドレスが存在しなかった場合、ユーザ作成に失敗' do
+        google_oauth2_params_empty_email = google_oauth2_params.merge(email: '')
+
+        expect { described_class.from_google_oauth2(google_oauth2_params_empty_email) }.to(raise_error do |error|
+          expect(error).to be_a(ActiveRecord::RecordInvalid)
+          expect(error.message).to eq 'メールアドレスを入力してください, メールアドレスは不正な値です'
         end)
       end
     end
