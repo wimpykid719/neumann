@@ -26,6 +26,6 @@ class Api::V1::ProfilesController < ApplicationController
   private
 
   def default_params
-    [:name, :bio, :x_twitter, :instagram, :facebook, :linkedin, :tiktok, :youtube, :website]
+    [:name, :bio, :x_twitter, :instagram, :facebook, :linkedin, :tiktok, :youtube, :website, :avatar_url]
   end
 end
