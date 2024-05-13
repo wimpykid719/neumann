@@ -60,6 +60,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_13_053814) do
     t.string "uid", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_providers_on_uid", unique: true
     t.index ["user_id"], name: "index_providers_on_user_id"
   end
 
