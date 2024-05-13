@@ -3,6 +3,7 @@ import { useUser } from '@/contexts/UserContext'
 import { useLogout } from '@/hooks/useLogout'
 import { isLoggedInBefore } from '@/utils/localStorage'
 import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import HurtIcon from '../icon/HurtIcon'
@@ -65,7 +66,23 @@ export default function Avatar() {
             onClick={handleClick}
             className='w-12 h-12 rounded-lg shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'
           >
-            (,,0‸0,,)
+            {user.profile.avatar_url ? (
+              <Image
+                width={48}
+                height={48}
+                src={user.profile.avatar_url}
+                alt={`${user.profile.name}のプロフィール画像`}
+                sizes='
+                          50vw,
+                          (min-width: 768px) 33vw,
+                          (min-width: 1024px) 25vw,
+                          (min-width: 1280px) 20vw
+                        '
+                className='rounded-lg object-cover'
+              />
+            ) : (
+              '(,,0‸0,,)'
+            )}
           </button>
           <AnimatePresence>
             {isOpen && (

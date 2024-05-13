@@ -14,6 +14,7 @@ type Response = {
   tiktok: string
   youtube: string
   website: string
+  avatar_url: string
 }
 
 type UpdateParams = {

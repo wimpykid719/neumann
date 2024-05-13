@@ -37,7 +37,7 @@ RSpec.describe Api::V1::ProfilesController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(9)
+        expect(json.size).to eq(10)
         expect(json['name']).to eq('ノイマン')
         expect(json['bio']).to eq('あらゆる学問に精通しています。コンピュータの開発に貢献しました。')
         expect(json['x_twitter']).to eq('neumann-1903')
@@ -47,6 +47,7 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['tiktok']).to eq('neumann-1903')
         expect(json['youtube']).to eq('neumann-1903')
         expect(json['website']).to eq('https://neuman.com')
+        expect(json['avatar_url']).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
     end
 
@@ -82,7 +83,7 @@ RSpec.describe Api::V1::ProfilesController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(9)
+        expect(json.size).to eq(10)
         expect(json['name']).to eq('こんどう ひろき')
         expect(json['bio']).to eq('Youtubeしてます')
         expect(json['x_twitter']).to eq('hiroki-1998')
@@ -92,6 +93,7 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['tiktok']).to eq('hiroki-1998')
         expect(json['youtube']).to eq('hiroki_1998')
         expect(json['website']).to eq('https://hiroki.com')
+        expect(json['avatar_url']).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
     end
 

@@ -21,6 +21,7 @@ import {
   youtubeAccountURL,
 } from '@/utils/profileURL'
 import { range } from '@/utils/range'
+import Image from 'next/image'
 
 type SlugsProps = {
   slug: string
@@ -71,8 +72,24 @@ export default async function ProfileLayout({ children, params }: { children: Re
   return (
     <section className='space-y-8'>
       <div className='md:flex  md:space-x-4 md:space-y-0 space-y-4'>
-        <div className='w-16 h-16 rounded-lg py-6 shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'>
-          (,,0‸0,,)
+        <div className='w-16 h-16 flex justify-center items-center rounded-lg shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'>
+          {res.avatar_url ? (
+            <Image
+              width={64}
+              height={64}
+              src={res.avatar_url}
+              alt={`${res.name}のプロフィール画像`}
+              sizes='
+                        50vw,
+                        (min-width: 768px) 33vw,
+                        (min-width: 1024px) 25vw,
+                        (min-width: 1280px) 20vw
+                      '
+              className='rounded-lg object-cover'
+            />
+          ) : (
+            '(,,0‸0,,)'
+          )}
         </div>
         <div className='max-w-80 space-y-2'>
           <h2 className='font-bold'>{res.name}</h2>
