@@ -39,24 +39,28 @@ class User < ApplicationRecord
     end
 
     def from_google_oauth2(oauth2_params)
-      user = User.where(email: oauth2_params[:email]).first
-      raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') if user && !user.provider.google?
+      validate_user_created_email(oauth2_params[:email])
 
       uid = oauth2_params[:sub]
-      user_google = Provider.find_by(uid:)&.user
+      user = Provider.find_by(uid:)&.user
 
-      if user_google
-        raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user_google.provider.google?
+      if user
+        raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user.provider.google?
       else
-        user_google = User.create!(
+        user = User.create!(
           name: SecureRandom.uuid,
           email: oauth2_params[:email],
           password: User.auto_create_password
         )
-        user_google.create_provider!(kind: Provider.kinds[oauth2_params[:provider]], uid:)
-        user_google.create_profile!(name: oauth2_params[:name], avatar_url: oauth2_params[:picture])
+        user.create_provider!(kind: Provider.kinds[oauth2_params[:provider]], uid:)
+        user.create_profile!(name: oauth2_params[:name], avatar_url: oauth2_params[:picture])
       end
-      user_google
+      user
+    end
+
+    def validate_user_created_email(email)
+      user = User.where(email:).first
+      raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') if user && !user.provider.google?
     end
 
     def auto_create_password(length = 20)

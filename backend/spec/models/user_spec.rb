@@ -331,6 +331,23 @@ RSpec.describe User do
       end
     end
 
+    context 'validate_user_created_email' do
+      it 'google認証以外でメールアドレスが使用済みの場合エラー' do
+        expect { described_class.validate_user_created_email(user_default_signed_up.user.email) }.to(raise_error do |error|
+          expect(error).to be_a(Constants::Exceptions::SignUp)
+          expect(error.message).to eq 'Google認証以外の方法でアカウント作成済みです。'
+        end)
+      end
+
+      it 'google認証によって作成されたユーザの場合は何も返さない' do
+        expect(described_class.validate_user_created_email(user_google_signed_up.user.email)).to be_nil
+      end
+
+      it '存在しないメールアドレスの場合何も返さない' do
+        expect(described_class.validate_user_created_email('no-exsist@no-exsist,com')).to be_nil
+      end
+    end
+
     context 'from_google_oauth2' do
       it 'google認証によるアカウント作成可能' do
         u = described_class.from_google_oauth2(google_oauth2_params)
