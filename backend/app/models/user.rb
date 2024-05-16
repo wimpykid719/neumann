@@ -1,12 +1,8 @@
 class User < ApplicationRecord
   include Token::TokenService
 
-  enum :provider, {
-    default: 0,
-    google: 1
-  }, validate: true
-
   has_one :profile, dependent: :destroy
+  has_one :provider, dependent: :destroy
   has_secure_password
   has_many :likes, dependent: :destroy
   has_many :books, through: :likes, source: :likeable, source_type: Book.name
@@ -20,7 +16,6 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8 },
                        format: { with: Constants::Regexps::VALID_PASSWORD_REGEX },
                        if: :password_required?
-  validates :provider, presence: true, inclusion: { in: User.providers.keys }
 
   def update_token_version(token_version)
     update!(current_token_version: token_version)
@@ -45,19 +40,23 @@ class User < ApplicationRecord
 
     def from_google_oauth2(oauth2_params)
       user = User.where(email: oauth2_params[:email]).first
+      raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') if user && !user.provider.google?
 
-      if user
-        raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user.google?
+      uid = oauth2_params[:sub]
+      user_google = Provider.find_by(uid:)&.user
+
+      if user_google
+        raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user_google.provider.google?
       else
-        user = User.create!(
+        user_google = User.create!(
           name: SecureRandom.uuid,
           email: oauth2_params[:email],
-          password: User.auto_create_password,
-          provider: User.providers[oauth2_params[:provider]]
+          password: User.auto_create_password
         )
-        user.create_profile!(name: oauth2_params[:name], avatar_url: oauth2_params[:picture])
+        user_google.create_provider!(kind: Provider.kinds[oauth2_params[:provider]], uid:)
+        user_google.create_profile!(name: oauth2_params[:name], avatar_url: oauth2_params[:picture])
       end
-      user
+      user_google
     end
 
     def auto_create_password(length = 20)
