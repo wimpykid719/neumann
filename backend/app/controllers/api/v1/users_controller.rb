@@ -35,7 +35,8 @@ class Api::V1::UsersController < ApplicationController
 
   def create
     user = User.create!(create_params)
-    user.create_profile
+    user.create_provider!(kind: Provider.kinds['default'])
+    user.create_profile!
 
     render status: :created, json: login_response_with_cookie(user)
   end
