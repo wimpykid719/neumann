@@ -24,7 +24,7 @@ module Oauth2Helper
       client_authorized_mock = instance_double(OAuth2::AccessToken)
       code_decoded = 'fake_code'
       user_info = {
-        'sub' => '123',
+        'sub' => '12345678',
         'name' => 'neumann',
         'given_name' => 'neumann',
         'picture' => 'https://lh3.googleusercontent.com/a/test',

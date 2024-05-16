@@ -54,7 +54,7 @@ RSpec.describe Oauth2::Google::Account, type: :service do
         user_info = google_account_mocked.info(verifier_params)
 
         expect(user_info.size).to eq(7)
-        expect(user_info['sub']).to eq('123')
+        expect(user_info['sub']).to eq('12345678')
         expect(user_info['name']).to eq('neumann')
         expect(user_info['given_name']).to eq('neumann')
         expect(user_info['picture']).to eq('https://lh3.googleusercontent.com/a/test')
