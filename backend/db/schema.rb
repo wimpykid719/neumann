@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_13_053814) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_17_095333) do
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", default: "", null: false
     t.string "img_url", default: "", null: false
@@ -50,7 +50,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_13_053814) do
     t.string "website", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "avatar_url", default: "", null: false
+    t.string "avatar", default: "", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 

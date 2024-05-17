@@ -13,20 +13,20 @@ class Profile < ApplicationRecord
                       format: { with: Constants::Regexps::YOUTUBE }
   validates :website, length: { maximum: 255 },
                       format: { with: Constants::Regexps::URL }
-  validates :avatar_url, length: { maximum: 4096 },
-                         format: { with: Constants::Regexps::URL }
-  validate :validate_avatar_url_extension
+  validates :avatar, length: { maximum: 4096 },
+                     format: { with: Constants::Regexps::URL }
+  validate :validate_avatar_extension
 
   private
 
-  def validate_avatar_url_extension
-    return if avatar_url.blank?
+  def validate_avatar_extension
+    return if avatar.blank?
 
     img_types = %w[jpg jpeg png gif webp]
-    extension = File.extname(avatar_url).delete('.')
+    extension = File.extname(avatar).delete('.')
     return if extension.blank?
     return if img_types.include?(extension)
 
-    errors.add(:avatar_url, I18n.t('errors.messages.wrong_img_extension'))
+    errors.add(:avatar, I18n.t('errors.messages.wrong_img_extension'))
   end
 end

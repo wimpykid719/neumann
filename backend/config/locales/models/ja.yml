@@ -21,7 +21,7 @@ ja:
         tiktok: TikTokのユーザ名
         youtube: YouTubeのユーザ名
         website: ウェブサイトのURL
-        avatar_url: プロフィール画像
+        avatar: プロフィール画像
       book:
         title: タイトル
         img_url: 画像のURL
@@ -55,7 +55,7 @@ ja:
           attributes:
             website:
               invalid: が不正な形式です
-            avatar_url:
+            avatar:
               invalid: が不正な形式です
             tiktok:
               invalid: は先頭の@不要です

@@ -26,7 +26,7 @@ class Api::V1::UsersController < ApplicationController
             :tiktok,
             :youtube,
             :website,
-            :avatar_url
+            :avatar
           ]
         }
       }
