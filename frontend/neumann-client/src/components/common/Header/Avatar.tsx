@@ -66,11 +66,11 @@ export default function Avatar() {
             onClick={handleClick}
             className='w-12 h-12 rounded-lg shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'
           >
-            {user.profile.avatar_url ? (
+            {user.profile.avatar ? (
               <Image
                 width={48}
                 height={48}
-                src={user.profile.avatar_url}
+                src={user.profile.avatar}
                 alt={`${user.profile.name}のプロフィール画像`}
                 sizes='
                           50vw,

@@ -9,6 +9,6 @@ FactoryBot.define do
     tiktok { 'neumann-1903' }
     youtube { 'neumann-1903' }
     website { 'https://neuman.com' }
-    avatar_url { 'https://lh4.googleusercontent.com/photo.jpg' }
+    avatar { 'https://lh4.googleusercontent.com/photo.jpg' }
   end
 end

@@ -47,7 +47,7 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['tiktok']).to eq('neumann-1903')
         expect(json['youtube']).to eq('neumann-1903')
         expect(json['website']).to eq('https://neuman.com')
-        expect(json['avatar_url']).to eq('https://lh4.googleusercontent.com/photo.jpg')
+        expect(json['avatar']).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['tiktok']).to eq('hiroki-1998')
         expect(json['youtube']).to eq('hiroki_1998')
         expect(json['website']).to eq('https://hiroki.com')
-        expect(json['avatar_url']).to eq('https://lh4.googleusercontent.com/photo.jpg')
+        expect(json['avatar']).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
     end
 

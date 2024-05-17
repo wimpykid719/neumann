@@ -73,11 +73,11 @@ export default async function ProfileLayout({ children, params }: { children: Re
     <section className='space-y-8'>
       <div className='md:flex  md:space-x-4 md:space-y-0 space-y-4'>
         <div className='w-16 h-16 flex justify-center items-center rounded-lg shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'>
-          {res.avatar_url ? (
+          {res.avatar ? (
             <Image
               width={64}
               height={64}
-              src={res.avatar_url}
+              src={res.avatar}
               alt={`${res.name}のプロフィール画像`}
               sizes='
                         50vw,

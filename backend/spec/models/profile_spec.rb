@@ -251,32 +251,32 @@ RSpec.describe Profile do
       end
     end
 
-    context 'avatar_url' do
+    context 'avatar' do
       it '登録可能' do
-        expect(profile.avatar_url).to eq('https://lh4.googleusercontent.com/photo.jpg')
+        expect(profile.avatar).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
 
       it '通常のURL形式登録可能' do
-        profile.update!(avatar_url: 'https://lh4.googleusercontent.com/user_profile', user:)
-        expect(profile.avatar_url).to eq('https://lh4.googleusercontent.com/user_profile')
+        profile.update!(avatar: 'https://lh4.googleusercontent.com/user_profile', user:)
+        expect(profile.avatar).to eq('https://lh4.googleusercontent.com/user_profile')
       end
 
       it '暗号化されていないURLは登録不可' do
-        expect { profile.update!(avatar_url: 'http://lh4.googleusercontent.com/photo.jpg', user:) }.to(raise_error do |error|
+        expect { profile.update!(avatar: 'http://lh4.googleusercontent.com/photo.jpg', user:) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
           expect(error.message).to eq('プロフィール画像が不正な形式です')
         end)
       end
 
       it '不正な形式は登録不可' do
-        expect { profile.update!(avatar_url: 'https://-@{}$$%%&&[]#', user:) }.to(raise_error do |error|
+        expect { profile.update!(avatar: 'https://-@{}$$%%&&[]#', user:) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
           expect(error.message).to eq('プロフィール画像が不正な形式です')
         end)
       end
 
       it '画像以外の形式は登録不可' do
-        expect { profile.update!(avatar_url: 'https://lh4.googleusercontent.com/photo.pdf', user:) }.to(raise_error do |error|
+        expect { profile.update!(avatar: 'https://lh4.googleusercontent.com/photo.pdf', user:) }.to(raise_error do |error|
           expect(error).to be_a(ActiveRecord::RecordInvalid)
           expect(error.message).to eq('プロフィール画像の拡張子をjpg, jpeg, png, gif, webpにしてください')
         end)
@@ -284,17 +284,17 @@ RSpec.describe Profile do
 
       it 'nilの場合エラー' do
         expect do
-          profile.update(avatar_url: nil, user:)
+          profile.update(avatar: nil, user:)
         end.to raise_error(ActiveRecord::NotNullViolation)
       end
 
       it '空文字入力可能' do
-        profile.update(avatar_url: '', user:)
-        expect(profile.avatar_url).to eq('')
+        profile.update(avatar: '', user:)
+        expect(profile.avatar).to eq('')
       end
 
-      it 'avatar_urlのURLが4097文字以上の場合エラー' do
-        profile.update(avatar_url: 'a' * 4097, user:)
+      it 'avatarのURLが4097文字以上の場合エラー' do
+        profile.update(avatar: 'a' * 4097, user:)
         expect(profile).not_to be_valid
         expect(profile.errors.full_messages.first).to eq('プロフィール画像は4096文字以内で入力してください')
       end
