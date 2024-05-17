@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_02_024752) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_13_053814) do
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", default: "", null: false
     t.string "img_url", default: "", null: false
@@ -54,6 +54,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_02_024752) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
+  create_table "providers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "kind", default: 0, null: false
+    t.string "uid", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_providers_on_uid", unique: true
+    t.index ["user_id"], name: "index_providers_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "email", default: "", null: false
@@ -61,11 +71,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_02_024752) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "current_token_version"
-    t.integer "provider", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["name"], name: "index_users_on_name", unique: true
   end
 
   add_foreign_key "likes", "users"
   add_foreign_key "profiles", "users"
+  add_foreign_key "providers", "users"
 end

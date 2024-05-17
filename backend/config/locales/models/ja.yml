@@ -8,7 +8,9 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: 確認用パスワード
-        provider: 認証サービス名
+      provider:
+        kind: 認証サービス名
+        uid: ユーザID
       profile:
         name: 表示名
         bio: 自己紹介
@@ -45,7 +47,9 @@ ja:
             password:
               invalid: は半角英数字、ハイフン、アンダーバーで入力してください
               password_too_long: は72文字以内で入力してください
-            provider:
+        provider:
+          attributes:
+            kind:
               inclusion: が範囲外の値です
         profile:
           attributes:

@@ -28,6 +28,7 @@ class Api::V1::GoogleOauth2Controller < ApplicationController
     user_info = account.info(oauth_params)
     {
       provider: 'google',
+      sub: user_info['sub'],
       name: user_info['name'],
       email: user_info['email'],
       picture: user_info['picture']
