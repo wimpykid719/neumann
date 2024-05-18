@@ -18,6 +18,9 @@ export async function refreshToken(accessToken: AccessToken) {
   // ローカルストレージに過去にログインした形跡がある場合、そしてアクセストークンがないサイレントリフレッシュ
   if (!accessToken)
     return await fetch.post<null, Response>('/api/v1/auth_token/refresh', null, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       credentials: 'include',
     })
 
@@ -28,6 +31,9 @@ export async function refreshToken(accessToken: AccessToken) {
   if (!exp || isValidExp(exp)) return
 
   return await fetch.post<null, Response>('/api/v1/auth_token/refresh', null, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
   })
 }

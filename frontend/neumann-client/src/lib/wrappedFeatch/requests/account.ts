@@ -22,7 +22,10 @@ type UpdateParams = {
 export async function patchUserAccount(updateData: AccountUpdateData, accessToken: string) {
   const params = { user: updateData }
   return await fetch.patch<UpdateParams, Response>('/api/v1/users', params, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
     credentials: 'include',
   })
 }

@@ -26,7 +26,10 @@ export async function getLike(bookId: BookDetail['id'], accessToken: AccessToken
 export async function postLike(bookLikeData: BookLikeData, accessToken: AccessToken) {
   const params = { book: bookLikeData }
   return await fetch.post<BookLikeParams, Response>('/api/v1/likes', params, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
     credentials: 'include',
   })
 }
