@@ -19,7 +19,12 @@ type Oauth2Params = {
 
 export async function postGoogleOuth2(oauth2Data: Oauth2Data) {
   const params = { oauth2: oauth2Data }
-  return await fetch.post<Oauth2Params, ResponseToken>('/api/v1/google_oauth2', params, { credentials: 'include' })
+  return await fetch.post<Oauth2Params, ResponseToken>('/api/v1/google_oauth2', params, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  })
 }
 
 export async function googleOauth2AuthorizationUrl() {

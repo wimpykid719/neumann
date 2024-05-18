@@ -15,5 +15,10 @@ type LoginParams = {
 
 export async function postAuthToken(loginData: LoginData) {
   const params = { auth: loginData }
-  return await fetch.post<LoginParams, Response>('/api/v1/auth_token', params, { credentials: 'include' })
+  return await fetch.post<LoginParams, Response>('/api/v1/auth_token', params, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  })
 }
