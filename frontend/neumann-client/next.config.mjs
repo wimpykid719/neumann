@@ -14,6 +14,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: process.env.BIZRANK_BUCKET_DOMAIN,
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   output: 'standalone',
