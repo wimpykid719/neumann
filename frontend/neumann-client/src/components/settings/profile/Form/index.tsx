@@ -7,6 +7,8 @@ import toastText from '@/text/toast.json'
 import { User } from '@/types/user'
 import { toastStatus } from '@/utils/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 type Props = {
@@ -17,12 +19,34 @@ type Props = {
 export default function ProfileForm({ user, setUser }: Props) {
   const { showToast } = useToast()
   const { accessToken, execSilentRefresh } = useSilentRefresh(showToast)
+  const [preview, setPreview] = useState<string | null>(null)
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const result = reader.result
+        if (typeof result === 'string') {
+          setPreview(result)
+        }
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setPreview(null)
+    }
+  }
 
   const requestUpdate = async (data: ProfileUpdateValidation) => {
     const token = (await execSilentRefresh()) || accessToken
     if (!token) return showToast(toastText.no_access_token, toastStatus.error)
 
-    const res = await patchUserProfile(data, token)
+    const form = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+      form.append(`profile[${key}]`, value)
+    })
+
+    const res = await patchUserProfile(form, token)
     if (res instanceof FetchError) {
       showToast(res.message, toastStatus.error)
     } else {
@@ -49,7 +73,7 @@ export default function ProfileForm({ user, setUser }: Props) {
     shouldUnregister: false,
     resolver: zodResolver(ProfileUpdateValidationSchema),
     defaultValues: {
-      name: user.profile.name,
+      name: user.profile.name || user.name,
       bio: user.profile.bio,
       xTwitter: user.profile.x_twitter,
       instagram: user.profile.instagram,
@@ -58,6 +82,7 @@ export default function ProfileForm({ user, setUser }: Props) {
       tiktok: user.profile.tiktok,
       youtube: user.profile.youtube,
       website: user.profile.website,
+      avatar: undefined,
     },
   })
 
@@ -67,6 +92,65 @@ export default function ProfileForm({ user, setUser }: Props) {
         <div className='lg:p-6 space-y-4 md:space-y-6 sm:p-8'>
           <form onSubmit={handleSubmit(updateProfile)}>
             <div className='space-y-4 md:space-y-6'>
+              <div>
+                <label htmlFor='avatar' className='cursor-pointer w-16 block'>
+                  <span
+                    className='
+                      w-16 h-16
+                      flex justify-center items-center
+                      rounded-lg
+                      shadow
+                      sub-bg-color
+                      text-xs font-medium text-center
+                      dark:border dark:border-gray-600
+                      overflow-hidden
+                      relative
+                    '
+                  >
+                    {preview ? (
+                      <Image
+                        src={preview}
+                        alt={`${user.profile.name || user.name}のプロフィール画像プレビュー`}
+                        sizes='
+                                50vw,
+                                (min-width: 768px) 33vw,
+                                (min-width: 1024px) 25vw,
+                                (min-width: 1280px) 20vw
+                              '
+                        fill={true}
+                        className='object-cover absolute'
+                      />
+                    ) : user.profile.avatar ? (
+                      <Image
+                        src={user.profile.avatar}
+                        alt={`${user.profile.name || user.name}のプロフィール画像`}
+                        sizes='
+                                50vw,
+                                (min-width: 768px) 33vw,
+                                (min-width: 1024px) 25vw,
+                                (min-width: 1280px) 20vw
+                              '
+                        fill={true}
+                        className='object-cover'
+                      />
+                    ) : (
+                      '(,,0‸0,,)'
+                    )}
+                  </span>
+                </label>
+                <input
+                  {...register('avatar')}
+                  type='file'
+                  name='avatar'
+                  id='avatar'
+                  hidden
+                  onChange={e => {
+                    register('avatar').onChange(e) // React Hook Formに伝える
+                    handleImageChange(e) // プレビューを更新
+                  }}
+                />
+                {errors.avatar?.message && <p className='text-sm text-primary'>{errors.avatar?.message}</p>}
+              </div>
               <div>
                 <label htmlFor='name' className='block mb-2 text-sm font-medium'>
                   表示名
