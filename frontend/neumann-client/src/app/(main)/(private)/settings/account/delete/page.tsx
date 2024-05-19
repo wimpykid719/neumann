@@ -9,6 +9,7 @@ import { deleteUser } from '@/lib/wrappedFeatch/requests/user'
 import toast from '@/text/toast.json'
 import { deleteLogoutStatus } from '@/utils/localStorage'
 import { toastStatus } from '@/utils/toast'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -44,18 +45,37 @@ export default function AccountDeletePage() {
         </p>
       </div>
       <div className='my-12 space-y-8 max-w-md p-8 mx-auto border border-gray-900 dark:border-gray-400 rounded-lg'>
-        <div className='flex gap-4 justify-center mx-auto'>
-          <div className='w-12 h-12 rounded-lg shadow-sm sub-bg-color py-4 text-xs font-medium text-center dark:border dark:border-gray-600'>
-            (,,0‸0,,)
-          </div>
-          <div className='flex items-center'>
+        <div className='flex gap-4 justify-center max-w-60 mx-auto'>
+          {user ? (
+            <div className='w-12 h-12 rounded-lg shadow-sm sub-bg-color py-4 text-xs font-medium text-center dark:border dark:border-gray-600 overflow-hidden relative'>
+              {user.profile.avatar ? (
+                <Image
+                  src={user.profile.avatar}
+                  alt={`${user.profile.name || user.name}のプロフィール画像`}
+                  sizes='
+                        50vw,
+                        (min-width: 768px) 33vw,
+                        (min-width: 1024px) 25vw,
+                        (min-width: 1280px) 20vw
+                      '
+                  fill={true}
+                  className='object-cover'
+                />
+              ) : (
+                '(,,0‸0,,)'
+              )}
+            </div>
+          ) : (
+            <div className='w-12 h-12 rounded-lg shadow item-bg-color animate-pulse dark:border dark:border-gray-600'></div>
+          )}
+          <div className='flex max-w-28 items-center'>
             {user ? <p>{user.name}</p> : <p className='w-24 h-6 rounded item-bg-color animate-pulse'></p>}
           </div>
         </div>
         <div className='text-center'>
           <p>削除すると以下の情報が全て失われます</p>
         </div>
-        <div className='w-64 h-40 sub-bg-color rounded-lg p-6 shadow-sm dark:border dark:border-gray-600 mx-auto'>
+        <div className='max-w-80 h-40 sub-bg-color rounded-lg p-6 shadow-sm dark:border dark:border-gray-600 mx-auto'>
           <ul className='list-disc list-inside'>
             <li>ユーザ名</li>
             <li>登録したメールアドレス</li>

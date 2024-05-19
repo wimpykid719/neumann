@@ -64,12 +64,10 @@ export default function Avatar() {
         <div className='relative'>
           <button
             onClick={handleClick}
-            className='w-12 h-12 rounded-lg shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'
+            className='w-12 h-12 rounded-lg shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600 overflow-hidden relative'
           >
             {user.profile.avatar ? (
               <Image
-                width={48}
-                height={48}
                 src={user.profile.avatar}
                 alt={`${user.profile.name}のプロフィール画像`}
                 sizes='
@@ -78,7 +76,8 @@ export default function Avatar() {
                           (min-width: 1024px) 25vw,
                           (min-width: 1280px) 20vw
                         '
-                className='rounded-lg object-cover'
+                fill={true}
+                className='absolute object-cover'
               />
             ) : (
               '(,,0‸0,,)'

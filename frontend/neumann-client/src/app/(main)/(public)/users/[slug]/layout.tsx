@@ -72,11 +72,19 @@ export default async function ProfileLayout({ children, params }: { children: Re
   return (
     <section className='space-y-8'>
       <div className='md:flex  md:space-x-4 md:space-y-0 space-y-4'>
-        <div className='w-16 h-16 flex justify-center items-center rounded-lg shadow sub-bg-color text-xs font-medium text-center dark:border dark:border-gray-600'>
+        <div
+          className='
+            w-16 h-16
+            flex justify-center
+            items-center rounded-lg
+            shadow sub-bg-color text-xs
+            font-medium text-center
+            dark:border dark:border-gray-600
+            overflow-hidden relative
+          '
+        >
           {res.avatar ? (
             <Image
-              width={64}
-              height={64}
               src={res.avatar}
               alt={`${res.name}のプロフィール画像`}
               sizes='
@@ -85,7 +93,8 @@ export default async function ProfileLayout({ children, params }: { children: Re
                         (min-width: 1024px) 25vw,
                         (min-width: 1280px) 20vw
                       '
-              className='rounded-lg object-cover'
+              fill={true}
+              className='absolute object-cover'
             />
           ) : (
             '(,,0‸0,,)'
