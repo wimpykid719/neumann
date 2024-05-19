@@ -14,8 +14,18 @@ class Api::V1::ProfilesController < ApplicationController
 
   def update
     profile = @current_user.profile
+    params_removed_avator = profiles_params.except(:avatar)
+    avatar_url_hash = {}
 
-    profile.update!(profiles_params)
+    if profiles_params[:avatar].instance_of?(ActionDispatch::Http::UploadedFile)
+      status_not_image_file and return unless profiles_params[:avatar].content_type.start_with?('image/')
+
+      bucket = R2::Bucket.new(@current_user.name)
+      bucket.delete_objects
+      avatar_url_hash = { avatar: bucket.upload_file_r2(profiles_params[:avatar]) }
+    end
+
+    profile.update!(params_removed_avator.merge(avatar_url_hash))
     render json: profile.as_json(only: default_params)
   end
 
