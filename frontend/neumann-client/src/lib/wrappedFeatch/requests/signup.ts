@@ -16,5 +16,10 @@ type SignupParams = {
 
 export async function postUserCreate(signupData: SignupData) {
   const params = { user: signupData }
-  return await fetch.post<SignupParams, Response>('/api/v1/users', params, { credentials: 'include' })
+  return await fetch.post<SignupParams, Response>('/api/v1/users', params, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  })
 }

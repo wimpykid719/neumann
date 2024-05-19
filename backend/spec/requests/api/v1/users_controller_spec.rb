@@ -48,7 +48,7 @@ RSpec.describe Api::V1::UsersController do
         expect(json['profile']['tiktok']).to eq('neumann-1903')
         expect(json['profile']['youtube']).to eq('neumann-1903')
         expect(json['profile']['website']).to eq('https://neuman.com')
-        expect(json['profile']['avatar_url']).to eq('https://lh4.googleusercontent.com/photo.jpg')
+        expect(json['profile']['avatar']).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
 
       it 'ログインユーザ自身が別のユーザ詳細を取得しようとしても自身が返る' do

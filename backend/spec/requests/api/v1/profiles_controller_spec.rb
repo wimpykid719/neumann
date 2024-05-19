@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ProfilesController do
   include_context 'user_authorities'
+  include_context 'r2_helper'
 
-  let!(:update_params) do
+  let(:update_params) do
     {
       profile: {
         name: 'こんどう ひろき',
@@ -14,7 +15,8 @@ RSpec.describe Api::V1::ProfilesController do
         linkedin: 'hiroki_1998',
         tiktok: 'hiroki-1998',
         youtube: 'hiroki_1998',
-        website: 'https://hiroki.com'
+        website: 'https://hiroki.com',
+        avatar: file
       }
     }
   end
@@ -47,7 +49,7 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['tiktok']).to eq('neumann-1903')
         expect(json['youtube']).to eq('neumann-1903')
         expect(json['website']).to eq('https://neuman.com')
-        expect(json['avatar_url']).to eq('https://lh4.googleusercontent.com/photo.jpg')
+        expect(json['avatar']).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
     end
 
@@ -70,16 +72,19 @@ RSpec.describe Api::V1::ProfilesController do
       before do
         user
         profile
+        bucket_mock
+        objects_mock(user.name)
+        object_mock(user.name)
       end
 
       it '認証成功、ステータスコード/200が返る' do
-        patch api_v1_profiles_path, **headers_with_access_token, params: update_params
+        patch api_v1_profiles_path, **headers_file_uploads, params: update_params
 
         expect(response).to have_http_status(:ok)
       end
 
       it '編集したプロフィール詳細が返る' do
-        patch api_v1_profiles_path, **headers_with_access_token, params: update_params
+        patch api_v1_profiles_path, **headers_file_uploads, params: update_params
 
         json = response.parsed_body
 
@@ -93,11 +98,58 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['tiktok']).to eq('hiroki-1998')
         expect(json['youtube']).to eq('hiroki_1998')
         expect(json['website']).to eq('https://hiroki.com')
-        expect(json['avatar_url']).to eq('https://lh4.googleusercontent.com/photo.jpg')
+        expect(json['avatar']).to eq("https://#{ENV.fetch('BIZRANK_BUCKET_DOMAIN')}/#{user.name}/profile/avatar/avatar.jpg")
+      end
+
+      it '画像ファイルが空の場合、以前の画像が変更されない' do
+        patch(
+          api_v1_profiles_path,
+          **headers_file_uploads,
+          params: update_params.merge({ profile: update_params[:profile].merge({ avatar: 'undefined' }) })
+        )
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(10)
+        expect(json['name']).to eq('こんどう ひろき')
+        expect(json['bio']).to eq('Youtubeしてます')
+        expect(json['x_twitter']).to eq('hiroki-1998')
+        expect(json['instagram']).to eq('hiroki_1998')
+        expect(json['facebook']).to eq('hiroki-1998')
+        expect(json['linkedin']).to eq('hiroki_1998')
+        expect(json['tiktok']).to eq('hiroki-1998')
+        expect(json['youtube']).to eq('hiroki_1998')
+        expect(json['website']).to eq('https://hiroki.com')
+        expect(json['avatar']).to eq('https://lh4.googleusercontent.com/photo.jpg')
       end
     end
 
     context '異常系' do
+      let(:pdf_file) do
+        instance_double(
+          ActionDispatch::Http::UploadedFile,
+          path: '/path/to/file',
+          original_filename: 'avatar.jpg',
+          content_type: 'application/pdf',
+          size: 1024
+        )
+      end
+
+      it '画像ファイル以外がアップロードされた際エラー' do
+        patch(
+          api_v1_profiles_path,
+          **headers_file_uploads,
+          params: update_params.merge({ profile: update_params[:profile].merge({ avatar: pdf_file }) })
+        )
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('画像ファイル以外をアップロードしないでください。')
+      end
+
       it 'アクセストークンなし' do
         patch api_v1_profiles_path, **headers, params: update_params
 

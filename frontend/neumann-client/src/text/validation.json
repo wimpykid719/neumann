@@ -19,5 +19,7 @@
   "noNeedAtSign": "先頭の@は不要です",
   "websiteMax": "URLは255文字以内で入力してください",
   "urlOnlyHttps": "https://~ から始まるURLのみになります",
-  "urlNotInvalid": "URLが不正な形式です"
+  "urlNotInvalid": "URLが不正な形式です",
+  "imageMaxSize": "画像ファイルのサイズは5MB以下にしてください",
+  "imageTypes": "画像ファイルの形式はJPG、JPEG、PNG、GIF、WEBPにしてください"
 }

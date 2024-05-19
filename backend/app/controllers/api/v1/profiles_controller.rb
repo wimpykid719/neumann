@@ -14,8 +14,16 @@ class Api::V1::ProfilesController < ApplicationController
 
   def update
     profile = @current_user.profile
+    file = profiles_params[:avatar]
 
-    profile.update!(profiles_params)
+    if file?(file)
+      status_not_image_file and return unless img_file?(file)
+
+      profile.update!(profiles_params.merge({ avatar: avatar_url }))
+    else
+      profile.update!(profiles_params.except(:avatar))
+    end
+
     render json: profile.as_json(only: default_params)
   end
 
@@ -25,7 +33,21 @@ class Api::V1::ProfilesController < ApplicationController
 
   private
 
+  def file?(file)
+    file.instance_of?(ActionDispatch::Http::UploadedFile)
+  end
+
+  def img_file?(file)
+    file.content_type.start_with?('image/')
+  end
+
+  def avatar_url
+    bucket = R2::Bucket.new(@current_user.name)
+    bucket.delete_objects
+    bucket.upload_file_r2(profiles_params[:avatar])
+  end
+
   def default_params
-    [:name, :bio, :x_twitter, :instagram, :facebook, :linkedin, :tiktok, :youtube, :website, :avatar_url]
+    [:name, :bio, :x_twitter, :instagram, :facebook, :linkedin, :tiktok, :youtube, :website, :avatar]
   end
 end

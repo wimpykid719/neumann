@@ -7,5 +7,14 @@ module UserHelper
     let!(:access_token) { user.generate_access_token }
     let(:headers) { { headers: { 'X-Requested-With' => 'XMLHttpRequest' } } }
     let(:headers_with_access_token) { { headers: { 'X-Requested-With' => 'XMLHttpRequest', Authorization: "Bearer #{access_token.token}" } } }
+    let(:headers_file_uploads) do
+      {
+        headers: {
+          'X-Requested-With' => 'XMLHttpRequest',
+          Authorization: "Bearer #{access_token.token}",
+          'Content-Type' => 'multipart/form-data; boundary=xYzZY'
+        }
+      }
+    end
   end
 end

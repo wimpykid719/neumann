@@ -14,11 +14,7 @@ type Response = {
   tiktok: string
   youtube: string
   website: string
-  avatar_url: string
-}
-
-type UpdateParams = {
-  profile: ProfileUpdateData
+  avatar: string
 }
 
 export async function getUserProfile(userName: User['name']) {
@@ -27,10 +23,11 @@ export async function getUserProfile(userName: User['name']) {
   })
 }
 
-export async function patchUserProfile(updateData: ProfileUpdateData, accessToken: string) {
-  const params = { profile: updateData }
-  return await fetch.patch<UpdateParams, Response>('/api/v1/profiles', params, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+export async function patchUserProfile(updateData: FormData, accessToken: string) {
+  return await fetch.patch<FormData, Response>('/api/v1/profiles', updateData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
     credentials: 'include',
   })
 }

@@ -53,7 +53,7 @@ class User < ApplicationRecord
           password: User.auto_create_password
         )
         user.create_provider!(kind: Provider.kinds[oauth2_params[:provider]], uid:)
-        user.create_profile!(name: oauth2_params[:name], avatar_url: oauth2_params[:picture])
+        user.create_profile!(name: oauth2_params[:name], avatar: oauth2_params[:picture])
       end
       user
     end

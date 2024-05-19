@@ -11,6 +11,6 @@ export type User = {
     tiktok: string
     youtube: string
     website: string
-    avatar_url: string
+    avatar: string
   }
 }
