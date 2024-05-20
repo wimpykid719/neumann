@@ -34,11 +34,13 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def create
-    user = User.create!(create_params)
-    user.create_provider!(kind: Provider.kinds['default'], uid: "bizrank-#{SecureRandom.uuid}")
-    user.create_profile!
+    ActiveRecord::Base.transaction do
+      user = User.create!(create_params)
+      user.create_provider!(kind: Provider.kinds['default'], uid: "bizrank-#{SecureRandom.uuid}")
+      user.create_profile!
 
-    render status: :created, json: login_response_with_cookie(user)
+      render status: :created, json: login_response_with_cookie(user)
+    end
   end
 
   def update

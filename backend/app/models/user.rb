@@ -47,13 +47,15 @@ class User < ApplicationRecord
       if user
         raise Constants::Exceptions::SignUp, I18n.t('errors.request.not_signedup_google') unless user.provider.google?
       else
-        user = User.create!(
-          name: SecureRandom.uuid,
-          email: oauth2_params[:email],
-          password: User.auto_create_password
-        )
-        user.create_provider!(kind: Provider.kinds[oauth2_params[:provider]], uid:)
-        user.create_profile!(name: oauth2_params[:name], avatar: oauth2_params[:picture])
+        ActiveRecord::Base.transaction do
+          user = User.create!(
+            name: SecureRandom.uuid,
+            email: oauth2_params[:email],
+            password: User.auto_create_password
+          )
+          user.create_provider!(kind: Provider.kinds[oauth2_params[:provider]], uid:)
+          user.create_profile!(name: oauth2_params[:name], avatar: oauth2_params[:picture])
+        end
       end
       user
     end
