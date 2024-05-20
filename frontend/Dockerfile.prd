@@ -12,7 +12,11 @@ RUN \
 FROM base AS builder
 WORKDIR /frontend/neumann-client
 COPY --from=deps /frontend/neumann-client/node_modules ./node_modules
+
+ARG BIZRANK_BUCKET_DOMAIN
 ARG NEXT_PUBLIC_API_URL
+
+ENV BIZRANK_BUCKET_DOMAIN=${BIZRANK_BUCKET_DOMAIN}
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 COPY /neumann-client .
 
