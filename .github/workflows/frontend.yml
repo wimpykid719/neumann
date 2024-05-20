@@ -72,10 +72,11 @@ jobs:
       - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version': '21'
+          node-version: '21'
           cache: 'npm'
           working-directory: ./frontend/neumann-client
       - run: npm install
+        working-directory: ./frontend/neumann-client
 
       - name: Run Jest Tests
         run: npm test
