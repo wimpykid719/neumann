@@ -74,7 +74,8 @@ jobs:
         with:
           node-version: '21'
           cache: 'npm'
-          working-directory: ./frontend/neumann-client
+          cache-dependency-path: ./frontend/neumann-client
+
       - run: npm install
         working-directory: ./frontend/neumann-client
 
