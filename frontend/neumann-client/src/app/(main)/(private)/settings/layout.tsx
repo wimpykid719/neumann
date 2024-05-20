@@ -1,6 +1,7 @@
 import Header from '@/components/common/Header'
 import Tabs from '@/components/common/Tabs'
 import { settingsNavigation } from '@/components/common/Tabs/Navigations'
+import { Suspense } from 'react'
 
 export default function SettingsLayout({
   children,
@@ -9,7 +10,9 @@ export default function SettingsLayout({
 }>) {
   return (
     <section className='m-auto w-full max-w-5xl space-y-8 md:px-14 px-8 pt-8'>
-      <Header />
+      <Suspense>
+        <Header />
+      </Suspense>
       <div className='space-y-8'>
         <div className='text-xl font-bold h-24 flex items-center'>設定</div>
         <Tabs navigation={settingsNavigation} />
