@@ -8,6 +8,7 @@ import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
 import Link from 'next/link'
+import { Suspense } from 'react'
 
 export default async function Home() {
   const res = await getBooks()
@@ -17,7 +18,9 @@ export default async function Home() {
   return (
     <section className='space-y-8'>
       <div className='m-auto w-full max-w-5xl space-y-8 md:px-14 px-8 pt-8'>
-        <Header />
+        <Suspense>
+          <Header />
+        </Suspense>
         <div className='space-y-8'>
           <Tabs navigation={booksNavigation} />
           <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto'>

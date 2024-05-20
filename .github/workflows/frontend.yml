@@ -1,0 +1,88 @@
+name: Next.js Build and Test
+
+on:
+  push:
+    branches:
+      - master
+      - feat/*
+      - fix/*
+      - refactor/*
+    paths:
+      - '.github/workflows/frontend.yml'
+      - 'frontend/neumann-client/**/*'
+
+env:
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+  FRONT_ORIGINS: 127.0.0.1:3000
+  ALLOW_HOST_PORT: 127.0.0.1:8080
+  NEUMANN_DATABASE_HOST: 127.0.0.1
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  FRONT_REDIRECT_URI: http://127.0.0.1:3000
+  STATE_SECRET: ${{ secrets.STATE_SECRET }}
+  BASE_URL: http://127.0.0.1
+  CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+  CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+  CLOUDFLARE_R2_BUCKET: ${{ secrets.CLOUDFLARE_R2_BUCKET }}
+  CLOUDFLARE_R2_ENDPOINT: ${{ secrets.CLOUDFLARE_R2_ENDPOINT }}
+  BIZRANK_BUCKET_DOMAIN: ${{ secrets.BIZRANK_BUCKET_DOMAIN }}
+  NEXT_PUBLIC_API_URL: http://127.0.0.1:8080
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    timeout-minutes: 10
+    services:
+      db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: neumann_test
+          MYSQL_ROOT_PASSWORD: password
+          TZ: Asia/Tokyo
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Start Rails API
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+          working-directory: ./backend
+      - run: |
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          nohup bundle exec rails s -p 8080 -b 0.0.0.0 &
+        working-directory: ./backend
+
+      - name: Wait for Rails server to be up
+        run: |
+          while ! curl -sSf http://127.0.0.1:8080 > /dev/null; do
+            echo "Waiting for Rails server..."
+            sleep 5
+          done
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21'
+          cache: 'npm'
+          cache-dependency-path: ./frontend/neumann-client
+
+      - run: npm install
+        working-directory: ./frontend/neumann-client
+
+      - name: Run Jest Tests
+        run: npm test
+        working-directory: ./frontend/neumann-client
+
+      - name: Build Test Next.js App
+        run: npm run build
+        working-directory: ./frontend/neumann-client
