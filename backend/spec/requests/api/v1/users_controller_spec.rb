@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController do
   include_context 'user_authorities'
+  include_context 'r2_helper'
 
   let(:user_duplicated_email) { FactoryBot.create(:user, name: 'duplicate-1', email: 'duplicate@dup.com', current_token_version: new_token_version) }
   let!(:user_params) { { user: { name: 'test', email: 'test@test.com', password: '1111111q' } } }
@@ -15,6 +16,7 @@ RSpec.describe Api::V1::UsersController do
   let!(:update_params_space_password) { { user: { new_email: 'space@space.com', new_password: ' ', old_password: '1111111q' } } }
   let(:book) { FactoryBot.create(:book) }
   let(:like) { FactoryBot.create(:like, user:, likeable: book) }
+  let(:provider_default) { FactoryBot.create(:provider, uid: '', user:) }
 
   describe 'GET #show' do
     context '正常系' do
@@ -117,6 +119,13 @@ RSpec.describe Api::V1::UsersController do
 
         expect(User.find_by(id: decrypt_for(decoded_token['sub']))).to be_present
         expect(response.cookies['refresh_token']).to be_present
+      end
+
+      it 'ユーザを続けて登録できる' do
+        provider_default
+        post api_v1_users_path, **headers, params: user_params
+
+        expect(response).to have_http_status(:created)
       end
     end
 
@@ -260,10 +269,13 @@ RSpec.describe Api::V1::UsersController do
     before do
       profile
       like
+      bucket_mock
+      objects_mock(user.name)
+      object_mock(user.name)
     end
 
     context '正常系' do
-      it 'ユーザ削除、ステータスコード/204が返る、リフレッシュトークン削除、ユーザ情報、登録したいいね、プロフィールデータ削除' do
+      it 'ユーザ削除、ステータスコード/204が返る、リフレッシュトークン削除、ユーザ情報、登録したいいね、プロフィールデータ削除、R2アップロードした画像' do
         expect(User.find(user.id)).to be_present
         expect(Like.find_by(user:, likeable: book)).to be_present
         expect(Profile.find_by(user_id: user.id)).to be_present
@@ -272,6 +284,8 @@ RSpec.describe Api::V1::UsersController do
 
         expect(response).to have_http_status(:no_content)
         expect(response.cookies['refresh_token']).to be_nil
+        expect(Rails.logger).to have_received(:info).with('test_user/profile/avatar/test.jpgを削除します')
+        expect(objects.first).to have_received(:delete)
         expect(User.find_by(id: user.id)).to be_nil
         expect(Like.find_by(user:, likeable: book)).to be_nil
         expect(Profile.find_by(user_id: user.id)).to be_nil

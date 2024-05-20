@@ -35,7 +35,7 @@ class Api::V1::UsersController < ApplicationController
 
   def create
     user = User.create!(create_params)
-    user.create_provider!(kind: Provider.kinds['default'])
+    user.create_provider!(kind: Provider.kinds['default'], uid: "bizrank-#{SecureRandom.uuid}")
     user.create_profile!
 
     render status: :created, json: login_response_with_cookie(user)
@@ -59,12 +59,19 @@ class Api::V1::UsersController < ApplicationController
 
   def destroy
     user = @current_user
+
+    delete_avatar_img(user.name)
     delete_session if user.destroy
 
     head(:no_content) if cookies[UserAuthConfig.session_key].nil?
   end
 
   private
+
+  def delete_avatar_img(user_name)
+    bucket = R2::Bucket.new(user_name)
+    bucket.delete_objects
+  end
 
   def create_params
     params.require(:user).permit(:name, :email, :password)
