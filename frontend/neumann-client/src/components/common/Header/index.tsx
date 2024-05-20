@@ -20,7 +20,7 @@ export default function Header() {
     <section className='flex justify-between'>
       <div>
         <Link href={'/'}>
-          <h1 className='text-lg font-bold'>
+          <h1 className='flex items-center sm:h-11 h-9 text-lg font-bold'>
             <BizRankIcon width={32} height={32} className='mr-2 inline' />
             {app.title}
           </h1>

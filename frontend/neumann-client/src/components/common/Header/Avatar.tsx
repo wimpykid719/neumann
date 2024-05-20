@@ -53,9 +53,7 @@ export default function Avatar() {
   // 実装するにはサーバサイドでの判定が必要になると思われる
   if (isLoggedInBefore(loginHistory) && !user)
     return (
-      <>
-        <div className='w-12 h-12 rounded-lg shadow item-bg-color animate-pulse dark:border dark:border-gray-600'></div>
-      </>
+      <div className='w-12 h-12 rounded-lg shadow item-bg-color animate-pulse dark:border dark:border-gray-600'></div>
     )
 
   return (
@@ -136,16 +134,16 @@ export default function Avatar() {
           </AnimatePresence>
         </div>
       ) : (
-        <div className='flex justify-between w-60'>
+        <div className='flex justify-between max-w-60'>
           <Link
             href='/signup'
-            className='w-28 h-11 flex justify-center items-center text-sm font-bold hover:opacity-70'
+            className='sm:w-28 w-20 sm:h-11 h-9 flex justify-center items-center sm:text-sm text-xs font-bold hover:opacity-70'
           >
             会員登録
           </Link>
           <Link
             href='/login'
-            className='w-28 h-11 bg-primary text-center rounded-lg flex justify-center items-center sub-text-color text-sm font-bold hover:opacity-70'
+            className='sm:w-28 w-20 sm:h-11 h-9 bg-primary text-center rounded-lg flex justify-center items-center sub-text-color sm:text-sm text-xs font-bold hover:opacity-70'
           >
             ログイン
           </Link>
