@@ -3,10 +3,10 @@ module Oauth2Config
   self.access_token_lifetime = 5.minute
 
   mattr_accessor :token_issuer
-  self.token_issuer = "#{ENV['BASE_URL']} - Backend"
+  self.token_issuer = "Backend : #{ENV['BASE_URL']}"
 
   mattr_accessor :token_audience
-  self.token_audience = "#{ENV['BASE_URL']} - Backend"
+  self.token_audience = "Frontend : #{ENV['BASE_URL']}"
 
   mattr_accessor :token_signature_algorithm
   self.token_signature_algorithm = 'HS256'
