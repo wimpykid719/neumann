@@ -45,6 +45,8 @@ module Token
     # エンコード時のデフォルトクレーム
     def claims(user_id)
       {
+        iss:,
+        aud:,
         user_claim => encrypt_for(user_id),
         exp: token_expiration,
         version: user_current_token_version(user_id)

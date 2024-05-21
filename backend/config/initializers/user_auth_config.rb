@@ -17,11 +17,11 @@ module UserAuthConfig
 
   # JWTの発行者を識別する文字列(認可サーバーURL) フロント1 バック1の場合いらないかも
   mattr_accessor :token_issuer
-  self.token_issuer = ENV["BASE_URL"]
+  self.token_issuer = "Backend : #{ENV['BASE_URL']}"
 
   # JWTの受信者を識別する文字列(保護リソースURL)
   mattr_accessor :token_audience
-  self.token_audience = ENV["BASE_URL"]
+  self.token_audience = "Frontend : #{ENV['BASE_URL']}"
 
   # JWTの署名アルゴリズム
   mattr_accessor :token_signature_algorithm

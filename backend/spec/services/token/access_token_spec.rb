@@ -10,6 +10,14 @@ RSpec.describe Token::AccessToken, type: :service do
     let!(:lifetime) { UserAuthConfig.access_token_lifetime }
 
     context 'encode' do
+      it 'payload[:iss]が想定通り' do
+        expect(access_token.payload[:iss]).to eq('Backend : http://localhost')
+      end
+
+      it 'payload[:aud]が想定通り' do
+        expect(access_token.payload[:aud]).to eq('Frontend : http://localhost')
+      end
+
       it 'payload[:exp]の値は想定通り(1秒許容)' do
         expect(access_token.payload[:exp]).to be_within(1.second).of(lifetime.from_now.to_i)
       end

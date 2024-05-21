@@ -5,6 +5,14 @@ module TokenConcern
   end
 
   module Methods
+    def iss
+      UserAuthConfig.token_issuer
+    end
+
+    def aud
+      UserAuthConfig.token_audience
+    end
+
     # エンコードキー
     def secret_key
       UserAuthConfig.token_secret_signature_key
