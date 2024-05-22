@@ -1,13 +1,11 @@
-import Tooltip from '@/components/common/Tooltip'
-import AmazonIcon from '@/components/common/icon/AamazonIcon'
 import CalendarIcon from '@/components/common/icon/CalendarIcon'
 import CompanyIcon from '@/components/common/icon/CompanyIcon'
 import HurtIcon from '@/components/common/icon/HurtIcon'
 import OcticonGraphIcon from '@/components/common/icon/OcticonGraphIcon'
 import PageIcon from '@/components/common/icon/PageIcon'
 import XIcon from '@/components/common/icon/XIcon'
-import tooltip from '@/text/tooltip.json'
 import { BookDetail } from '@/types/book'
+import AssociateLink from './AssociateLink'
 import LikeButton from './LikeButton'
 
 type InfoCardProps = {
@@ -28,22 +26,7 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
   return (
     <div className='h-96 w-64 sub-bg-color rounded-lg p-6 space-y-8'>
       <div className='w-52 mx-auto'>
-        <Tooltip message={tooltip.amazonAssociate}>
-          <a
-            className='block text-center py-1 w-full h-8 bg-primary sub-text-color rounded-lg mb-3 hover:bg-opacity-70'
-            href={associate_url}
-          >
-            <div className='flex justify-center items-center'>
-              <div className='mr-2'>
-                <AmazonIcon width={18} height={18} />
-              </div>
-              <div>
-                <span className='text-xs mr-1'>¥</span>
-                {price}
-              </div>
-            </div>
-          </a>
-        </Tooltip>
+        <AssociateLink price={price} associate_url={associate_url} />
         <p className='text-gray-500 text-xs'>
           広告収益の10%は本のプレゼントキャンペーンに当て、
           <br />

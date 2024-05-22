@@ -4,6 +4,7 @@
 
 :root {
   --color-primary: 255 2 17;
+  --color-primary-shine: 255 145 145;
   --color-secondary: 77 201 255;
   --color-success: 9 186 181;
   --color-warning: 255 176 53;
@@ -12,6 +13,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: 247 110 118;
+    --color-primary-shine: 247 209 211;
     --color-secondary: 110 206 247;
     --color-success: 22 208 202;
     --color-warning: 255 196 105;
