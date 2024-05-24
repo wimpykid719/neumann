@@ -17,5 +17,6 @@ services:
     tty: true
     init: true
     environment:
-      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      PARTNER_TAG: $PARTNER_TAG
