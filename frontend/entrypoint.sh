@@ -19,5 +19,5 @@ if [ ! -d "/frontend/neumann-client/node_modules" ]; then
 fi
 
 # Then exec the container's main process (what's set as CMD in the Dockerfile).'
-cd neumann-client
+cd /frontend/neumann-client
 exec "$@"
