@@ -41,6 +41,8 @@ export default function Avatar() {
     document.addEventListener('click', documentClickHandler.current)
   }
 
+  const emojiFace = (isOpen: boolean) => (isOpen ? '(,,0‸0,,)' : '(,,-‸-,,)')
+
   const removeDocumentClickHandler = () => {
     document.removeEventListener('click', documentClickHandler.current)
   }
@@ -78,7 +80,7 @@ export default function Avatar() {
                 className='absolute object-cover'
               />
             ) : (
-              '(,,0‸0,,)'
+              emojiFace(isOpen)
             )}
           </button>
           <AnimatePresence>
