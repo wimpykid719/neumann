@@ -1,3 +1,7 @@
 {
-  "internal_server_error": "申し訳ございません。サーバーでエラーが発生しました。しばらくしてから再度アクセスしてみてください。"
+  "internalServerError": "申し訳ございません。サーバーでエラーが発生しました。しばらくしてから再度アクセスしてみてください。",
+  "noteKeysError": "ハッシュタグスクレイピング中にエラーが発生しました",
+  "stopCrawling": "スクレイピングを停止します",
+  "startCrawling": "クローリング開始",
+  "successCrawling": "クローリング開始"
 }

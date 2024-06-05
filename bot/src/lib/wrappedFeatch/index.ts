@@ -97,7 +97,7 @@ async function http<T>(path: string, config: RequestInit): Promise<T | FetchErro
       const data = (await res.json()) as any
       return new FetchError(data.toString, res.status)
     } catch {
-      return new FetchError(requestErrorText.internal_server_error, res.status)
+      return new FetchError(requestErrorText.internalServerError, res.status)
     }
   }
 
