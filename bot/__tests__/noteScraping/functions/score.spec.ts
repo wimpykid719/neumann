@@ -1,4 +1,4 @@
-import { evaluateScore } from '@/noteScraping/score'
+import { evaluateScore } from '@/noteScraping/functions/score'
 
 const isInRangeZeroToOne = (value: number): boolean => {
   return value >= 0 && value <= 1
