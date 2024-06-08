@@ -15,10 +15,12 @@ type NotesError = {
   timeStamp: FieldValue
 }
 
-const firestore = new Firestore()
+export const COLLECTION_KEYS = 'keys'
 const COLLECTION_ERROR = 'notesError'
 const INITIAL_PAGE = 1
 let i = 0
+
+const firestore = new Firestore()
 
 const stopScraping = async (res: FetchError, url: string, hashtag: HashTags, page: number) => {
   console.error(requestText.noteKeysError)
@@ -78,7 +80,7 @@ export const crawling = async (initialHashtag: HashTags, initialPage = INITIAL_P
     // Firestore記事のkeysを保存
     await Promise.all(
       notes.map(note => {
-        const docRef = firestore.collection('keys').doc(note.key)
+        const docRef = firestore.collection(COLLECTION_KEYS).doc(note.key)
 
         // keyが重複するする場合はハッシュタグだけ追記して更新する
         return docRef.set(
