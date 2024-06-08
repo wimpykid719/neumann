@@ -1,8 +1,13 @@
 {
   "internalServerError": "申し訳ございません。サーバーでエラーが発生しました。しばらくしてから再度アクセスしてみてください。",
   "noteKeysError": "ハッシュタグスクレイピング中にエラーが発生しました",
+  "keyError": "記事詳細スクレイピング中にエラーが発生しました",
   "stopCrawling": "スクレイピングを停止します",
   "startCrawling": "クローリング開始",
   "successCrawling": "クローリング成功！！！",
-  "noNotesError": "取得失敗したページはありません"
+  "doneNoteCrawling": "ノート記事のクローリングが終了",
+  "noNotesError": "取得失敗したページはありません",
+  "noKeys": "未取得のkeyがありません",
+  "initialPage": "最初のページ",
+  "amazonUrl": "Amazonの商品URLを保存"
 }
