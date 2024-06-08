@@ -10,3 +10,8 @@ const isAmazonURL = (url: string) => {
 export const getAmazonEmbeds = (embeds: EmbeddedContents[]) => {
   return embeds.filter(embed => isAmazonURL(embed.url))
 }
+
+export const getASIN = (url: string) => {
+  const regex = /\/dp\/([A-Z0-9]{10})/
+  return url.match(regex)?.[1]
+}

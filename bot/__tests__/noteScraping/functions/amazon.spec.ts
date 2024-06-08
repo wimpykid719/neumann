@@ -1,4 +1,5 @@
 import { getAmazonEmbeds } from '@/noteScraping/functions/amazon'
+import { getASIN } from '@/noteScraping/functions/amazon'
 
 describe('getAmazonEmbeds', () => {
   it('amazonのURL（amzn.to, amzn.asia, amazon.co.jp）を含む外部リンク一覧が返る', () => {
@@ -31,5 +32,29 @@ describe('getAmazonEmbeds', () => {
 
     expect(amazonEmbeds.length).toEqual(0)
     expect(amazonEmbeds).toEqual([])
+  })
+})
+
+describe('getASIN', () => {
+  it('asinを含む（短縮URL出ない）場合、asinのみを返す', () => {
+    const url =
+      'https://www.amazon.co.jp/%E5%AE%9A%E5%B9%B4%E5%89%8D%E3%81%A8%E5%AE%9A%E5%B9%B4%E5%BE%8C%E3%81%AE%E5%83%8D%E3%81%8D%E6%96%B9%EF%BD%9E%E3%82%B5%E3%83%BC%E3%83%89%E3%82%A8%E3%82%A4%E3%82%B8%E3%82%92%E7%94%9F%E3%81%8D%E3%82%8B%E6%80%9D%E8%80%83%EF%BD%9E-%E5%85%89%E6%96%87%E7%A4%BE%E6%96%B0%E6%9B%B8-%E7%9F%B3%E5%B1%B1-%E6%81%92%E8%B2%B4-ebook/dp/B0C42W5716/ref=sr_1_1?crid=1WNAXSOUA99Q6&keywords=%E5%AE%9A%E5%B9%B4%E5%89%8D%E3%81%A8%E5%AE%9A%E5%B9%B4%E5%BE%8C%E3%81%AE%E5%83%8D%E3%81%8D%E6%96%B9&qid=1703890751&sprefix=%E5%AE%9A%E5%B9%B4%E5%89%8D%E3%81%A8%E5%AE%9A%E5%B9%B4%E5%BE%8C%E3%81%AE%E5%83%8D%E3%81%8D%E6%96%B9%2Caps%2C180&sr=8-1'
+    const url2 =
+      'https://www.amazon.co.jp/%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%81%E3%83%A5%E3%82%A8%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3-%E5%84%AA%E3%82%8C%E3%81%9F%E8%B5%B7%E6%A5%AD%E5%AE%B6%E3%81%8C%E5%AE%9F%E8%B7%B5%E3%81%99%E3%82%8B%E3%80%8C5%E3%81%A4%E3%81%AE%E5%8E%9F%E5%89%87%E3%80%8D-%E5%90%89%E7%94%B0-%E6%BA%80%E6%A2%A8-ebook/dp/B0C9CF55J6/ref=sr_1_1?crid=15L3GJQLZD7PH&keywords=%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%81%E3%83%A5%E3%82%A8%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3&qid=1703890563&sprefix=%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%81%E3%83%A5%E3%82%A8%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%2Caps%2C179&sr=8-1'
+    const url3 =
+      'https://www.amazon.co.jp/%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6-%E4%B8%80%E8%88%AC%E6%9B%B8-%E5%8F%A4%E8%B3%80-%E5%8F%B2%E5%81%A5/dp/4591178544/ref=sxts_b2b_sx_reorder_acb_customer?content-id=amzn1.sym.3aa0b3f0-43bc-4d36-b0f9-9cf3da9df3ea%3Aamzn1.sym.3aa0b3f0-43bc-4d36-b0f9-9cf3da9df3ea&crid=3PCVNMXI87026&cv_ct_cx=%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6&keywords=%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6&pd_rd_i=4591178544&pd_rd_r=ab5adc90-f978-468e-abe6-a46a5964d03b&pd_rd_w=UVsEu&pd_rd_wg=KwXe2&pf_rd_p=3aa0b3f0-43bc-4d36-b0f9-9cf3da9df3ea&pf_rd_r=V54GRZ3D9EBPSXF9ZH19&qid=1703890652&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sprefix=%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6%2Caps%2C182&sr=1-1-4ed356dd-72ad-4ce9-9bc3-e42562543353'
+
+    expect(getASIN(url)).toEqual('B0C42W5716')
+    expect(getASIN(url2)).toEqual('B0C9CF55J6')
+    expect(getASIN(url3)).toEqual('4591178544')
+  })
+  it('短縮URLの場合（asinを含まない）、undefinedを返す', () => {
+    const url = 'https://amzn.asia/d/imUy4q5'
+    const url2 = 'https://amzn.to/3uxQ7Mp'
+    const url3 = 'https://amzn.asia/d/8tTnOWq'
+
+    expect(getASIN(url)).toBeUndefined()
+    expect(getASIN(url2)).toBeUndefined()
+    expect(getASIN(url3)).toBeUndefined()
   })
 })
