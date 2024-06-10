@@ -1,6 +1,7 @@
 import { FetchError } from '@/lib/errors'
 import * as noteModule from '@/lib/wrappedFeatch/requests/note'
 import { crawling } from '@/notesScraping'
+import * as crawlingModuleForSpy from '@/notesScraping'
 import requestText from '@/text/request.json'
 import type { HashTags } from '@/utils/hashTags'
 
@@ -70,6 +71,7 @@ describe('crawling', () => {
   describe('再起処理', () => {
     const consoleInfoSpied = jest.spyOn(console, 'info').mockImplementation(() => {})
     const consoleErrorSpied = jest.spyOn(console, 'error').mockImplementation(() => {})
+    jest.spyOn(crawlingModuleForSpy, 'crawling')
 
     afterEach(() => {
       jest.clearAllMocks() // 各テストの後にモックをクリア
@@ -107,6 +109,7 @@ describe('crawling', () => {
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.successCrawling)
         expect(consoleErrorSpied).not.toHaveBeenCalledWith(requestText.noteKeysError)
         expect(noteModule.getNotesFromHashTag).toHaveBeenCalledTimes(3)
+        expect(crawling).toHaveBeenCalledTimes(3)
       })
     })
 
@@ -139,6 +142,7 @@ describe('crawling', () => {
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.successCrawling)
         expect(consoleErrorSpied).not.toHaveBeenCalledWith(requestText.noteKeysError)
         expect(noteModule.getNotesFromHashTag).toHaveBeenCalledTimes(1)
+        expect(crawling).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -172,6 +176,7 @@ describe('crawling', () => {
         expect(consoleErrorSpied).toHaveBeenCalledWith('error occurred')
         expect(consoleInfoSpied).not.toHaveBeenCalledWith(requestText.successCrawling)
         expect(noteModule.getNotesFromHashTag).toHaveBeenCalledTimes(1)
+        expect(crawling).toHaveBeenCalledTimes(1)
       })
     })
   })
