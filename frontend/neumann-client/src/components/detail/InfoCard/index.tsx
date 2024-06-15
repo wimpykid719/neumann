@@ -1,6 +1,6 @@
 import CalendarIcon from '@/components/common/icon/CalendarIcon'
 import CompanyIcon from '@/components/common/icon/CompanyIcon'
-import HurtIcon from '@/components/common/icon/HurtIcon'
+import HeartIcon from '@/components/common/icon/HeartIcon'
 import OcticonGraphIcon from '@/components/common/icon/OcticonGraphIcon'
 import PageIcon from '@/components/common/icon/PageIcon'
 import XIcon from '@/components/common/icon/XIcon'
@@ -47,7 +47,7 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
           <li key={'likes'} className='flex justify-between'>
             <div className='flex'>
               <span className='mr-1'>
-                <HurtIcon width={ICON_SIZE} height={ICON_SIZE} />
+                <HeartIcon width={ICON_SIZE} height={ICON_SIZE} />
               </span>
               総いいね数
             </div>

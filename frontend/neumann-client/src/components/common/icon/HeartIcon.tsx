@@ -1,6 +1,6 @@
 import { SvgIconProps } from '@/types/icon'
 
-export default function HurtIcon({ width = 24, height = 24, className = '' }: SvgIconProps) {
+export default function HeartIcon({ width = 24, height = 24, className = '' }: SvgIconProps) {
   return (
     <svg
       className={className}
