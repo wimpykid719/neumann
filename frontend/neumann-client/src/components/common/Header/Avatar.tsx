@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import HurtIcon from '../icon/HurtIcon'
+import HeartIcon from '../icon/HeartIcon'
 import LogoutIcon from '../icon/LogoutIcon'
 import SettingsIcon from '../icon/SettingsIcon'
 
@@ -106,7 +106,7 @@ export default function Avatar() {
                     className='flex items-center cursor-pointer p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
                   >
                     <span className='inline-flex items-center w-7'>
-                      <HurtIcon />
+                      <HeartIcon />
                     </span>
                     いいねした本
                   </li>
