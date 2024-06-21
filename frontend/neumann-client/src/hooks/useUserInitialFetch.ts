@@ -12,15 +12,15 @@ export const useUserInitialFetch = (
   showToast: (message: string, type: ToastType) => void,
 ) => {
   const { user, setUser } = useUser()
-  const { data, isLoading } = useSWRImmutable(accessToken || null, accessToken => getUser(accessToken))
+  const { data } = useSWRImmutable(accessToken || null, accessToken => getUser(accessToken))
 
   useEffect(() => {
     if (data instanceof FetchError) {
       showToast(data.message, toastStatus.error)
     } else if (data) {
-      setUser(data)
+      if (!user) {
+        setUser(data)
+      }
     }
   }, [data])
-
-  return { user, isLoading }
 }
