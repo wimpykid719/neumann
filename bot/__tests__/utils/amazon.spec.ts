@@ -1,5 +1,5 @@
-import { getAmazonEmbeds } from '@/noteScraping/functions/amazon'
-import { getASIN } from '@/noteScraping/functions/amazon'
+import { getAmazonEmbeds } from '@/utils/amazon'
+import { getASIN } from '@/utils/amazon'
 
 describe('getAmazonEmbeds', () => {
   it('amazonのURL（amzn.to, amzn.asia, amazon.co.jp）を含む外部リンク一覧が返る', () => {

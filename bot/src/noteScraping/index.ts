@@ -6,7 +6,7 @@ import { base64UrlSafeEncode } from '@/utils/base64url'
 import { chunkArray } from '@/utils/chunkArray'
 import { sleep } from '@/utils/sleep'
 import { FieldValue, Firestore, type QueryDocumentSnapshot } from '@google-cloud/firestore'
-import { getASIN, getAmazonEmbeds } from './functions/amazon'
+import { getASIN, getAmazonEmbeds } from '../utils/amazon'
 import { evaluateScore } from './functions/score'
 
 const COLLECTION_AMAZON_LINKS = 'amazonLinks'

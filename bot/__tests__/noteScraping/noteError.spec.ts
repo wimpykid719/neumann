@@ -103,6 +103,7 @@ describe('crawling', () => {
       jest.clearAllMocks() // 各テストの後にモックをクリア
     })
 
+    // ここのテストが実行される場合は下のテストが失敗します。ループの制限がそのまま引き継がれるためです
     describe('記事詳細取得が全てエラーの場合', () => {
       const getNoteDetailSpied = jest.spyOn(noteModule, 'getNoteDetail')
       getNoteDetailSpied.mockImplementation((key: Note['key']) => {
