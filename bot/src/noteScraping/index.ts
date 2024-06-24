@@ -4,6 +4,7 @@ import { COLLECTION_KEYS } from '@/notesScraping'
 import requestText from '@/text/request.json'
 import { base64UrlSafeEncode } from '@/utils/base64url'
 import { chunkArray } from '@/utils/chunkArray'
+import { query } from '@/utils/firestore'
 import { sleep } from '@/utils/sleep'
 import { FieldValue, Firestore, type QueryDocumentSnapshot } from '@google-cloud/firestore'
 import { getASIN, getAmazonEmbeds } from '../utils/amazon'
@@ -16,14 +17,6 @@ const CHUNK_SIZE = 5
 let i = 0
 
 const firestore = new Firestore()
-
-const query = (lastDocument: QueryDocumentSnapshot | undefined, limit: number) => {
-  if (lastDocument) {
-    return firestore.collection('keys').where('scraping', '==', false).limit(limit).startAfter(lastDocument)
-  }
-
-  return firestore.collection('keys').where('scraping', '==', false).limit(limit)
-}
 
 const noteKeysFetched = async (keys: Note['key'][]) => {
   await Promise.all(
@@ -45,7 +38,7 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
   i++
   console.info(requestText.startCrawling, `Start from : ${initialPage ? initialPage.id : requestText.initialPage}`)
 
-  const noteKeys = await query(initialPage, PAGE_LIMIT).get()
+  const noteKeys = await query(firestore, COLLECTION_KEYS, initialPage, PAGE_LIMIT).get()
   if (noteKeys.empty) {
     console.info(requestText.noKeys)
     return
@@ -110,6 +103,7 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
                 count: FieldValue.increment(1),
                 referenceObj: FieldValue.arrayUnion(noteReferencesObj),
                 hashtags: FieldValue.arrayUnion(...hashtagNames),
+                scraping: false,
                 timeStamp: FieldValue.serverTimestamp(),
               },
               { merge: true },
