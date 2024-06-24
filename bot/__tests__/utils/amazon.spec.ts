@@ -21,6 +21,18 @@ describe('getAmazonEmbeds', () => {
     expect(amazonEmbeds.length).toEqual(5)
   })
 
+  it('重複するリンクは1つとしてで返される', () => {
+    const embeds = [
+      { url: 'https://amzn.to/3Kya66P' },
+      { url: 'https://amzn.to/3Kya66P' },
+      { url: 'https://amzn.to/3Kya66P' },
+    ]
+
+    const amazonEmbeds = getAmazonEmbeds(embeds)
+
+    expect(amazonEmbeds.length).toEqual(1)
+  })
+
   it('Amazonリンクが存在しない場合は空配列を返す', () => {
     const embeds = [
       { url: 'https://stand.fm/episodes/608f4cd2abb2ac0947fb4ef9' },

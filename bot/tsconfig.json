@@ -13,7 +13,8 @@
     "incremental": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "downlevelIteration": true
   },
   "include": ["**/*.ts", "jest.config.ts"],
   "exclude": ["node_modules"]

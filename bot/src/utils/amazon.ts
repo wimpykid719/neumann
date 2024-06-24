@@ -8,7 +8,9 @@ const isAmazonURL = (url: string) => {
 }
 
 export const getAmazonEmbeds = (embeds: EmbeddedContents[]) => {
-  return embeds.filter(embed => isAmazonURL(embed.url))
+  const amazonUrls = embeds.filter(embed => isAmazonURL(embed.url))
+
+  return [...new Set(amazonUrls.map(embed => embed.url))].map(url => ({ url }))
 }
 
 export const getASIN = (url: string) => {
