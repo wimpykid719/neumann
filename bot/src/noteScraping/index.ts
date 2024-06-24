@@ -91,6 +91,7 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
           const amazonEmbeds = getAmazonEmbeds(embedded_contents)
 
           amazonEmbeds.map(amazonEmbed => {
+            console.info(`${requestText.noteUrl} : ${noteReferencesObj.url}`)
             console.info(`${requestText.amazonUrl} : ${amazonEmbed.url}`)
             const documentId = getASIN(amazonEmbed.url) || amazonEmbed.url
 

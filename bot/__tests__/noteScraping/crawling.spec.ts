@@ -107,6 +107,7 @@ describe('crawling', () => {
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.startCrawling, 'Start from : xxxxxxxx')
         expect(consoleInfoSpied).not.toHaveBeenCalledWith(requestText.noKeys)
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.doneNoteCrawling)
+        expect(consoleInfoSpied).toHaveBeenCalledWith(`${requestText.noteUrl} : https://note.com/user/key`)
         expect(consoleInfoSpied).toHaveBeenCalledWith(`${requestText.amazonUrl} : https://amzn.to/3Kya66P`)
 
         expect(noteModule.getNoteDetail).toHaveBeenCalledTimes(25)
