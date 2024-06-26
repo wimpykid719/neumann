@@ -9,5 +9,14 @@
   "noNotesError": "取得失敗したページはありません",
   "noKeys": "未取得のkeyがありません",
   "initialPage": "最初のページ",
-  "amazonUrl": "Amazonの商品URLを保存"
+  "amazonUrl": "Amazonの商品URLを保存",
+  "noteUrl": "取得した記事URL",
+  "puppeteerClose": "書籍データ取得完了",
+  "noAmazonLinks": "未取得のAmazonLinksがありません",
+  "errorScraping": "スクレイピング中にエラー発生",
+  "forceCloseScraping": "スクレイピング強制停止",
+  "notBook": "商品URLが書籍ではないです",
+  "asin": "こちらの商品を追加します",
+  "noAsin": "ASINが取得出来ませんでした",
+  "doneAmazonCrawling": "Amazon商品のクローリングが終了"
 }

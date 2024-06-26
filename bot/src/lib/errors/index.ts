@@ -19,3 +19,29 @@ export class FetchError extends AppError {
     this.status = status
   }
 }
+
+export class PuppeteerError extends AppError {
+  url: string
+
+  static {
+    this.prototype.name = 'PuppeteerError'
+  }
+
+  constructor(message: string, url: string, options?: ErrorOptions) {
+    super(message, options)
+    this.url = url
+  }
+}
+
+export class NotBookError extends AppError {
+  url: string
+
+  static {
+    this.prototype.name = 'NotBookError'
+  }
+
+  constructor(message: string, url: string, options?: ErrorOptions) {
+    super(message, options)
+    this.url = url
+  }
+}
