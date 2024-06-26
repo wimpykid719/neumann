@@ -61,6 +61,25 @@ jest.mock('@/utils/sleep', () => ({
 }))
 
 describe('crawling', () => {
+  const noteDetail = {
+    data: {
+      name: 'タイトル',
+      user: {
+        user_profile_image_path: 'https://note.com/user/profile/path',
+        following_count: 321,
+        follower_count: 541,
+      },
+      like_count: 88,
+      hashtag_notes: [{ hashtag: { name: '#ハッシュタグ - 1' } }, { hashtag: { name: '#ハッシュタグ - 2' } }],
+      embedded_contents: [
+        { url: 'https://amzn.to/3Kya66P' },
+        { url: 'https://note.com/kankipublishing/n/n9a09777a03f' },
+      ],
+      publish_at: new Date().toDateString(),
+      note_url: 'https://note.com/user/key',
+    },
+  }
+
   const errorRes = new FetchError('error occurred', 403)
 
   describe('再起処理', () => {
@@ -72,18 +91,81 @@ describe('crawling', () => {
       jest.clearAllMocks() // 各テストの後にモックをクリア
     })
 
-    // ここのテストが実行される場合は下のテストが失敗します。ループの制限がそのまま引き継がれるためです
-    describe('記事詳細取得が全てエラーの場合', () => {
+    describe('記事詳細取得が成功・エラーが混合する場合', () => {
       const getNoteDetailSpied = jest.spyOn(noteModule, 'getNoteDetail')
-      getNoteDetailSpied.mockImplementation((key: Note['key']) => {
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
+        return Promise.resolve({
+          url: `https://note.com/api/v3/notes/${key}`,
+          key,
+          res: noteDetail,
+        })
+      })
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
+        return Promise.resolve({
+          url: `https://note.com/api/v3/notes/${key}`,
+          key,
+          res: noteDetail,
+        })
+      })
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
         return Promise.resolve({
           url: `https://note.com/api/v3/notes/${key}`,
           key,
           res: errorRes,
         })
       })
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
+        return Promise.resolve({
+          url: `https://note.com/api/v3/notes/${key}`,
+          key,
+          res: errorRes,
+        })
+      })
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
+        return Promise.resolve({
+          url: `https://note.com/api/v3/notes/${key}`,
+          key,
+          res: noteDetail,
+        })
+      })
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
+        return Promise.resolve({
+          url: `https://note.com/api/v3/notes/${key}`,
+          key,
+          res: noteDetail,
+        })
+      })
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
+        return Promise.resolve({
+          url: `https://note.com/api/v3/notes/${key}`,
+          key,
+          res: noteDetail,
+        })
+      })
+      getNoteDetailSpied.mockImplementationOnce((key: Note['key']) => {
+        return Promise.resolve({
+          url: `https://note.com/api/v3/notes/${key}`,
+          key,
+          res: noteDetail,
+        })
+      })
+      getNoteDetailSpied
+        .mockImplementationOnce((key: Note['key']) => {
+          return Promise.resolve({
+            url: `https://note.com/api/v3/notes/${key}`,
+            key,
+            res: noteDetail,
+          })
+        })
+        .mockImplementation((key: Note['key']) => {
+          return Promise.resolve({
+            url: `https://note.com/api/v3/notes/${key}`,
+            key,
+            res: errorRes,
+          })
+        })
 
-      it('エラー内容をFirestoreに保存するも処理は止まらず、2回再起処理が行われる', async () => {
+      it('成功・エラー処理がぞれぞれ行われ処理は止まらない、2回再起処理が行われる', async () => {
         await crawling()
 
         expect(consoleInfoSpied).toHaveBeenCalledWith(
