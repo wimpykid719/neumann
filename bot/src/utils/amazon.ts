@@ -14,6 +14,6 @@ export const getAmazonEmbeds = (embeds: EmbeddedContents[]) => {
 }
 
 export const getASIN = (url: string) => {
-  const regex = /\/dp\/([A-Z0-9]{10})/
+  const regex = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})/
   return url.match(regex)?.[1]
 }
