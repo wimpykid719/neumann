@@ -120,7 +120,11 @@ export const getBookInfo = async (url: string) => {
 
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded' })
-    if (!(await isBook(page))) return new NotBookError(requestText.notBook, url)
+    if (!(await isBook(page))) {
+      await browser.close()
+
+      return new NotBookError(requestText.notBook, url)
+    }
 
     const asin = getBookASIN(page)
 
