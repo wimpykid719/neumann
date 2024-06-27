@@ -35,6 +35,18 @@ let i = 0
 
 const firestore = new Firestore()
 
+const amazonLinkFetched = (id: string) => {
+  const docRef = firestore.collection(COLLECTION_AMAZON_LINKS).doc(id)
+
+  return docRef.set(
+    {
+      scraping: true,
+      timeStamp: FieldValue.serverTimestamp(),
+    },
+    { merge: true },
+  )
+}
+
 export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = undefined) => {
   i++
 
@@ -91,7 +103,7 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
         } else {
           const { asin, book } = bookInfo
           if (!asin) {
-            console.info(requestText.noAsin)
+            console.info(requestText.noAsin, linkInfo.productUrl)
             return
           }
 
@@ -111,14 +123,7 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
             { merge: true },
           )
 
-          const docRefAmazonLinks = firestore.collection(COLLECTION_AMAZON_LINKS).doc(id)
-          return docRefAmazonLinks.set(
-            {
-              scraping: true,
-              timeStamp: FieldValue.serverTimestamp(),
-            },
-            { merge: true },
-          )
+          return amazonLinkFetched(id)
         }
       }),
     )
