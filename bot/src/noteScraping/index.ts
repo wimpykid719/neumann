@@ -18,19 +18,15 @@ let i = 0
 
 const firestore = new Firestore()
 
-const noteKeysFetched = async (keys: Note['key'][]) => {
-  await Promise.all(
-    keys.map(key => {
-      const docRef = firestore.collection(COLLECTION_KEYS).doc(key)
+const noteKeyFetched = (key: Note['key']) => {
+  const docRef = firestore.collection(COLLECTION_KEYS).doc(key)
 
-      return docRef.set(
-        {
-          scraping: true,
-          timeStamp: FieldValue.serverTimestamp(),
-        },
-        { merge: true },
-      )
-    }),
+  return docRef.set(
+    {
+      scraping: true,
+      timeStamp: FieldValue.serverTimestamp(),
+    },
+    { merge: true },
   )
 }
 
@@ -47,17 +43,20 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
   const lastDocument = noteKeys.docs[noteKeys.docs.length - 1]
   const keys = noteKeys.docs.map(key => key.id)
 
-  await noteKeysFetched(keys)
-
   const keyChunks = chunkArray(keys, CHUNK_SIZE)
 
   for (const keyChunk of keyChunks) {
     // Note APIを叩く処理を５リクエストずつ並列で行う
-    const notesDetail = await Promise.all(keyChunk.map(key => getNoteDetail(key)))
+    const noteDetailObjs = await Promise.all(
+      keyChunk.map(async key => {
+        return { id: key, noteDetail: await getNoteDetail(key) }
+      }),
+    )
 
     // Firestoreも上記に合わせて5記事分データを並行に保存
     await Promise.all(
-      notesDetail.map(noteDetail => {
+      noteDetailObjs.map(noteDetailObj => {
+        const { id, noteDetail } = noteDetailObj
         const { url, key, res } = noteDetail
 
         if (res instanceof FetchError) {
@@ -97,7 +96,7 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
 
             const docRef = firestore.collection(COLLECTION_AMAZON_LINKS).doc(base64UrlSafeEncode(documentId))
 
-            return docRef.set(
+            docRef.set(
               {
                 productUrl: amazonEmbed.url,
                 score: FieldValue.increment(evaluateScore(scoreValue)),
@@ -109,6 +108,8 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
               },
               { merge: true },
             )
+
+            return noteKeyFetched(id)
           })
         }
       }),
