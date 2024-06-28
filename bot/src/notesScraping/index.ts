@@ -18,6 +18,7 @@ type NotesError = {
 export const COLLECTION_KEYS = 'keys'
 const COLLECTION_ERROR = 'notesError'
 const INITIAL_PAGE = 1
+const ARTICLE_500 = 25
 let i = 0
 
 const firestore = new Firestore()
@@ -94,16 +95,13 @@ export const crawling = async (initialHashtag: HashTags, initialPage = INITIAL_P
       }),
     )
 
-    // 次のページが存在する場合は再起的に上記の処理を繰り返す
-    if (!is_last_page && next_page && i < 3) {
-      // 5秒間の待機処理
-      await sleep(5000)
+    // 次のページが存在する場合は再起的に上記の処理を繰り返す。最大500件まで取得
+    if (!is_last_page && next_page && i < ARTICLE_500) {
+      // 10秒間の待機処理
+      await sleep(10000)
       await crawling(hashtag, next_page)
     } else {
       console.info(requestText.successCrawling)
     }
   }
 }
-// ;(async () => {
-//   await crawling(HASH_TAGS[0])
-// })()
