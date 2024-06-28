@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "npx ts-node src/index.ts"
+    "start": "npx ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "npx ts-node -r tsconfig-paths/register src/amazonBookScraping/index.ts"
   },
   "keywords": [],
   "author": "",

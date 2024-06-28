@@ -1,10 +1,12 @@
-import puppeteer from 'puppeteer'
+import { crawling as amazonBookScraping } from './amazonBookScraping'
+import { crawling as noteScraping } from './noteScraping'
+import { crawling as notesScraping } from './notesScraping'
+import { HASH_TAGS } from './utils/hashTags'
+import { sleep } from './utils/sleep'
 ;(async () => {
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox'],
-  })
-  const page = await browser.newPage()
-  await page.goto('https://example.com')
-  await browser.close()
-  console.log('done')
+  await notesScraping(HASH_TAGS[0])
+  await sleep(10000)
+  await noteScraping()
+  await sleep(10000)
+  await amazonBookScraping()
 })()
