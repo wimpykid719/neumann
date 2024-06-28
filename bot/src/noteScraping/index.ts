@@ -14,7 +14,6 @@ const COLLECTION_AMAZON_LINKS = 'amazonLinks'
 const COLLECTION_NOTE_ERROR = 'noteError'
 const PAGE_LIMIT = 10
 const CHUNK_SIZE = 5
-let i = 0
 
 const firestore = new Firestore()
 
@@ -31,7 +30,6 @@ const noteKeyFetched = (key: Note['key']) => {
 }
 
 export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = undefined) => {
-  i++
   console.info(requestText.startCrawling, `Start from : ${initialPage ? initialPage.id : requestText.initialPage}`)
 
   const noteKeys = await query(firestore, COLLECTION_KEYS, initialPage, PAGE_LIMIT).get()
@@ -115,17 +113,14 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
       }),
     )
 
-    // リクエスト実行後は5秒間待機して次のリクエストを行う
-    await sleep(5000)
+    // リクエスト実行後は10秒間待機して次のリクエストを行う
+    await sleep(10000)
   }
 
   // 取得したkeyの数が制限よりも少ない場合は最後ページと判定、それ以外は処理を繰り返す
-  if (PAGE_LIMIT <= noteKeys.docs.length && i < 3) {
+  if (PAGE_LIMIT <= noteKeys.docs.length) {
     await crawling(lastDocument)
   } else {
     console.info(requestText.doneNoteCrawling)
   }
 }
-// ;(async () => {
-//   await crawling()
-// })()

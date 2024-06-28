@@ -31,7 +31,6 @@ const COLLECTION_NOT_BOOKS = 'notBooksLink'
 const COLLECTION_AMAZON_BOOKS = 'amazonBooks'
 const PAGE_LIMIT = 10
 const CHUNK_SIZE = 5
-let i = 0
 
 const firestore = new Firestore()
 
@@ -48,8 +47,6 @@ const amazonLinkFetched = (id: string) => {
 }
 
 export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = undefined) => {
-  i++
-
   console.info(
     requestText.startCrawling,
     `Start from （Amazon書籍情報取得） : ${initialPage ? initialPage.id : requestText.initialPage}`,
@@ -133,12 +130,9 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
   }
 
   // 取得したAmazonLinksの数が制限よりも少ない場合は最後ページと判定、それ以外は処理を繰り返す
-  if (PAGE_LIMIT <= amazonLinks.docs.length && i < 3) {
+  if (PAGE_LIMIT <= amazonLinks.docs.length) {
     await crawling(lastDocument)
   } else {
     console.info(requestText.doneAmazonCrawling)
   }
 }
-// ;(async () => {
-//   await crawling()
-// })()
