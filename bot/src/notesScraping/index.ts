@@ -80,18 +80,28 @@ export const crawling = async (initialHashtag: HashTags, initialPage = INITIAL_P
     const { is_last_page, next_page, notes } = res.data
     // Firestore記事のkeysを保存
     await Promise.all(
-      notes.map(note => {
+      notes.map(async note => {
         const docRef = firestore.collection(COLLECTION_KEYS).doc(note.key)
-
-        // keyが重複するする場合はハッシュタグだけ追記して更新する
-        return docRef.set(
-          {
-            hashTags: FieldValue.arrayUnion(hashtag),
-            scraping: false,
-            timeStamp: FieldValue.serverTimestamp(),
-          },
-          { merge: true },
-        )
+        const doc = await docRef.get()
+        if (!doc.exists) {
+          return docRef.set(
+            {
+              hashTags: FieldValue.arrayUnion(hashtag),
+              scraping: false,
+              timeStamp: FieldValue.serverTimestamp(),
+            },
+            { merge: true },
+          )
+        } else {
+          console.info(`${requestText.duplicateArticle} : ${doc.id}`)
+          return docRef.set(
+            {
+              hashTags: FieldValue.arrayUnion(hashtag),
+              timeStamp: FieldValue.serverTimestamp(),
+            },
+            { merge: true },
+          )
+        }
       }),
     )
 

@@ -1,4 +1,3 @@
-import { FetchError } from '@/lib/errors'
 import * as noteModule from '@/lib/wrappedFeatch/requests/note'
 import { crawling } from '@/notesScraping'
 import * as crawlingModuleForSpy from '@/notesScraping'
@@ -9,7 +8,7 @@ const HASH_TAG = 'ビジネス書評'
 
 jest.mock('@google-cloud/firestore', () => {
   const set = jest.fn().mockImplementation(() => Promise.resolve({}))
-  const get = jest.fn().mockImplementation(() => Promise.resolve({ empty: true, docs: [], exists: false }))
+  const get = jest.fn().mockImplementation(() => Promise.resolve({ empty: true, docs: [], exists: true, id: 'xxx' }))
   const firestoreMock = {
     settings: jest.fn(),
     databaseId: jest.fn(),
@@ -66,8 +65,6 @@ describe('crawling', () => {
     },
   }
 
-  const errorRes = new FetchError('error occurred', 403)
-
   describe('再起処理', () => {
     const consoleInfoSpied = jest.spyOn(console, 'info').mockImplementation(() => {})
     const consoleErrorSpied = jest.spyOn(console, 'error').mockImplementation(() => {})
@@ -99,7 +96,7 @@ describe('crawling', () => {
           })
         })
 
-      it('3回再起処理が行われる', async () => {
+      it('重複する記事の場合scrapingは更新しない', async () => {
         await crawling(HASH_TAG)
 
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.startCrawling, 'Hashtag : ビジネス書評', 'Page : 1')
@@ -107,76 +104,10 @@ describe('crawling', () => {
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.startCrawling, 'Hashtag : ビジネス書評', 'Page : 2')
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.startCrawling, 'Hashtag : ビジネス書評', 'Page : 3')
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.successCrawling)
+        expect(consoleInfoSpied).toHaveBeenCalledWith(`${requestText.duplicateArticle} : xxx`)
         expect(consoleErrorSpied).not.toHaveBeenCalledWith(requestText.noteKeysError)
         expect(noteModule.getNotesFromHashTag).toHaveBeenCalledTimes(3)
         expect(crawling).toHaveBeenCalledTimes(3)
-      })
-    })
-
-    describe('最後のページの場合', () => {
-      beforeAll(() => {
-        const getNotesFromHashTagSpied = jest.spyOn(noteModule, 'getNotesFromHashTag')
-        getNotesFromHashTagSpied.mockImplementation((hashtag: HashTags, page: number) => {
-          return Promise.resolve({
-            url: `https://note.com/api/v3/hashtags/${hashtag}/notes?order=trend&page=${page}&paid_only=false`,
-            res: lastPageRes,
-          })
-        })
-      })
-
-      it('再起処理は行われず処理が正常に終了', async () => {
-        await crawling(HASH_TAG)
-
-        expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.startCrawling, 'Hashtag : ビジネス書評', 'Page : 1')
-        expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.noNotesError)
-        expect(consoleInfoSpied).not.toHaveBeenCalledWith(
-          requestText.startCrawling,
-          'Hashtag : ビジネス書評',
-          'Page : 2',
-        )
-        expect(consoleInfoSpied).not.toHaveBeenCalledWith(
-          requestText.startCrawling,
-          'Hashtag : ビジネス書評',
-          'Page : 3',
-        )
-        expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.successCrawling)
-        expect(consoleErrorSpied).not.toHaveBeenCalledWith(requestText.noteKeysError)
-        expect(noteModule.getNotesFromHashTag).toHaveBeenCalledTimes(1)
-        expect(crawling).toHaveBeenCalledTimes(1)
-      })
-    })
-
-    describe('エラーステータスが返る', () => {
-      beforeAll(() => {
-        const getNotesFromHashTagSpied = jest.spyOn(noteModule, 'getNotesFromHashTag')
-        getNotesFromHashTagSpied.mockImplementation((hashtag: HashTags, page: number) => {
-          return Promise.resolve({
-            url: `https://note.com/api/v3/hashtags/${hashtag}/notes?order=trend&page=${page}&paid_only=false`,
-            res: errorRes,
-          })
-        })
-      })
-
-      it('エラー処理を行いクローラが停止', async () => {
-        await expect(crawling(HASH_TAG)).rejects.toThrow(requestText.stopCrawling)
-
-        expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.startCrawling, 'Hashtag : ビジネス書評', 'Page : 1')
-        expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.noNotesError)
-        expect(consoleInfoSpied).not.toHaveBeenCalledWith(
-          requestText.startCrawling,
-          'Hashtag : ビジネス書評',
-          'Page : 2',
-        )
-        expect(consoleInfoSpied).not.toHaveBeenCalledWith(
-          requestText.startCrawling,
-          'Hashtag : ビジネス書評',
-          'Page : 3',
-        )
-        expect(consoleErrorSpied).toHaveBeenCalledWith(requestText.noteKeysError)
-        expect(consoleErrorSpied).toHaveBeenCalledWith('error occurred')
-        expect(consoleInfoSpied).not.toHaveBeenCalledWith(requestText.successCrawling)
-        expect(noteModule.getNotesFromHashTag).toHaveBeenCalledTimes(1)
-        expect(crawling).toHaveBeenCalledTimes(1)
       })
     })
   })

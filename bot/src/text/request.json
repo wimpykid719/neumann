@@ -18,5 +18,6 @@
   "notBook": "商品URLが書籍ではないです",
   "asin": "こちらの商品を追加します",
   "noAsin": "ASINが取得出来ませんでした",
-  "doneAmazonCrawling": "Amazon商品のクローリングが終了"
+  "doneAmazonCrawling": "Amazon商品のクローリングが終了",
+  "duplicateArticle": "記事keyの重複を確認"
 }
