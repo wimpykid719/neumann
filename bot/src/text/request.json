@@ -1,0 +1,23 @@
+{
+  "internalServerError": "申し訳ございません。サーバーでエラーが発生しました。しばらくしてから再度アクセスしてみてください。",
+  "noteKeysError": "ハッシュタグスクレイピング中にエラーが発生しました",
+  "keyError": "記事詳細スクレイピング中にエラーが発生しました",
+  "stopCrawling": "スクレイピングを停止します",
+  "startCrawling": "クローリング開始",
+  "successCrawling": "クローリング成功！！！",
+  "doneNoteCrawling": "ノート記事のクローリングが終了",
+  "noNotesError": "取得失敗したページはありません",
+  "noKeys": "未取得のkeyがありません",
+  "initialPage": "最初のページ",
+  "amazonUrl": "Amazonの商品URLを保存",
+  "noteUrl": "取得した記事URL",
+  "puppeteerClose": "書籍データ取得完了",
+  "noAmazonLinks": "未取得のAmazonLinksがありません",
+  "errorScraping": "スクレイピング中にエラー発生",
+  "forceCloseScraping": "スクレイピング強制停止",
+  "notBook": "商品URLが書籍ではないです",
+  "asin": "こちらの商品を追加します",
+  "noAsin": "ASINが取得出来ませんでした",
+  "doneAmazonCrawling": "Amazon商品のクローリングが終了",
+  "duplicateArticle": "記事keyの重複を確認"
+}
