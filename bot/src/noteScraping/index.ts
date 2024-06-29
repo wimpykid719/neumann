@@ -7,7 +7,7 @@ import { chunkArray } from '@/utils/chunkArray'
 import { query } from '@/utils/firestore'
 import { sleep } from '@/utils/sleep'
 import { FieldValue, Firestore, type QueryDocumentSnapshot } from '@google-cloud/firestore'
-import { getASIN, getAmazonEmbeds } from '../utils/amazon'
+import { getAmazonEmbeds } from '../utils/amazon'
 import { evaluateScore } from './functions/score'
 
 const COLLECTION_AMAZON_LINKS = 'amazonLinks'
@@ -87,28 +87,27 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
           }
           const amazonEmbeds = getAmazonEmbeds(embedded_contents)
 
-          amazonEmbeds.map(amazonEmbed => {
-            console.info(`${requestText.noteUrl} : ${noteReferencesObj.url}`)
-            console.info(`${requestText.amazonUrl} : ${amazonEmbed.url}`)
-            const documentId = getASIN(amazonEmbed.url) || amazonEmbed.url
-
-            const docRef = firestore.collection(COLLECTION_AMAZON_LINKS).doc(base64UrlSafeEncode(documentId))
-
+          console.info(`${requestText.noteUrl} : ${noteReferencesObj.url}`)
+          if (amazonEmbeds.length > 0) {
+            amazonEmbeds.forEach(amazonEmbed => {
+              console.info(`${requestText.amazonUrl} : ${amazonEmbed}`)
+            })
+            const docRef = firestore.collection(COLLECTION_AMAZON_LINKS).doc(id)
             docRef.set(
               {
-                productUrl: amazonEmbed.url,
+                productUrls: amazonEmbeds,
                 score: FieldValue.increment(evaluateScore(scoreValue)),
                 count: FieldValue.increment(1),
-                referenceObj: FieldValue.arrayUnion(noteReferencesObj),
-                hashtags: FieldValue.arrayUnion(...hashtagNames),
+                referenceObj: noteReferencesObj,
+                hashtags: hashtagNames,
                 scraping: false,
                 timeStamp: FieldValue.serverTimestamp(),
               },
               { merge: true },
             )
+          }
 
-            return noteKeyFetched(id)
-          })
+          return noteKeyFetched(id)
         }
       }),
     )
