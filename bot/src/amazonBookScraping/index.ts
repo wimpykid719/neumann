@@ -16,10 +16,10 @@ type NoteReferences = {
 }
 
 type AmazonLinks = {
-  productUrl: string
+  productUrls: string[]
   score: number
   count: number
-  referenceObj: NoteReferences[]
+  referenceObj: NoteReferences
   hashtags: string[]
   scraping: boolean
   timeStamp: string
@@ -69,59 +69,71 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
     const bookObjs = await Promise.all(
       amazonObjChunk.map(async obj => {
         const { id, data } = obj
-        return { id, bookInfo: await getBookInfo(data['productUrl']), linkInfo: data }
+        return {
+          id,
+          booksInfo: await Promise.all(
+            data['productUrls'].map(async productUrl => {
+              return { info: await getBookInfo(productUrl), url: productUrl }
+            }),
+          ),
+          linkInfo: data,
+        }
       }),
     )
 
     await Promise.all(
       bookObjs.map(bookObj => {
-        const { id, bookInfo, linkInfo } = bookObj
+        const { id, booksInfo, linkInfo } = bookObj
 
-        if (bookInfo instanceof PuppeteerError) {
-          console.error(bookInfo.message)
-          const documentId = getASIN(bookInfo.url) || bookInfo.url
+        for (const bookInfo of booksInfo) {
+          const { info, url } = bookInfo
 
-          const docRef = firestore.collection(COLLECTION_AMAZON_ERROR).doc(base64UrlSafeEncode(documentId))
+          if (info instanceof PuppeteerError) {
+            console.error(info.message)
+            const documentId = getASIN(url) || url
 
-          return docRef.set({
-            failed: true,
-            count: FieldValue.increment(1),
-            productUrl: bookInfo.url,
-          })
-        } else if (bookInfo instanceof NotBookError) {
-          console.error(bookInfo.message)
-          const documentId = getASIN(bookInfo.url) || bookInfo.url
+            const docRef = firestore.collection(COLLECTION_AMAZON_ERROR).doc(base64UrlSafeEncode(documentId))
 
-          const docRef = firestore.collection(COLLECTION_NOT_BOOKS).doc(base64UrlSafeEncode(documentId))
-
-          return docRef.set({
-            productUrl: bookInfo.url,
-          })
-        } else {
-          const { asin, book } = bookInfo
-          if (!asin) {
-            console.info(requestText.noAsin, linkInfo.productUrl)
-            return
-          }
-
-          console.info(`${requestText.asin} : ${asin}`)
-
-          const docRef = firestore.collection(COLLECTION_AMAZON_BOOKS).doc(asin)
-          docRef.set(
-            {
-              score: FieldValue.increment(linkInfo['score']),
+            return docRef.set({
+              failed: true,
               count: FieldValue.increment(1),
-              referenceObj: FieldValue.arrayUnion(...linkInfo['referenceObj']),
-              hashtags: FieldValue.arrayUnion(...linkInfo['hashtags']),
-              book: book,
-              scraping: false,
-              timeStamp: FieldValue.serverTimestamp(),
-            },
-            { merge: true },
-          )
+              productUrl: url,
+            })
+          } else if (info instanceof NotBookError) {
+            console.error(info.message)
+            const documentId = getASIN(url) || url
 
-          return amazonLinkFetched(id)
+            const docRef = firestore.collection(COLLECTION_NOT_BOOKS).doc(base64UrlSafeEncode(documentId))
+
+            return docRef.set({
+              productUrl: url,
+            })
+          } else {
+            const { asin, book } = info
+            if (!asin) {
+              console.info(requestText.noAsin)
+              return
+            }
+
+            console.info(`${requestText.asin} : ${asin}`)
+
+            const docRef = firestore.collection(COLLECTION_AMAZON_BOOKS).doc(asin)
+            docRef.set(
+              {
+                score: FieldValue.increment(linkInfo['score']),
+                count: FieldValue.increment(1),
+                referenceObj: FieldValue.arrayUnion(linkInfo['referenceObj']),
+                hashtags: FieldValue.arrayUnion(...linkInfo['hashtags']),
+                book: book,
+                scraping: false,
+                timeStamp: FieldValue.serverTimestamp(),
+              },
+              { merge: true },
+            )
+          }
         }
+
+        return amazonLinkFetched(id)
       }),
     )
 

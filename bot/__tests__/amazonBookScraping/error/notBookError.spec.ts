@@ -9,16 +9,14 @@ jest.mock('@google-cloud/firestore', () => {
   const docsTemplateObject = {
     data: jest.fn().mockReturnValue({
       hashtags: ['#ビジネス書評', '#マーケティング'],
-      productUrl: 'https://www.amazon.co.jp/dp/xxxxxxxxx',
-      referenceObj: [
-        {
-          likes: 28,
-          title: '【書評】UXリサーチの道具箱　イノベーションのための質的調査・分析',
-          url: 'https://note.com/ktaro0157/n/na309197dbafb',
-          userProfileImg:
-            'https://assets.st-note.com/production/uploads/images/87200981/profile_f42e6f25b6be789ba378b5d150d73826.jpg?fit=bounds&format=jpeg&quality=85&width=330',
-        },
-      ],
+      productUrls: ['https://www.amazon.co.jp/dp/xxxxxxxxx'],
+      referenceObj: {
+        likes: 28,
+        title: '【書評】UXリサーチの道具箱　イノベーションのための質的調査・分析',
+        url: 'https://note.com/ktaro0157/n/na309197dbafb',
+        userProfileImg:
+          'https://assets.st-note.com/production/uploads/images/87200981/profile_f42e6f25b6be789ba378b5d150d73826.jpg?fit=bounds&format=jpeg&quality=85&width=330',
+      },
       score: 0.028021138211382114,
       scraping: false,
       timeStamp: new Date(),
