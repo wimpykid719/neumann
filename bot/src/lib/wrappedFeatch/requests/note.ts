@@ -5,13 +5,11 @@ export type Note = {
   key: string
 }
 
-type Notes = {
-  data: {
-    count: number
-    is_last_page: boolean
-    next_page: number | null
-    notes: Note[] // 20件記事の詳細情報と著者の詳細情報が入る
-  }
+export type Notes = {
+  count: number // ハッシュタグの総記事数
+  is_last_page: boolean
+  next_page: number | null
+  notes: Note[] // 20件記事の詳細情報と著者の詳細情報が入る
 }
 
 export type EmbeddedContents = {
@@ -40,7 +38,7 @@ export type NoteDetail = {
   }
 }
 
-type ResponseNotes = Notes
+type ResponseNotes = { data: Notes }
 
 const API = 'https://note.com/api/'
 

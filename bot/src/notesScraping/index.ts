@@ -1,11 +1,11 @@
 import { FetchError } from '@/lib/errors'
-import { deleteDocument } from '@/lib/fireStore'
-import { getNotesFromHashTag } from '@/lib/wrappedFeatch/requests/note'
+import { deleteDocument, generateDocRef, notesErrorQuery, storeObjOverWrite } from '@/lib/fireStore'
+import { type Note, type Notes, getNotesFromHashTag } from '@/lib/wrappedFeatch/requests/note'
 import requestText from '@/text/request.json'
 import { base64UrlSafeEncode } from '@/utils/base64url'
 import type { HashTags } from '@/utils/hashTags'
 import { sleep } from '@/utils/sleep'
-import { FieldValue, Firestore } from '@google-cloud/firestore'
+import { type DocumentData, FieldValue, Firestore, type QueryDocumentSnapshot } from '@google-cloud/firestore'
 
 type NotesError = {
   failed: boolean
@@ -19,32 +19,30 @@ export const COLLECTION_KEYS = 'keys'
 const COLLECTION_ERROR = 'notesError'
 const INITIAL_PAGE = 1
 const ARTICLE_500 = 25
-let i = 0
 
 const firestore = new Firestore()
 
 const stopScraping = async (res: FetchError, url: string, hashtag: HashTags, page: number) => {
   console.error(requestText.noteKeysError)
   console.error(res.message)
+  const notesErrorObj = {
+    failed: true,
+    count: FieldValue.increment(1),
+    tag: hashtag,
+    page,
+    timeStamp: FieldValue.serverTimestamp(),
+  }
 
-  const docRef = firestore.collection(COLLECTION_ERROR).doc(base64UrlSafeEncode(url))
-  await docRef.set(
-    {
-      failed: true,
-      count: FieldValue.increment(1),
-      tag: hashtag,
-      page,
-      timeStamp: FieldValue.serverTimestamp(),
-    },
-    { merge: true },
-  )
-
+  await storeObjOverWrite(generateDocRef(firestore, COLLECTION_ERROR, base64UrlSafeEncode(url)), notesErrorObj)
   throw new Error(requestText.stopCrawling)
 }
 
+const isInitialPage = (page: number) => INITIAL_PAGE >= page
+
 // 基本はハッシュタグに付き1件ずつしかたまらない（失敗した時点でクロールが停止するため）
 const getErrorPages = async (hashtag: HashTags) => {
-  const pages = await firestore.collection(COLLECTION_ERROR).where('tag', '==', hashtag).limit(1).get()
+  const limit = 1
+  const pages = await notesErrorQuery(firestore, COLLECTION_ERROR, hashtag, limit).get()
   if (pages.empty) {
     console.info(requestText.noNotesError)
     return
@@ -53,65 +51,70 @@ const getErrorPages = async (hashtag: HashTags) => {
   return pages.docs[0]
 }
 
-const checkErrorPage = async (initialHashtag: HashTags, initialPage: number) => {
-  if (INITIAL_PAGE >= initialPage) {
-    const errorPage = await getErrorPages(initialHashtag)
-    if (!errorPage) return { hashtag: initialHashtag, page: initialPage }
+const checkErrorPage = async (initialHashtag: HashTags, crawlingPage: number) => {
+  if (!isInitialPage(crawlingPage)) return { hashtag: initialHashtag, crawlingPage }
 
-    const { tag, page } = errorPage.data() as NotesError
-    return { hashtag: tag, page, docErrorPage: errorPage }
-  }
+  const errorPage = await getErrorPages(initialHashtag)
+  if (!errorPage) return { hashtag: initialHashtag, crawlingPage }
 
-  return { hashtag: initialHashtag, page: initialPage }
+  const { tag, page } = errorPage.data() as NotesError
+
+  return { hashtag: tag, crawlingPage: page, docErrorPage: errorPage }
 }
 
-export const crawling = async (initialHashtag: HashTags, initialPage = INITIAL_PAGE) => {
-  const { hashtag, page, docErrorPage } = await checkErrorPage(initialHashtag, initialPage)
-  i++
-  console.info(requestText.startCrawling, `Hashtag : ${hashtag}`, `Page : ${page}`)
+const deleteSuccessedErrorPageObj = async (
+  docErrorPage: QueryDocumentSnapshot<DocumentData, DocumentData> | undefined,
+) => {
+  if (docErrorPage) await deleteDocument(docErrorPage)
+}
 
-  const { url, res } = await getNotesFromHashTag(hashtag, page)
+const storeNoteKeysParallelRequest = async (notes: Note[], hashtag: HashTags) => {
+  await Promise.all(
+    notes.map(async note => {
+      const duplicateKeyObj = {
+        hashTags: FieldValue.arrayUnion(hashtag),
+        timeStamp: FieldValue.serverTimestamp(),
+      }
+      const keyObj = {
+        ...duplicateKeyObj,
+        scraping: false,
+      }
+      const docRef = generateDocRef(firestore, COLLECTION_KEYS, note.key)
+      const doc = await docRef.get()
+
+      if (doc.exists) {
+        console.info(`${requestText.duplicateArticle} : ${doc.id}`)
+        return storeObjOverWrite(docRef, duplicateKeyObj)
+      }
+
+      return storeObjOverWrite(docRef, keyObj)
+    }),
+  )
+}
+
+const reCrawling = async (is_last_page: Notes['is_last_page'], next_page: Notes['next_page'], hashtag: HashTags) => {
+  if (!is_last_page && next_page && next_page <= ARTICLE_500) {
+    await sleep(5000)
+    await crawling(hashtag, next_page)
+  } else {
+    console.info(requestText.successCrawling)
+  }
+}
+
+export const crawling = async (initialHashtag: HashTags, page = INITIAL_PAGE) => {
+  const { hashtag, crawlingPage, docErrorPage } = await checkErrorPage(initialHashtag, page)
+  console.info(requestText.startCrawling, `Hashtag : ${hashtag}`, `Page : ${crawlingPage}`)
+
+  const { url, res } = await getNotesFromHashTag(hashtag, crawlingPage)
 
   if (res instanceof FetchError) {
-    await stopScraping(res, url, hashtag, page)
+    await stopScraping(res, url, hashtag, crawlingPage)
   } else {
-    if (docErrorPage) await deleteDocument(docErrorPage)
-
     const { is_last_page, next_page, notes } = res.data
-    // Firestore記事のkeysを保存
-    await Promise.all(
-      notes.map(async note => {
-        const docRef = firestore.collection(COLLECTION_KEYS).doc(note.key)
-        const doc = await docRef.get()
-        if (!doc.exists) {
-          return docRef.set(
-            {
-              hashTags: FieldValue.arrayUnion(hashtag),
-              scraping: false,
-              timeStamp: FieldValue.serverTimestamp(),
-            },
-            { merge: true },
-          )
-        } else {
-          console.info(`${requestText.duplicateArticle} : ${doc.id}`)
-          return docRef.set(
-            {
-              hashTags: FieldValue.arrayUnion(hashtag),
-              timeStamp: FieldValue.serverTimestamp(),
-            },
-            { merge: true },
-          )
-        }
-      }),
-    )
 
-    // 次のページが存在する場合は再起的に上記の処理を繰り返す。最大500件まで取得
-    if (!is_last_page && next_page && i < ARTICLE_500) {
-      // 10秒間の待機処理
-      await sleep(10000)
-      await crawling(hashtag, next_page)
-    } else {
-      console.info(requestText.successCrawling)
-    }
+    await deleteSuccessedErrorPageObj(docErrorPage)
+    await storeNoteKeysParallelRequest(notes, hashtag)
+
+    await reCrawling(is_last_page, next_page, hashtag)
   }
 }
