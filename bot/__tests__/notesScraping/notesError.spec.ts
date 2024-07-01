@@ -112,7 +112,7 @@ describe('crawling', () => {
         jest.clearAllMocks()
       })
 
-      it('成功した際はenotesErrorから削除', async () => {
+      it('成功した際はnotesErrorから削除', async () => {
         await crawling(HASH_TAG)
 
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.startCrawling, 'Hashtag : ビジネス書評', 'Page : 5')
