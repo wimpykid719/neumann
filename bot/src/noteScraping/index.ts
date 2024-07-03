@@ -1,6 +1,5 @@
 import { FetchError } from '@/lib/errors'
-import { notScrapingNoteKeysQuery } from '@/lib/fireStore'
-import { generateDocRef, storeObjOverWrite } from '@/lib/fireStore'
+import { generateDocRef, notScrapingNoteKeysQuery, storeObjOverWrite } from '@/lib/fireStore'
 import { type Note, type NoteDetail, getNoteDetail } from '@/lib/wrappedFeatch/requests/note'
 import { COLLECTION_KEYS } from '@/notesScraping'
 import requestText from '@/text/request.json'
