@@ -11,8 +11,8 @@ export const deleteDocument = async (docment: QueryDocumentSnapshot) => {
   await docment.ref.delete()
 }
 
-export const generateDocRef = (firestore: Firestore, collectionPath: string, docId: string) => {
-  return firestore.collection(collectionPath).doc(docId)
+export const generateDocRef = (firestore: Firestore, collectionPath: string, docId: string | undefined = undefined) => {
+  return docId ? firestore.collection(collectionPath).doc(docId) : firestore.collection(collectionPath).doc()
 }
 
 export const storeObjOverWrite = async (
@@ -24,3 +24,16 @@ export const storeObjOverWrite = async (
 
 export const notesErrorQuery = (firestore: Firestore, collectionName: string, hashtag: HashTags, limit: number) =>
   firestore.collection(collectionName).where('tag', '==', hashtag).limit(limit)
+
+export const notScrapingNoteKeysQuery = (
+  firestore: Firestore,
+  collectionName: string,
+  lastDocument: QueryDocumentSnapshot | undefined,
+  limit: number,
+) => {
+  if (lastDocument) {
+    return firestore.collection(collectionName).where('scraping', '==', false).limit(limit).startAfter(lastDocument)
+  }
+
+  return firestore.collection(collectionName).where('scraping', '==', false).limit(limit)
+}

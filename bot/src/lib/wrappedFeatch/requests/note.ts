@@ -23,20 +23,20 @@ type HashtagNotes = {
 }
 
 export type NoteDetail = {
-  data: {
-    name: string
-    user: {
-      user_profile_image_path: string
-      following_count: number
-      follower_count: number
-    }
-    like_count: number
-    hashtag_notes: HashtagNotes[]
-    embedded_contents: EmbeddedContents[]
-    publish_at: string
-    note_url: string
+  name: string
+  user: {
+    user_profile_image_path: string
+    following_count: number
+    follower_count: number
   }
+  like_count: number
+  hashtag_notes: HashtagNotes[]
+  embedded_contents: EmbeddedContents[]
+  publish_at: string
+  note_url: string
 }
+
+type ResponseNoteDetail = { data: NoteDetail }
 
 type ResponseNotes = { data: Notes }
 
@@ -62,7 +62,7 @@ export async function getNoteDetail(key: Note['key']) {
   return {
     url,
     key,
-    res: await fetch.get<NoteDetail>(url, {
+    res: await fetch.get<ResponseNoteDetail>(url, {
       headers: {
         'Content-Type': 'application/json',
       },
