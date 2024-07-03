@@ -25,7 +25,7 @@ export const storeObjOverWrite = async (
 export const notesErrorQuery = (firestore: Firestore, collectionName: string, hashtag: HashTags, limit: number) =>
   firestore.collection(collectionName).where('tag', '==', hashtag).limit(limit)
 
-export const notScrapingNoteKeysQuery = (
+export const notScrapingQuery = (
   firestore: Firestore,
   collectionName: string,
   lastDocument: QueryDocumentSnapshot | undefined,

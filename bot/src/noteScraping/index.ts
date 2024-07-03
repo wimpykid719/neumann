@@ -1,5 +1,5 @@
 import { FetchError } from '@/lib/errors'
-import { generateDocRef, notScrapingNoteKeysQuery, storeObjOverWrite } from '@/lib/fireStore'
+import { generateDocRef, notScrapingQuery, storeObjOverWrite } from '@/lib/fireStore'
 import { type Note, type NoteDetail, getNoteDetail } from '@/lib/wrappedFeatch/requests/note'
 import { COLLECTION_KEYS } from '@/notesScraping'
 import requestText from '@/text/request.json'
@@ -49,7 +49,7 @@ const storeNoteError = (res: FetchError, key: Note['key'], url: string) => {
 }
 
 const getNoteKeys = async (initialPage: QueryDocumentSnapshot | undefined) => {
-  const noteKeys = await notScrapingNoteKeysQuery(firestore, COLLECTION_KEYS, initialPage, PAGE_LIMIT).get()
+  const noteKeys = await notScrapingQuery(firestore, COLLECTION_KEYS, initialPage, PAGE_LIMIT).get()
   if (!noteKeys.empty) return noteKeys
 
   console.info(requestText.noKeys)
