@@ -6,7 +6,13 @@ import requestText from '@/text/request.json'
 import { base64UrlSafeEncode } from '@/utils/base64url'
 import { chunkArray } from '@/utils/chunkArray'
 import { sleep } from '@/utils/sleep'
-import { FieldValue, Firestore, type QueryDocumentSnapshot } from '@google-cloud/firestore'
+import {
+  type DocumentData,
+  FieldValue,
+  Firestore,
+  type QueryDocumentSnapshot,
+  type QuerySnapshot,
+} from '@google-cloud/firestore'
 import { getAmazonEmbeds } from '../utils/amazon'
 import { evaluateScore } from './functions/score'
 
@@ -114,19 +120,28 @@ const batchNoteDetailRequestStoreAmazonLinks = async (keys: string[]) => {
   }
 }
 
+const isReCrawling = (objSize: number) => PAGE_LIMIT <= objSize
+
+const extractNoteKeysData = (noteKeys: QuerySnapshot<DocumentData, DocumentData>) => {
+  const noteKeysSize = noteKeys.docs.length
+  const lastDocumentIndex = noteKeysSize - 1
+  const nextPage = noteKeys.docs[lastDocumentIndex]
+
+  return { noteKeysSize, nextPage }
+}
+
 export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = undefined) => {
   console.info(requestText.startCrawling, `Start from : ${initialPage ? initialPage.id : requestText.initialPage}`)
 
   const noteKeys = await getNoteKeys(initialPage)
   if (!noteKeys) return
 
-  const lastDocumentIndex = noteKeys.docs.length
-  const crawlingPage = noteKeys.docs[lastDocumentIndex - 1]
+  const { noteKeysSize, nextPage } = extractNoteKeysData(noteKeys)
   await batchNoteDetailRequestStoreAmazonLinks(noteKeys.docs.map(key => key.id))
 
   // 取得したkeyの数が制限よりも少ない場合は最後ページと判定、それ以外は処理を繰り返す
-  if (PAGE_LIMIT <= lastDocumentIndex) {
-    await crawling(crawlingPage)
+  if (isReCrawling(noteKeysSize)) {
+    await crawling(nextPage)
   } else {
     console.info(requestText.doneNoteCrawling)
   }
