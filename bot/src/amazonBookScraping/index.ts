@@ -1,10 +1,17 @@
 import { NotBookError, PuppeteerError } from '@/lib/errors'
+import { generateDocRef, notScrapingQuery, storeObjOverWrite } from '@/lib/fireStore'
 import requestText from '@/text/request.json'
 import { base64UrlSafeEncode } from '@/utils/base64url'
 import { chunkArray } from '@/utils/chunkArray'
-import { query } from '@/utils/firestore'
+
 import { sleep } from '@/utils/sleep'
-import { FieldValue, Firestore, type QueryDocumentSnapshot } from '@google-cloud/firestore'
+import {
+  type DocumentData,
+  FieldValue,
+  Firestore,
+  type QueryDocumentSnapshot,
+  type QuerySnapshot,
+} from '@google-cloud/firestore'
 import { getASIN } from '../utils/amazon'
 import { getBookInfo } from './functions/bookInfo'
 
@@ -16,13 +23,32 @@ type NoteReferences = {
 }
 
 type AmazonLinks = {
-  productUrls: string[]
+  productUrl: string
   score: number
   count: number
   referenceObj: NoteReferences
   hashtags: string[]
   scraping: boolean
   timeStamp: string
+}
+
+type AmazonObj = {
+  id: string
+  data: AmazonLinks
+}
+
+type BookInfo = {
+  asin: string | undefined
+  book: {
+    title: string
+    imgUrl: string
+    page: number
+    launched: string
+    author: string
+    associateUrl: string
+    publisher: string
+    price: number
+  }
 }
 
 const COLLECTION_AMAZON_LINKS = 'amazonLinks'
@@ -34,7 +60,7 @@ const CHUNK_SIZE = 5
 
 const firestore = new Firestore()
 
-const amazonLinkFetched = (id: string) => {
+const amazonLinkScraped = (id: string) => {
   const docRef = firestore.collection(COLLECTION_AMAZON_LINKS).doc(id)
 
   return docRef.set(
@@ -46,36 +72,76 @@ const amazonLinkFetched = (id: string) => {
   )
 }
 
-export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = undefined) => {
-  console.info(
-    requestText.startCrawling,
-    `Start from （Amazon書籍情報取得） : ${initialPage ? initialPage.id : requestText.initialPage}`,
+const getAmazonLinks = async (initialPage: QueryDocumentSnapshot | undefined) => {
+  const amazonLinks = await notScrapingQuery(firestore, COLLECTION_AMAZON_LINKS, initialPage, PAGE_LIMIT).get()
+  if (!amazonLinks.empty) return amazonLinks
+
+  console.info(requestText.noAmazonLinks)
+}
+
+const storeNotBookError = async (bookInfo: NotBookError, id: AmazonObj['id']) => {
+  const { message, url } = bookInfo
+  console.error(message)
+  const documentId = getASIN(url) || url
+  const notBookErrorObj = { productUrl: url }
+
+  await storeObjOverWrite(
+    generateDocRef(firestore, COLLECTION_NOT_BOOKS, base64UrlSafeEncode(documentId)),
+    notBookErrorObj,
   )
 
-  const amazonLinks = await query(firestore, COLLECTION_AMAZON_LINKS, initialPage, PAGE_LIMIT).get()
-  if (amazonLinks.empty) {
-    console.info(requestText.noAmazonLinks)
+  return amazonLinkScraped(id)
+}
+
+const storePuppeteerError = (bookInfo: PuppeteerError) => {
+  const { message, url } = bookInfo
+  console.error(message)
+
+  const documentId = getASIN(url) || url
+  const puppeteerErrorObj = {
+    failed: true,
+    count: FieldValue.increment(1),
+    productUrl: url,
+  }
+
+  return storeObjOverWrite(
+    generateDocRef(firestore, COLLECTION_AMAZON_ERROR, base64UrlSafeEncode(documentId)),
+    puppeteerErrorObj,
+  )
+}
+
+const storeBook = async (bookInfo: BookInfo, linkInfo: AmazonLinks, id: AmazonObj['id']) => {
+  const { asin, book } = bookInfo
+  if (!asin) {
+    console.info(requestText.noAsin)
     return
   }
 
-  const lastDocument = amazonLinks.docs[amazonLinks.docs.length - 1]
-  const amazonObjs = amazonLinks.docs.map(doc => {
-    return { id: doc.id, data: doc.data() as AmazonLinks }
-  })
+  console.info(`${requestText.asin} : ${asin}`)
+  const bookObj = {
+    score: FieldValue.increment(linkInfo['score']),
+    count: FieldValue.increment(1),
+    referenceObj: FieldValue.arrayUnion(linkInfo['referenceObj']),
+    hashtags: FieldValue.arrayUnion(...linkInfo['hashtags']),
+    book: book,
+    scraping: false,
+    timeStamp: FieldValue.serverTimestamp(),
+  }
 
-  const amazonObjChunks = chunkArray(amazonObjs, CHUNK_SIZE)
+  await storeObjOverWrite(generateDocRef(firestore, COLLECTION_AMAZON_BOOKS, asin), bookObj)
 
-  for (const amazonObjChunk of amazonObjChunks) {
+  return amazonLinkScraped(id)
+}
+
+const batchAmazonLinksRequestStoreBook = async (amazonObjs: AmazonObj[]) => {
+  const amazonObjChunk = chunkArray(amazonObjs, CHUNK_SIZE)
+  for (const amazonObjs of amazonObjChunk) {
     const bookObjs = await Promise.all(
-      amazonObjChunk.map(async obj => {
-        const { id, data } = obj
+      amazonObjs.map(async amazonObj => {
+        const { id, data } = amazonObj
         return {
           id,
-          booksInfo: await Promise.all(
-            data['productUrls'].map(async productUrl => {
-              return { info: await getBookInfo(productUrl), url: productUrl }
-            }),
-          ),
+          bookInfo: await getBookInfo(data['productUrl']),
           linkInfo: data,
         }
       }),
@@ -83,67 +149,47 @@ export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = 
 
     await Promise.all(
       bookObjs.map(bookObj => {
-        const { id, booksInfo, linkInfo } = bookObj
+        const { id, bookInfo, linkInfo } = bookObj
 
-        for (const bookInfo of booksInfo) {
-          const { info, url } = bookInfo
+        if (bookInfo instanceof PuppeteerError) return storePuppeteerError(bookInfo)
+        if (bookInfo instanceof NotBookError) return storeNotBookError(bookInfo, id)
 
-          if (info instanceof PuppeteerError) {
-            console.error(info.message)
-            const documentId = getASIN(url) || url
-
-            const docRef = firestore.collection(COLLECTION_AMAZON_ERROR).doc(base64UrlSafeEncode(documentId))
-
-            return docRef.set({
-              failed: true,
-              count: FieldValue.increment(1),
-              productUrl: url,
-            })
-          } else if (info instanceof NotBookError) {
-            console.error(info.message)
-            const documentId = getASIN(url) || url
-
-            const docRef = firestore.collection(COLLECTION_NOT_BOOKS).doc(base64UrlSafeEncode(documentId))
-
-            return docRef.set({
-              productUrl: url,
-            })
-          } else {
-            const { asin, book } = info
-            if (!asin) {
-              console.info(requestText.noAsin)
-              return
-            }
-
-            console.info(`${requestText.asin} : ${asin}`)
-
-            const docRef = firestore.collection(COLLECTION_AMAZON_BOOKS).doc(asin)
-            docRef.set(
-              {
-                score: FieldValue.increment(linkInfo['score']),
-                count: FieldValue.increment(1),
-                referenceObj: FieldValue.arrayUnion(linkInfo['referenceObj']),
-                hashtags: FieldValue.arrayUnion(...linkInfo['hashtags']),
-                book: book,
-                scraping: false,
-                timeStamp: FieldValue.serverTimestamp(),
-              },
-              { merge: true },
-            )
-          }
-        }
-
-        return amazonLinkFetched(id)
+        return storeBook(bookInfo, linkInfo, id)
       }),
     )
 
-    // リクエスト実行後は5秒間待機して次のリクエストを行う
     await sleep(5000)
   }
+}
+
+const isReCrawling = (objSize: number) => PAGE_LIMIT <= objSize
+
+const extractAmazonLinksData = (amazonLinks: QuerySnapshot<DocumentData, DocumentData>) => {
+  const amazonLinksSize = amazonLinks.docs.length
+  const lastDocumentIndex = amazonLinksSize - 1
+  const nextPage = amazonLinks.docs[lastDocumentIndex]
+  const amazonObjs = amazonLinks.docs.map(doc => {
+    return { id: doc.id, data: doc.data() as AmazonLinks }
+  })
+
+  return { amazonLinksSize, nextPage, amazonObjs }
+}
+
+export const crawling = async (initialPage: QueryDocumentSnapshot | undefined = undefined) => {
+  console.info(
+    requestText.startCrawling,
+    `Start from （Amazon書籍情報取得） : ${initialPage ? initialPage.id : requestText.initialPage}`,
+  )
+
+  const amazonLinks = await getAmazonLinks(initialPage)
+  if (!amazonLinks) return
+
+  const { amazonLinksSize, nextPage, amazonObjs } = extractAmazonLinksData(amazonLinks)
+  await batchAmazonLinksRequestStoreBook(amazonObjs)
 
   // 取得したAmazonLinksの数が制限よりも少ない場合は最後ページと判定、それ以外は処理を繰り返す
-  if (PAGE_LIMIT <= amazonLinks.docs.length) {
-    await crawling(lastDocument)
+  if (isReCrawling(amazonLinksSize)) {
+    await crawling(nextPage)
   } else {
     console.info(requestText.doneAmazonCrawling)
   }

@@ -113,7 +113,7 @@ describe('crawling', () => {
         expect(consoleInfoSpied).toHaveBeenCalledWith(requestText.doneAmazonCrawling)
         expect(consoleInfoSpied).not.toHaveBeenCalledWith(requestText.noAsin)
         expect(consoleInfoSpied).toHaveBeenCalledWith(`${requestText.asin} : B09QQPFB2W`)
-        expect(bookInfoModule.getBookInfo).toHaveBeenCalledTimes(50)
+        expect(bookInfoModule.getBookInfo).toHaveBeenCalledTimes(25)
         expect(crawling).toHaveBeenCalledTimes(2)
       })
     })
