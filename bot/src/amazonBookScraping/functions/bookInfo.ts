@@ -107,12 +107,23 @@ const generateAmazonAffiliateLink = (productUrl: string, tagId: string) => {
   return origin + pathname + `?tag=${tagId}`
 }
 
+const settingsCookie = async (page: Page) => {
+  const amazonPageLanguageCookie = { domain: '.amazon.co.jp', name: 'lc-acbjp', value: 'ja_JP' }
+  const cookies = [amazonPageLanguageCookie]
+
+  await page.setCookie(...cookies)
+
+  return page
+}
+
+const settingsPage = async (page: Page) => await settingsCookie(page)
+
 const initialPuppeteer = async () => {
   const browser = await puppeteer.launch({
     args: ['--no-sandbox'],
   })
 
-  return { page: await browser.newPage(), browser }
+  return { page: await settingsPage(await browser.newPage()), browser }
 }
 
 export const getBookInfo = async (url: string) => {
