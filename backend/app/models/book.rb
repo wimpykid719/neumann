@@ -1,5 +1,6 @@
 class Book < ApplicationRecord
   has_many :likes, as: :likeable, dependent: :destroy
+  has_one :note_reference, dependent: :destroy
 
   validates :title, length: { maximum: 500 }
   validates :img_url, length: { maximum: 255 },

@@ -35,6 +35,9 @@ ja:
         associate_url: アソシエイトリンク
       like:
         user_id: ユーザー
+      note_reference:
+        hashtags: ハッシュタグ
+        reference_objs: 参照先
     errors:
       models:
         user:

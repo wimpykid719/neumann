@@ -111,6 +111,8 @@ ja:
       too_short: は%{count}文字以上で入力してください
       wrong_length: は%{count}文字で入力してください
       wrong_img_extension: の拡張子をjpg, jpeg, png, gif, webpにしてください
+      wrong_type_hashtags: は文字列の配列にしてください
+      wrong_type_reference_objs: は{ likes:number, title:string, url:string, user_profile_img:string }の配列にしてください
     template:
       body: 次の項目を確認してください
       header: "%{model}に%{count}個のエラーが発生しました"
