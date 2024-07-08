@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  bot:
+    build:
+      context: ./bot/
+      dockerfile: Dockerfile.dev
+    container_name: bot
+    working_dir: /bot
+    stop_signal: SIGINT
+    volumes:
+      - ./bot:/bot
+    ports:
+      - 9222:9222
+    stdin_open: true
+    # -tを意味する
+    tty: true
+    init: true
+    environment:
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      PARTNER_TAG: $PARTNER_TAG
+      GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
