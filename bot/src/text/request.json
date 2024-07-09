@@ -19,5 +19,8 @@
   "asin": "こちらの商品を追加します",
   "noAsin": "ASINが取得出来ませんでした",
   "doneAmazonCrawling": "Amazon商品のクローリングが終了",
-  "duplicateArticle": "記事keyの重複を確認"
+  "duplicateArticle": "記事keyの重複を確認",
+  "scrapingRequestError": "商品ページのリクエストに失敗しました",
+  "amazonLinksReset": "amazonLinksの取り込み設定をリセット",
+  "doneAmazonLinksReset": "amazonLinksのリセット完了"
 }
