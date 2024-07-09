@@ -73,29 +73,6 @@ RSpec.describe Book do
       end
     end
 
-    context 'description' do
-      it '登録可能' do
-        expect(book.description).to be_present
-      end
-
-      it 'nil使用可能' do
-        book.update(description: nil)
-        expect(book).to be_valid
-      end
-
-      it '空文字入力可能' do
-        b = FactoryBot.build(:book, description: '')
-        expect(b).to be_valid
-        expect(b.description).to eq('')
-      end
-
-      it 'descriptionが10000文字以上の場合エラー' do
-        b = FactoryBot.build(:book, description: 'あ' * 10_001)
-        expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:description).first).to eq('説明文は10000文字以内で入力してください')
-      end
-    end
-
     context 'price' do
       it '登録可能' do
         expect(book.price).to be_present
@@ -207,6 +184,48 @@ RSpec.describe Book do
         b = FactoryBot.build(:book, launched: '2024-02-12')
         expect(b).to be_valid
         expect(b.launched).to eq('2024-02-12'.to_date)
+      end
+    end
+
+    context 'scraped_at' do
+      it '登録可能' do
+        expect(book.scraped_at).to eq('2024-07-09'.to_date)
+      end
+
+      it 'nilの入力可能' do
+        b = FactoryBot.build(:book, scraped_at: nil)
+        expect(b).to be_valid
+      end
+
+      it '空文字の入力した場合、戻り値がnilになる' do
+        b = FactoryBot.build(:book, scraped_at: '')
+        expect(b).to be_valid
+        # RubyのDate型は「存在しない日付」を持つことが出来ないため、タイプキャストによりnil値となる
+        expect(b.scraped_at).to be_nil
+      end
+
+      it '年の先頭が0場合エラー' do
+        b = FactoryBot.build(:book, scraped_at: '0195-02-24')
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:scraped_at).first).to eq('取得日が不正な形式です')
+      end
+
+      it '存在しない月の場合、戻り値がnilになる' do
+        b = FactoryBot.build(:book, scraped_at: '2024-13-24')
+        expect(b).to be_valid
+        expect(b.scraped_at).to be_nil
+      end
+
+      it '存在しない日の場合、戻り値がnilになる' do
+        b = FactoryBot.build(:book, scraped_at: '2024-02-00')
+        expect(b).to be_valid
+        expect(b.scraped_at).to be_nil
+      end
+
+      it '月の先頭に0が含まれる入力可能' do
+        b = FactoryBot.build(:book, scraped_at: '2024-02-12')
+        expect(b).to be_valid
+        expect(b.scraped_at).to eq('2024-02-12'.to_date)
       end
     end
 

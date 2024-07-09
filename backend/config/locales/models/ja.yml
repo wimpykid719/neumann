@@ -25,7 +25,7 @@ ja:
       book:
         title: タイトル
         img_url: 画像のURL
-        description: 説明文
+        scraped_at: 取得日
         price: 価格
         score: 評価ポイント
         page: ページ数
@@ -69,6 +69,8 @@ ja:
             img_url:
               invalid: が不正な形式です
             launched:
+              invalid: が不正な形式です
+            scraped_at:
               invalid: が不正な形式です
             associate_url:
               invalid: が不正な形式です

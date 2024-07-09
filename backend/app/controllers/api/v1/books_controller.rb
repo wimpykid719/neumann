@@ -46,7 +46,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def book_params_render
-    [*books_params_render, :description, :score, :page, :launched, :author, :publisher, :associate_url]
+    [*books_params_render, :scraped_at, :score, :page, :launched, :author, :publisher, :associate_url]
   end
 
   def note_reference_params_render

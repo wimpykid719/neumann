@@ -167,7 +167,7 @@ RSpec.describe Api::V1::BooksController do
         expect(json['id']).to be_present
         expect(json['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
         expect(json['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
-        expect(json['description']).to be_present
+        expect(json['scraped_at']).to eq('2024-07-09')
         expect(json['price_delimited']).to be_present
         expect(json['score']).to be_present
         expect(json['page']).to be_present
