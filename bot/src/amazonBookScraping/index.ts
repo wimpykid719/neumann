@@ -1,9 +1,8 @@
-import { NotBookError, PuppeteerError } from '@/lib/errors'
+import { NotBookError, PuppeteerError, ScrapingRequestError } from '@/lib/errors'
 import { generateDocRef, notScrapingQuery, storeObjOverWrite } from '@/lib/fireStore'
 import requestText from '@/text/request.json'
 import { base64UrlSafeEncode } from '@/utils/base64url'
 import { chunkArray } from '@/utils/chunkArray'
-
 import { sleep } from '@/utils/sleep'
 import {
   type DocumentData,
@@ -53,6 +52,7 @@ type BookInfo = {
 
 const COLLECTION_AMAZON_LINKS = 'amazonLinks'
 const COLLECTION_AMAZON_ERROR = 'amazonError'
+const COLLECTION_AMAZON_REQUEST_ERROR = 'amazonRequestError'
 const COLLECTION_NOT_BOOKS = 'notBooksLink'
 const COLLECTION_AMAZON_BOOKS = 'amazonBooks'
 const PAGE_LIMIT = 10
@@ -110,6 +110,22 @@ const storePuppeteerError = (bookInfo: PuppeteerError) => {
   )
 }
 
+const storeScrapingRequestError = (bookInfo: ScrapingRequestError, linkInfo: AmazonLinks) => {
+  const { message } = bookInfo
+  console.error(message)
+
+  const { productUrl, score, referenceObj, hashtags } = linkInfo
+  const scrapingRequestErrorObj = {
+    productUrl,
+    score,
+    referenceObj,
+    hashtags,
+    timeStamp: FieldValue.serverTimestamp(),
+  }
+
+  return storeObjOverWrite(generateDocRef(firestore, COLLECTION_AMAZON_REQUEST_ERROR), scrapingRequestErrorObj)
+}
+
 const storeBook = async (bookInfo: BookInfo, linkInfo: AmazonLinks, id: AmazonObj['id']) => {
   const { asin, book } = bookInfo
   if (!asin) {
@@ -151,6 +167,7 @@ const batchAmazonLinksRequestStoreBook = async (amazonObjs: AmazonObj[]) => {
       bookObjs.map(bookObj => {
         const { id, bookInfo, linkInfo } = bookObj
 
+        if (bookInfo instanceof ScrapingRequestError) return storeScrapingRequestError(bookInfo, linkInfo)
         if (bookInfo instanceof PuppeteerError) return storePuppeteerError(bookInfo)
         if (bookInfo instanceof NotBookError) return storeNotBookError(bookInfo, id)
 
