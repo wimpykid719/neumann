@@ -20,6 +20,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'assets.st-note.com',
+        port: '',
+        pathname: '/production/uploads/images/**',
+      },
     ],
   },
   output: 'standalone',
