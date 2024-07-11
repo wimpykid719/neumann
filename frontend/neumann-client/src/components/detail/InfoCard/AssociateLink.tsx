@@ -20,7 +20,6 @@ export default function AssociateLink({ price, associate_url }: AssociateLinkPro
   useEffect(() => {
     const triggerAnimation = () => {
       setAnimate(true)
-      console.log('きらん')
       setTimeout(() => setAnimate(false), ANIMATE_TIME)
     }
 
