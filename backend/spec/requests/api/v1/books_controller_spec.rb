@@ -180,8 +180,8 @@ RSpec.describe Api::V1::BooksController do
         expect(json['note_reference']['hashtags']).to eq(['#tag1', '#tag2'])
         expect(json['note_reference']['reference_objs']).to eq(
           [
-            { 'url' => 'http://example.com/1', 'likes' => 10, 'title' => 'example title', 'user_profile_img' => 'http://example.com/image1.jpg' },
-            { 'url' => 'http://example.com/2', 'likes' => 16, 'title' => 'example title2', 'user_profile_img' => 'http://example.com/image2.jpg' }
+            { 'url' => 'http://example.com/1', 'likes' => 10, 'title' => 'example title', 'userProfileImg' => 'http://example.com/image1.jpg' },
+            { 'url' => 'http://example.com/2', 'likes' => 16, 'title' => 'example title2', 'userProfileImg' => 'http://example.com/image2.jpg' }
           ]
         )
       end

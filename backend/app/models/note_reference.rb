@@ -36,7 +36,7 @@ class NoteReference < ApplicationRecord
       'likes' => Integer,
       'title' => String,
       'url' => String,
-      'user_profile_img' => String
+      'userProfileImg' => String
     }
   end
 

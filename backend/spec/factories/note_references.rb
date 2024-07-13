@@ -7,13 +7,13 @@ FactoryBot.define do
           'likes' => 10,
           'title' => 'example title',
           'url' => 'http://example.com/1',
-          'user_profile_img' => 'http://example.com/image1.jpg'
+          'userProfileImg' => 'http://example.com/image1.jpg'
         },
         {
           'likes' => 16,
           'title' => 'example title2',
           'url' => 'http://example.com/2',
-          'user_profile_img' => 'http://example.com/image2.jpg'
+          'userProfileImg' => 'http://example.com/image2.jpg'
         }
       ]
     end
