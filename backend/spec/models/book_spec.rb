@@ -54,10 +54,10 @@ RSpec.describe Book do
         expect(b.errors.full_messages_for(:img_url).first).to eq('画像のURLが不正な形式です')
       end
 
-      it 'nilの場合エラー' do
+      it 'nil入力可能' do
         expect do
           book.update(img_url: nil)
-        end.to raise_error(ActiveRecord::NotNullViolation)
+        end.not_to raise_error
       end
 
       it '空文字入力可能' do
@@ -67,9 +67,9 @@ RSpec.describe Book do
       end
 
       it 'img_urlのURLが256文字以上の場合エラー' do
-        b = FactoryBot.build(:book, img_url: 'a' * 256)
+        b = FactoryBot.build(:book, img_url: 'a' * 4_097)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:img_url).first).to eq('画像のURLは255文字以内で入力してください')
+        expect(b.errors.full_messages_for(:img_url).first).to eq('画像のURLは4096文字以内で入力してください')
       end
     end
 
@@ -294,10 +294,10 @@ RSpec.describe Book do
         expect(b.errors.full_messages_for(:associate_url).first).to eq('アソシエイトリンクが不正な形式です')
       end
 
-      it 'nilの場合エラー' do
+      it 'nil入力可能' do
         expect do
           book.update(associate_url: nil)
-        end.to raise_error(ActiveRecord::NotNullViolation)
+        end.not_to raise_error
       end
 
       it '空文字入力可能' do
@@ -307,9 +307,9 @@ RSpec.describe Book do
       end
 
       it 'associate_urlのURLが256文字以上の場合エラー' do
-        b = FactoryBot.build(:book, associate_url: 'a' * 256)
+        b = FactoryBot.build(:book, associate_url: 'a' * 40_967)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:associate_url).first).to eq('アソシエイトリンクは255文字以内で入力してください')
+        expect(b.errors.full_messages_for(:associate_url).first).to eq('アソシエイトリンクは4096文字以内で入力してください')
       end
     end
   end

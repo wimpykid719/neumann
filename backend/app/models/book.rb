@@ -3,7 +3,7 @@ class Book < ApplicationRecord
   has_one :note_reference, dependent: :destroy
 
   validates :title, length: { maximum: 500 }
-  validates :img_url, length: { maximum: 255 },
+  validates :img_url, length: { maximum: 4_096 },
                       format: { with: Constants::Regexps::URL }
   validates :price, numericality: { in: 0..9_999_999 }
   validates :score, numericality: { in: 0..1 }
@@ -12,7 +12,7 @@ class Book < ApplicationRecord
   validates :scraped_at, format: { with: Constants::Regexps::DATE }
   validates :author, length: { maximum: 50 }
   validates :publisher, length: { maximum: 50 }
-  validates :associate_url, length: { maximum: 255 },
+  validates :associate_url, length: { maximum: 4_096 },
                             format: { with: Constants::Regexps::URL }
 
   def liked_by_user?(user_id)
