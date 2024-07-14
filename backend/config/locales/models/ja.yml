@@ -23,7 +23,7 @@ ja:
         website: ウェブサイトのURL
         avatar: プロフィール画像
       book:
-        title: タイトル
+        title: 書籍名
         img_url: 画像のURL
         scraped_at: 取得日
         price: 価格
@@ -66,6 +66,8 @@ ja:
               invalid: は先頭の@不要です
         book:
           attributes:
+            title:
+              taken: が重複しています
             img_url:
               invalid: が不正な形式です
             launched:

@@ -18,6 +18,13 @@ RSpec.describe Book do
         expect(book.title).to be_present
       end
 
+      it '重複した書籍名は登録不可' do
+        FactoryBot.create(:book, title: 'same_title')
+        b = FactoryBot.build(:book, title: 'same_title')
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:title).first).to eq('書籍名が重複しています')
+      end
+
       it 'nilの場合エラー' do
         expect do
           book.update!(title: nil)
@@ -33,7 +40,7 @@ RSpec.describe Book do
       it 'titleが501文字以上の場合エラー' do
         b = FactoryBot.build(:book, title: 'あ' * 501)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:title).first).to eq('タイトルは500文字以内で入力してください')
+        expect(b.errors.full_messages_for(:title).first).to eq('書籍名は500文字以内で入力してください')
       end
     end
 
