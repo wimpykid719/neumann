@@ -21,7 +21,7 @@ export default function NoteReference({ referenceObjs }: NoteReferenceProps) {
               <Image
                 width={24}
                 height={24}
-                src={referenceObj.user_profile_img}
+                src={referenceObj.userProfileImg}
                 alt={'noteユーザプロフィールの画像'}
                 sizes='
               50vw,

@@ -2,7 +2,7 @@ type ReferenceObj = {
   url: string
   likes: number
   title: string
-  user_profile_img: string
+  userProfileImg: string
 }
 
 export type Book = {
