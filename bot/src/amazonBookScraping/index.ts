@@ -1,9 +1,8 @@
-import { NotBookError, PuppeteerError } from '@/lib/errors'
+import { NotBookError, PuppeteerError, ScrapingRequestError } from '@/lib/errors'
 import { generateDocRef, notScrapingQuery, storeObjOverWrite } from '@/lib/fireStore'
 import requestText from '@/text/request.json'
 import { base64UrlSafeEncode } from '@/utils/base64url'
 import { chunkArray } from '@/utils/chunkArray'
-
 import { sleep } from '@/utils/sleep'
 import {
   type DocumentData,
@@ -110,6 +109,14 @@ const storePuppeteerError = (bookInfo: PuppeteerError) => {
   )
 }
 
+const forceExsitScrapingRequestError = (bookInfo: ScrapingRequestError) => {
+  const { message, url } = bookInfo
+
+  console.error(message)
+  console.error(requestText.amazonRequestError, url)
+  process.exit(1)
+}
+
 const storeBook = async (bookInfo: BookInfo, linkInfo: AmazonLinks, id: AmazonObj['id']) => {
   const { asin, book } = bookInfo
   if (!asin) {
@@ -133,24 +140,29 @@ const storeBook = async (bookInfo: BookInfo, linkInfo: AmazonLinks, id: AmazonOb
   return amazonLinkScraped(id)
 }
 
+const generateAmazonObj = async (amazonObjs: AmazonObj[]) => {
+  return await Promise.all(
+    amazonObjs.map(async amazonObj => {
+      const { id, data } = amazonObj
+      return {
+        id,
+        bookInfo: await getBookInfo(data['productUrl']),
+        linkInfo: data,
+      }
+    }),
+  )
+}
+
 const batchAmazonLinksRequestStoreBook = async (amazonObjs: AmazonObj[]) => {
   const amazonObjChunk = chunkArray(amazonObjs, CHUNK_SIZE)
   for (const amazonObjs of amazonObjChunk) {
-    const bookObjs = await Promise.all(
-      amazonObjs.map(async amazonObj => {
-        const { id, data } = amazonObj
-        return {
-          id,
-          bookInfo: await getBookInfo(data['productUrl']),
-          linkInfo: data,
-        }
-      }),
-    )
+    const bookObjs = await generateAmazonObj(amazonObjs)
 
     await Promise.all(
       bookObjs.map(bookObj => {
         const { id, bookInfo, linkInfo } = bookObj
 
+        if (bookInfo instanceof ScrapingRequestError) return forceExsitScrapingRequestError(bookInfo)
         if (bookInfo instanceof PuppeteerError) return storePuppeteerError(bookInfo)
         if (bookInfo instanceof NotBookError) return storeNotBookError(bookInfo, id)
 

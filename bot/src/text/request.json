@@ -14,10 +14,14 @@
   "puppeteerClose": "書籍データ取得完了",
   "noAmazonLinks": "未取得のAmazonLinksがありません",
   "errorScraping": "スクレイピング中にエラー発生",
-  "forceCloseScraping": "スクレイピング強制停止",
+  "forceClosePuppeteer": "Puppeteer強制停止",
   "notBook": "商品URLが書籍ではないです",
   "asin": "こちらの商品を追加します",
   "noAsin": "ASINが取得出来ませんでした",
   "doneAmazonCrawling": "Amazon商品のクローリングが終了",
-  "duplicateArticle": "記事keyの重複を確認"
+  "duplicateArticle": "記事keyの重複を確認",
+  "scrapingRequestError": "商品ページのリクエストに失敗しました",
+  "amazonLinksReset": "amazonLinksの取り込み設定をリセット",
+  "doneAmazonLinksReset": "amazonLinksのリセット完了",
+  "amazonRequestError": "取得制限のためリクエストに失敗しました"
 }

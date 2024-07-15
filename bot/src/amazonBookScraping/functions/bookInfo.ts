@@ -1,4 +1,4 @@
-import { NotBookError, PuppeteerError } from '@/lib/errors'
+import { NotBookError, PuppeteerError, ScrapingRequestError } from '@/lib/errors'
 import requestText from '@/text/request.json'
 import { getASIN } from '@/utils/amazon'
 import puppeteer, { type Page } from 'puppeteer'
@@ -21,6 +21,9 @@ type BookPagePath = (typeof PAGE_ELEMENT_PATH)[number]
 
 const PUBLISHER_ELEMENT_PATH = ['#rpi-attribute-book_details-publisher .rpi-attribute-value > span'] as const
 type PublisherPath = (typeof PUBLISHER_ELEMENT_PATH)[number]
+
+const isRequestFailed = async (page: Page) =>
+  await elementExists(page, 'form[method="get"][action="/errors/validateCaptcha"][name=""]')
 
 const isBook = async (page: Page) => {
   const breadcrumbs = await page.$$eval(
@@ -131,6 +134,8 @@ export const getBookInfo = async (url: string) => {
 
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded' })
+    if (await isRequestFailed(page)) return new ScrapingRequestError(requestText.scrapingRequestError, url)
+
     if (!(await isBook(page))) {
       await browser.close()
 
@@ -157,7 +162,7 @@ export const getBookInfo = async (url: string) => {
   } catch (error) {
     console.error(error)
 
-    console.info(requestText.forceCloseScraping)
+    console.info(requestText.forceClosePuppeteer)
     await browser.close()
 
     return new PuppeteerError(requestText.errorScraping, url)

@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest",
     "start": "npx ts-node -r tsconfig-paths/register src/index.ts",
-    "dev": "npx ts-node -r tsconfig-paths/register src/amazonBookScraping/index.ts"
+    "dev": "npx ts-node -r tsconfig-paths/register src/amazonBookScraping/index.ts",
+    "script": "npx ts-node -r tsconfig-paths/register src/script/scrapingResetAmazonLinks.ts"
   },
   "keywords": [],
   "author": "",

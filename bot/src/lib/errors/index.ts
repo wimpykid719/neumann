@@ -45,3 +45,16 @@ export class NotBookError extends AppError {
     this.url = url
   }
 }
+
+export class ScrapingRequestError extends AppError {
+  url: string
+
+  static {
+    this.prototype.name = 'ScrapingRequestError'
+  }
+
+  constructor(message: string, url: string, options?: ErrorOptions) {
+    super(message, options)
+    this.url = url
+  }
+}

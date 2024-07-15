@@ -37,3 +37,18 @@ export const notScrapingQuery = (
 
   return firestore.collection(collectionName).where('scraping', '==', false).limit(limit)
 }
+export const limitQuery = (
+  firestore: Firestore,
+  collectionName: string,
+  lastDocument: QueryDocumentSnapshot | undefined,
+  limit: number,
+) => {
+  if (lastDocument) {
+    return firestore.collection(collectionName).limit(limit).startAfter(lastDocument)
+  }
+
+  return firestore.collection(collectionName).limit(limit)
+}
+
+export const scrapingRequestErrorQuery = (firestore: Firestore, collectionName: string, limit: number) =>
+  firestore.collection(collectionName).limit(limit)
