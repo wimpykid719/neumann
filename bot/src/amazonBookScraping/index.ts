@@ -140,19 +140,23 @@ const storeBook = async (bookInfo: BookInfo, linkInfo: AmazonLinks, id: AmazonOb
   return amazonLinkScraped(id)
 }
 
+const generateAmazonObj = async (amazonObjs: AmazonObj[]) => {
+  return await Promise.all(
+    amazonObjs.map(async amazonObj => {
+      const { id, data } = amazonObj
+      return {
+        id,
+        bookInfo: await getBookInfo(data['productUrl']),
+        linkInfo: data,
+      }
+    }),
+  )
+}
+
 const batchAmazonLinksRequestStoreBook = async (amazonObjs: AmazonObj[]) => {
   const amazonObjChunk = chunkArray(amazonObjs, CHUNK_SIZE)
   for (const amazonObjs of amazonObjChunk) {
-    const bookObjs = await Promise.all(
-      amazonObjs.map(async amazonObj => {
-        const { id, data } = amazonObj
-        return {
-          id,
-          bookInfo: await getBookInfo(data['productUrl']),
-          linkInfo: data,
-        }
-      }),
-    )
+    const bookObjs = await generateAmazonObj(amazonObjs)
 
     await Promise.all(
       bookObjs.map(bookObj => {
