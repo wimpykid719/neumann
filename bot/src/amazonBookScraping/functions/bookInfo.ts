@@ -162,7 +162,7 @@ export const getBookInfo = async (url: string) => {
   } catch (error) {
     console.error(error)
 
-    console.info(requestText.forceCloseScraping)
+    console.info(requestText.forceClosePuppeteer)
     await browser.close()
 
     return new PuppeteerError(requestText.errorScraping, url)
