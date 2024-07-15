@@ -52,7 +52,6 @@ type BookInfo = {
 
 const COLLECTION_AMAZON_LINKS = 'amazonLinks'
 const COLLECTION_AMAZON_ERROR = 'amazonError'
-const COLLECTION_AMAZON_REQUEST_ERROR = 'amazonRequestError'
 const COLLECTION_NOT_BOOKS = 'notBooksLink'
 const COLLECTION_AMAZON_BOOKS = 'amazonBooks'
 const PAGE_LIMIT = 10
@@ -110,20 +109,12 @@ const storePuppeteerError = (bookInfo: PuppeteerError) => {
   )
 }
 
-const storeScrapingRequestError = (bookInfo: ScrapingRequestError, linkInfo: AmazonLinks) => {
-  const { message } = bookInfo
+const forceExsitScrapingRequestError = (bookInfo: ScrapingRequestError) => {
+  const { message, url } = bookInfo
+
   console.error(message)
-
-  const { productUrl, score, referenceObj, hashtags } = linkInfo
-  const scrapingRequestErrorObj = {
-    productUrl,
-    score,
-    referenceObj,
-    hashtags,
-    timeStamp: FieldValue.serverTimestamp(),
-  }
-
-  return storeObjOverWrite(generateDocRef(firestore, COLLECTION_AMAZON_REQUEST_ERROR), scrapingRequestErrorObj)
+  console.error(requestText.amazonRequestError, url)
+  process.exit(1)
 }
 
 const storeBook = async (bookInfo: BookInfo, linkInfo: AmazonLinks, id: AmazonObj['id']) => {
@@ -167,7 +158,7 @@ const batchAmazonLinksRequestStoreBook = async (amazonObjs: AmazonObj[]) => {
       bookObjs.map(bookObj => {
         const { id, bookInfo, linkInfo } = bookObj
 
-        if (bookInfo instanceof ScrapingRequestError) return storeScrapingRequestError(bookInfo, linkInfo)
+        if (bookInfo instanceof ScrapingRequestError) return forceExsitScrapingRequestError(bookInfo)
         if (bookInfo instanceof PuppeteerError) return storePuppeteerError(bookInfo)
         if (bookInfo instanceof NotBookError) return storeNotBookError(bookInfo, id)
 

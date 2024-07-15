@@ -22,5 +22,6 @@
   "duplicateArticle": "記事keyの重複を確認",
   "scrapingRequestError": "商品ページのリクエストに失敗しました",
   "amazonLinksReset": "amazonLinksの取り込み設定をリセット",
-  "doneAmazonLinksReset": "amazonLinksのリセット完了"
+  "doneAmazonLinksReset": "amazonLinksのリセット完了",
+  "amazonRequestError": "取得制限のためリクエストに失敗しました"
 }
