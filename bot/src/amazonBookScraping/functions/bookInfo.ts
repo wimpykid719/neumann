@@ -3,7 +3,7 @@ import requestText from '@/text/request.json'
 import { getASIN } from '@/utils/amazon'
 import puppeteer, { type Page } from 'puppeteer'
 
-const AFFILIATE_TAG = 'hero719-22'
+const AFFILIATE_TAG = process.env.PARTNER_TAG!
 
 const BOOK_CATEGORIES = ['本', 'Kindleストア', 'Kindle本'] as const
 const PRICE_ELEMENT_PATH = [
