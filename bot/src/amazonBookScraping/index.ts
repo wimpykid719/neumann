@@ -120,7 +120,7 @@ const forceExsitScrapingRequestError = (bookInfo: ScrapingRequestError) => {
 const storeBook = async (bookInfo: BookInfo, linkInfo: AmazonLinks, id: AmazonObj['id']) => {
   const { asin, book } = bookInfo
   if (!asin) {
-    console.info(requestText.noAsin)
+    console.error(`${requestText.noAsin} : error AmazonLinks doc id ${id}`)
     return
   }
 
