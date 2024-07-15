@@ -56,11 +56,13 @@ describe('getASIN', () => {
     const url3 =
       'https://www.amazon.co.jp/%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6-%E4%B8%80%E8%88%AC%E6%9B%B8-%E5%8F%A4%E8%B3%80-%E5%8F%B2%E5%81%A5/dp/4591178544/ref=sxts_b2b_sx_reorder_acb_customer?content-id=amzn1.sym.3aa0b3f0-43bc-4d36-b0f9-9cf3da9df3ea%3Aamzn1.sym.3aa0b3f0-43bc-4d36-b0f9-9cf3da9df3ea&crid=3PCVNMXI87026&cv_ct_cx=%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6&keywords=%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6&pd_rd_i=4591178544&pd_rd_r=ab5adc90-f978-468e-abe6-a46a5964d03b&pd_rd_w=UVsEu&pd_rd_wg=KwXe2&pf_rd_p=3aa0b3f0-43bc-4d36-b0f9-9cf3da9df3ea&pf_rd_r=V54GRZ3D9EBPSXF9ZH19&qid=1703890652&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sprefix=%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6%2Caps%2C182&sr=1-1-4ed356dd-72ad-4ce9-9bc3-e42562543353'
     const url4 = 'https://www.amazon.co.jp/gp/product/B08J7GGY6N/ref=as_li_qf_asin_il_tl'
+    const url5 = 'https://www.amazon.co.jp/exec/obidos/ASIN/4799326686/opc-22/ref=nosim'
 
     expect(getASIN(url)).toEqual('B0C42W5716')
     expect(getASIN(url2)).toEqual('B0C9CF55J6')
     expect(getASIN(url3)).toEqual('4591178544')
     expect(getASIN(url4)).toEqual('B08J7GGY6N')
+    expect(getASIN(url5)).toEqual('4799326686')
   })
   it('短縮URLの場合（asinを含まない）、undefinedを返す', () => {
     const url = 'https://amzn.asia/d/imUy4q5'
