@@ -74,6 +74,7 @@ export default async function Detail({ params }: { params: SlugsProps }) {
           page={res.page}
           launched={res.launched}
           publisher={res.publisher}
+          scrapedAt={res.scraped_at}
         />
       </div>
     </section>
