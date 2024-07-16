@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_14_093024) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_16_021014) do
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", default: "", null: false
     t.text "img_url"
@@ -24,7 +24,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_14_093024) do
     t.datetime "updated_at", null: false
     t.integer "price", default: 0, null: false
     t.date "scraped_at"
-    t.index ["title"], name: "index_books_on_title", unique: true
+    t.string "asin", default: "", null: false
+    t.index ["asin"], name: "index_books_on_asin", unique: true
+    t.index ["title"], name: "index_books_on_title"
   end
 
   create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

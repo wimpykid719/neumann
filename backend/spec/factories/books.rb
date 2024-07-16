@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :book do
+    asin { SecureRandom.alphanumeric(10) }
     sequence(:title) { |n| "フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書) - #{n}" }
     img_url { 'https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg' }
     price { Random.rand(0..9_999_999) }

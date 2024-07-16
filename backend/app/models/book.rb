@@ -2,8 +2,9 @@ class Book < ApplicationRecord
   has_many :likes, as: :likeable, dependent: :destroy
   has_one :note_reference, dependent: :destroy
 
-  validates :title, length: { maximum: 500 },
-                    uniqueness: true
+  validates :asin, length: { maximum: 10 },
+                   uniqueness: true
+  validates :title, length: { maximum: 500 }
   validates :img_url, length: { maximum: 4_096 },
                       format: { with: Constants::Regexps::URL }
   validates :price, numericality: { in: 0..9_999_999 }

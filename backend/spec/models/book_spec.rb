@@ -13,16 +13,40 @@ RSpec.describe Book do
   end
 
   describe 'validation' do
+    context 'asin' do
+      it '登録可能' do
+        expect(book.asin).to be_present
+      end
+
+      it '重複したasinは登録不可' do
+        FactoryBot.create(:book, asin: 'B08J7GGY6N')
+        b = FactoryBot.build(:book, asin: 'B08J7GGY6N')
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:asin).first).to eq('ASINが重複しています、登録済みの書籍です')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          book.update!(asin: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        b = FactoryBot.build(:book, asin: '')
+        expect(b).to be_valid
+        expect(b.asin).to eq('')
+      end
+
+      it 'asinが501文字以上の場合エラー' do
+        b = FactoryBot.build(:book, asin: 'A' * 11)
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:asin).first).to eq('ASINは10文字以内で入力してください')
+      end
+    end
+
     context 'title' do
       it '登録可能' do
         expect(book.title).to be_present
-      end
-
-      it '重複した書籍名は登録不可' do
-        FactoryBot.create(:book, title: 'same_title')
-        b = FactoryBot.build(:book, title: 'same_title')
-        expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:title).first).to eq('書籍名が重複しています')
       end
 
       it 'nilの場合エラー' do
