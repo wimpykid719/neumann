@@ -10,7 +10,7 @@ def create_books(num)
                          score: Random.rand(0..1.0).round(3),
                          page: Random.rand(1..5000),
                          launched: '2021-02-17',
-                         scraped_at: '2024-07-09',
+                         scraped_at: '2024/07/08 23:20:46.385',
                          author: '高橋 昌一郎',
                          publisher: '講談社',
                          associate_url: 'https://amzn.to/4c9f3R8'
