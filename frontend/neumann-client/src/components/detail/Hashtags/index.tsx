@@ -38,7 +38,7 @@ export default function Hashtags({ hashtags }: HashtagsProps) {
           h-24 ${isCollapse && '-mt-24'}
         `}
         >
-          <button className='text-sm text-secondary hover:opacity-70' onClick={() => setCollapse(false)}>
+          <button className='text-sm text-gray-500 hover:opacity-70' onClick={() => setCollapse(false)}>
             もっと見る
           </button>
         </div>
