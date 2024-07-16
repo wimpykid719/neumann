@@ -40,6 +40,7 @@ module.exports = {
     },
   },
   safelist: [
+    'text-[10px]',
     {
       pattern: /(text|bg|border)-(primary|secondary|success|danger|warning)/,
     },
