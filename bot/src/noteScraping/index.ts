@@ -81,7 +81,7 @@ const storeAmazonLinks = (res: NoteDetail, amazonEmbed: string) => {
 
   const amazonLinksObj = {
     productUrl: amazonEmbed,
-    score: FieldValue.increment(evaluateScore(scoreValue)),
+    score: evaluateScore(scoreValue),
     referenceObj: noteReferencesObj,
     hashtags: hashtagNames,
     scraping: false,
