@@ -17,14 +17,36 @@ type InfoCardProps = {
   page: BookDetail['page']
   launched: BookDetail['launched']
   publisher: BookDetail['publisher']
+  scrapedAt: BookDetail['scraped_at']
 }
 
-export default function InfoCard({ id, associate_url, price, score, likes, page, launched, publisher }: InfoCardProps) {
+export default function InfoCard({
+  id,
+  associate_url,
+  price,
+  score,
+  likes,
+  page,
+  launched,
+  publisher,
+  scrapedAt,
+}: InfoCardProps) {
   const ICON_SIZE = 16
   const X_SHARE_URL = `https://twitter.com/intent/tweet?hashtags=BizRank&url=${'#'}&related=BizRank`
+  const SUPPLEMENT_TEXT_SIZE = '10px'
+
+  const transformDateJaStyle = (date: string) => {
+    const scrapedAt = new Date(date)
+    const year = scrapedAt.getFullYear()
+    // getMonthは 0~11 始まりで1ヶ月ずれるへの対応
+    const month = scrapedAt.getMonth() + 1
+    const day = scrapedAt.getDate()
+
+    return year + '年' + month + '月' + day + '日'
+  }
 
   return (
-    <div className='h-96 w-64 sub-bg-color rounded-lg p-6 space-y-8'>
+    <div className='w-64 sub-bg-color rounded-lg p-6 space-y-8'>
       <div className='w-52 mx-auto'>
         <AssociateLink price={price} associate_url={associate_url} />
         <p className='text-gray-500 text-xs'>
@@ -82,18 +104,25 @@ export default function InfoCard({ id, associate_url, price, score, likes, page,
           </li>
         </ul>
       </div>
-      <div className='flex justify-between'>
-        <LikeButton id={id} likes={likes} />
-        <div>
-          <a
-            className='flex justify-center items-center py-1 text-xs w-28 h-8 border border-gray-900 dark:border-gray-50 rounded-lg hover:opacity-70'
-            href={X_SHARE_URL}
-          >
-            <span className='mr-1'>
-              <XIcon width={ICON_SIZE} height={ICON_SIZE} />
-            </span>
-            コメントする
-          </a>
+      <div className='space-y-4'>
+        <div className='flex justify-between'>
+          <LikeButton id={id} likes={likes} />
+          <div>
+            <a
+              className='flex justify-center items-center py-1 text-xs w-28 h-8 border border-gray-900 dark:border-gray-50 rounded-lg hover:opacity-70'
+              href={X_SHARE_URL}
+            >
+              <span className='mr-1'>
+                <XIcon width={ICON_SIZE} height={ICON_SIZE} />
+              </span>
+              コメントする
+            </a>
+          </div>
+        </div>
+        <div className='text-center'>
+          <span className={`text-[${SUPPLEMENT_TEXT_SIZE}] text-gray-500`}>{`${transformDateJaStyle(
+            scrapedAt,
+          )}の商品データになります。`}</span>
         </div>
       </div>
     </div>

@@ -10,20 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_17_095333) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_16_021014) do
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", default: "", null: false
-    t.string "img_url", default: "", null: false
-    t.text "description"
+    t.text "img_url"
     t.float "score", default: 0.0, null: false
     t.integer "page", default: 0, null: false
     t.date "launched"
     t.string "author", default: "", null: false
     t.string "publisher", default: "", null: false
-    t.string "associate_url", default: "", null: false
+    t.text "associate_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "price", default: 0, null: false
+    t.date "scraped_at"
+    t.string "asin", default: "", null: false
+    t.index ["asin"], name: "index_books_on_asin", unique: true
+    t.index ["title"], name: "index_books_on_title"
   end
 
   create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -35,6 +38,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_17_095333) do
     t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
     t.index ["user_id", "likeable_id", "likeable_type"], name: "index_likes_on_user_id_and_likeable_type_and_likeable_id", unique: true
     t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
+  create_table "note_references", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.json "hashtags", null: false
+    t.json "reference_objs", null: false
+    t.bigint "book_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_note_references_on_book_id"
   end
 
   create_table "profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -76,6 +88,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_17_095333) do
   end
 
   add_foreign_key "likes", "users"
+  add_foreign_key "note_references", "books"
   add_foreign_key "profiles", "users"
   add_foreign_key "providers", "users"
 end

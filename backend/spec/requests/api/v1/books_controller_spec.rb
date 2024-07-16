@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::BooksController do
   include_context 'user_authorities'
   let(:book) { FactoryBot.create(:book) }
+  let(:note_reference) { FactoryBot.create(:note_reference, book:) }
   let(:books) { FactoryBot.build_list(:book, 27) }
 
   describe 'GET #index' do
@@ -46,7 +47,7 @@ RSpec.describe Api::V1::BooksController do
           expect(json['books'].size).to eq(12)
           expect(json['books'][0].size).to eq(4)
           expect(json['books'][0]['id']).to be_present
-          expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+          expect(json['books'][0]['title']).to start_with('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書) - ')
           expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
           expect(json['books'][0]['likes_count']).to be_present
 
@@ -69,7 +70,7 @@ RSpec.describe Api::V1::BooksController do
           expect(json['books'].size).to eq(12)
           expect(json['books'][0].size).to eq(4)
           expect(json['books'][0]['id']).to be_present
-          expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+          expect(json['books'][0]['title']).to start_with('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書) - ')
           expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
 
           expect(json['rankings'].size).to eq(12)
@@ -91,7 +92,7 @@ RSpec.describe Api::V1::BooksController do
           expect(json['books'].size).to eq(3)
           expect(json['books'][0].size).to eq(4)
           expect(json['books'][0]['id']).to be_present
-          expect(json['books'][0]['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+          expect(json['books'][0]['title']).to start_with('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書) - ')
           expect(json['books'][0]['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
 
           expect(json['rankings'].size).to eq(3)
@@ -146,6 +147,7 @@ RSpec.describe Api::V1::BooksController do
     context '正常系' do
       before do
         book
+        note_reference
       end
 
       it 'リクエスト成功、ステータスコード/200が返る' do
@@ -159,11 +161,13 @@ RSpec.describe Api::V1::BooksController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(13)
+        expect(json.size).to eq(14)
+        expect(json['note_reference'].size).to eq(2)
+
         expect(json['id']).to be_present
-        expect(json['title']).to eq('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)')
+        expect(json['title']).to start_with('フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書) - ')
         expect(json['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
-        expect(json['description']).to be_present
+        expect(json['scraped_at']).to eq('2024-07-09')
         expect(json['price_delimited']).to be_present
         expect(json['score']).to be_present
         expect(json['page']).to be_present
@@ -173,6 +177,13 @@ RSpec.describe Api::V1::BooksController do
         expect(json['associate_url']).to eq('https://amzn.to/4c9f3R8')
         expect(json['ranking']).to eq(1)
         expect(json['likes_count']).to be_present
+        expect(json['note_reference']['hashtags']).to eq(['#tag1', '#tag2'])
+        expect(json['note_reference']['reference_objs']).to eq(
+          [
+            { 'url' => 'http://example.com/1', 'likes' => 10, 'title' => 'example title', 'userProfileImg' => 'http://example.com/image1.jpg' },
+            { 'url' => 'http://example.com/2', 'likes' => 16, 'title' => 'example title2', 'userProfileImg' => 'http://example.com/image2.jpg' }
+          ]
+        )
       end
     end
 

@@ -1,3 +1,10 @@
+type ReferenceObj = {
+  url: string
+  likes: number
+  title: string
+  userProfileImg: string
+}
+
 export type Book = {
   id: number
   title: string
@@ -6,7 +13,7 @@ export type Book = {
 }
 
 export type BookDetail = Book & {
-  description: string
+  scraped_at: string
   price_delimited: string
   score: number
   page: number
@@ -15,4 +22,8 @@ export type BookDetail = Book & {
   publisher: string
   associate_url: string
   ranking: number
+  note_reference: {
+    hashtags: string[]
+    reference_objs: ReferenceObj[]
+  }
 }

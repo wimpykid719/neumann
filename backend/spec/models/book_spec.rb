@@ -13,6 +13,37 @@ RSpec.describe Book do
   end
 
   describe 'validation' do
+    context 'asin' do
+      it '登録可能' do
+        expect(book.asin).to be_present
+      end
+
+      it '重複したasinは登録不可' do
+        FactoryBot.create(:book, asin: 'B08J7GGY6N')
+        b = FactoryBot.build(:book, asin: 'B08J7GGY6N')
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:asin).first).to eq('ASINが重複しています、登録済みの書籍です')
+      end
+
+      it 'nilの場合エラー' do
+        expect do
+          book.update!(asin: nil)
+        end.to raise_error(ActiveRecord::NotNullViolation)
+      end
+
+      it '空文字入力可能' do
+        b = FactoryBot.build(:book, asin: '')
+        expect(b).to be_valid
+        expect(b.asin).to eq('')
+      end
+
+      it 'asinが501文字以上の場合エラー' do
+        b = FactoryBot.build(:book, asin: 'A' * 11)
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:asin).first).to eq('ASINは10文字以内で入力してください')
+      end
+    end
+
     context 'title' do
       it '登録可能' do
         expect(book.title).to be_present
@@ -33,7 +64,7 @@ RSpec.describe Book do
       it 'titleが501文字以上の場合エラー' do
         b = FactoryBot.build(:book, title: 'あ' * 501)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:title).first).to eq('タイトルは500文字以内で入力してください')
+        expect(b.errors.full_messages_for(:title).first).to eq('書籍名は500文字以内で入力してください')
       end
     end
 
@@ -54,10 +85,10 @@ RSpec.describe Book do
         expect(b.errors.full_messages_for(:img_url).first).to eq('画像のURLが不正な形式です')
       end
 
-      it 'nilの場合エラー' do
+      it 'nil入力可能' do
         expect do
           book.update(img_url: nil)
-        end.to raise_error(ActiveRecord::NotNullViolation)
+        end.not_to raise_error
       end
 
       it '空文字入力可能' do
@@ -67,32 +98,9 @@ RSpec.describe Book do
       end
 
       it 'img_urlのURLが256文字以上の場合エラー' do
-        b = FactoryBot.build(:book, img_url: 'a' * 256)
+        b = FactoryBot.build(:book, img_url: 'a' * 4_097)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:img_url).first).to eq('画像のURLは255文字以内で入力してください')
-      end
-    end
-
-    context 'description' do
-      it '登録可能' do
-        expect(book.description).to be_present
-      end
-
-      it 'nil使用可能' do
-        book.update(description: nil)
-        expect(book).to be_valid
-      end
-
-      it '空文字入力可能' do
-        b = FactoryBot.build(:book, description: '')
-        expect(b).to be_valid
-        expect(b.description).to eq('')
-      end
-
-      it 'descriptionが10000文字以上の場合エラー' do
-        b = FactoryBot.build(:book, description: 'あ' * 10_001)
-        expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:description).first).to eq('説明文は10000文字以内で入力してください')
+        expect(b.errors.full_messages_for(:img_url).first).to eq('画像のURLは4096文字以内で入力してください')
       end
     end
 
@@ -155,16 +163,10 @@ RSpec.describe Book do
         expect(b.errors.full_messages_for(:page).first).to eq('ページ数は数値で入力してください')
       end
 
-      it '0入力不可' do
-        b = FactoryBot.build(:book, page: 0)
-        expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:page).first).to eq('ページ数は1..5000の範囲に含めてください')
-      end
-
       it 'ページ数が1~5000範囲外の場合エラー' do
         b = FactoryBot.build(:book, page: 5001)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:page).first).to eq('ページ数は1..5000の範囲に含めてください')
+        expect(b.errors.full_messages_for(:page).first).to eq('ページ数は0..5000の範囲に含めてください')
       end
     end
 
@@ -207,6 +209,48 @@ RSpec.describe Book do
         b = FactoryBot.build(:book, launched: '2024-02-12')
         expect(b).to be_valid
         expect(b.launched).to eq('2024-02-12'.to_date)
+      end
+    end
+
+    context 'scraped_at' do
+      it '登録可能' do
+        expect(book.scraped_at).to eq('2024-07-09'.to_date)
+      end
+
+      it 'nilの入力可能' do
+        b = FactoryBot.build(:book, scraped_at: nil)
+        expect(b).to be_valid
+      end
+
+      it '空文字の入力した場合、戻り値がnilになる' do
+        b = FactoryBot.build(:book, scraped_at: '')
+        expect(b).to be_valid
+        # RubyのDate型は「存在しない日付」を持つことが出来ないため、タイプキャストによりnil値となる
+        expect(b.scraped_at).to be_nil
+      end
+
+      it '年の先頭が0場合エラー' do
+        b = FactoryBot.build(:book, scraped_at: '0195-02-24')
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:scraped_at).first).to eq('取得日が不正な形式です')
+      end
+
+      it '存在しない月の場合、戻り値がnilになる' do
+        b = FactoryBot.build(:book, scraped_at: '2024-13-24')
+        expect(b).to be_valid
+        expect(b.scraped_at).to be_nil
+      end
+
+      it '存在しない日の場合、戻り値がnilになる' do
+        b = FactoryBot.build(:book, scraped_at: '2024-02-00')
+        expect(b).to be_valid
+        expect(b.scraped_at).to be_nil
+      end
+
+      it '月の先頭に0が含まれる入力可能' do
+        b = FactoryBot.build(:book, scraped_at: '2024-02-12')
+        expect(b).to be_valid
+        expect(b.scraped_at).to eq('2024-02-12'.to_date)
       end
     end
 
@@ -275,10 +319,10 @@ RSpec.describe Book do
         expect(b.errors.full_messages_for(:associate_url).first).to eq('アソシエイトリンクが不正な形式です')
       end
 
-      it 'nilの場合エラー' do
+      it 'nil入力可能' do
         expect do
           book.update(associate_url: nil)
-        end.to raise_error(ActiveRecord::NotNullViolation)
+        end.not_to raise_error
       end
 
       it '空文字入力可能' do
@@ -288,9 +332,9 @@ RSpec.describe Book do
       end
 
       it 'associate_urlのURLが256文字以上の場合エラー' do
-        b = FactoryBot.build(:book, associate_url: 'a' * 256)
+        b = FactoryBot.build(:book, associate_url: 'a' * 40_967)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:associate_url).first).to eq('アソシエイトリンクは255文字以内で入力してください')
+        expect(b.errors.full_messages_for(:associate_url).first).to eq('アソシエイトリンクは4096文字以内で入力してください')
       end
     end
   end

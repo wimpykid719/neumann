@@ -23,9 +23,10 @@ ja:
         website: ウェブサイトのURL
         avatar: プロフィール画像
       book:
-        title: タイトル
+        asin: ASIN
+        title: 書籍名
         img_url: 画像のURL
-        description: 説明文
+        scraped_at: 取得日
         price: 価格
         score: 評価ポイント
         page: ページ数
@@ -35,6 +36,9 @@ ja:
         associate_url: アソシエイトリンク
       like:
         user_id: ユーザー
+      note_reference:
+        hashtags: ハッシュタグ
+        reference_objs: 参照先
     errors:
       models:
         user:
@@ -63,9 +67,13 @@ ja:
               invalid: は先頭の@不要です
         book:
           attributes:
+            asin:
+              taken: が重複しています、登録済みの書籍です
             img_url:
               invalid: が不正な形式です
             launched:
+              invalid: が不正な形式です
+            scraped_at:
               invalid: が不正な形式です
             associate_url:
               invalid: が不正な形式です

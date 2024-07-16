@@ -1,13 +1,14 @@
 import Card from '@/components/common/Card'
 import Tabs from '@/components/common/Tabs'
 import { bookNavigation } from '@/components/common/Tabs/Navigations'
+import Hashtags from '@/components/detail/Hashtags'
 import InfoCard from '@/components/detail/InfoCard'
+import NoteReference from '@/components/detail/NoteReference'
 import { FetchError } from '@/lib/errors'
 import { getBook, getBooks } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
 import { FIRST_PAGE } from '@/utils/page'
 import { range } from '@/utils/range'
-import { replaceNewlines } from '@/utils/replaceNewlines'
 
 type SlugsProps = {
   slug: string
@@ -61,7 +62,8 @@ export default async function Detail({ params }: { params: SlugsProps }) {
         <Card title={res.title} img_url={res.img_url} ranking={res.ranking} likes={res.likes_count} detail={false} />
         <div className='space-y-8 flex-1'>
           <h2 className='font-bold text-lg'>{res.title}</h2>
-          <article className='whitespace-pre-wrap'>{replaceNewlines(res.description)}</article>
+          <Hashtags hashtags={res.note_reference.hashtags} />
+          <NoteReference referenceObjs={res.note_reference.reference_objs} />
         </div>
         <InfoCard
           id={res.id}
@@ -72,6 +74,7 @@ export default async function Detail({ params }: { params: SlugsProps }) {
           page={res.page}
           launched={res.launched}
           publisher={res.publisher}
+          scrapedAt={res.scraped_at}
         />
       </div>
     </section>

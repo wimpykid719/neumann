@@ -115,7 +115,7 @@ RSpec/MultipleExpectations:
 
 # 最大コード文字列を緩める
 RSpec/ExampleLength:
-  Max: 20
+  Max: 30
 
 Lint/RedundantCopDisableDirective:
   Enabled: false
