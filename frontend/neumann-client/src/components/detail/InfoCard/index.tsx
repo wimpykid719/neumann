@@ -122,7 +122,7 @@ export default function InfoCard({
         <div className='text-center'>
           <span className={`text-[${SUPPLEMENT_TEXT_SIZE}] text-gray-500`}>{`${transformDateJaStyle(
             scrapedAt,
-          )}時点の商品データになります。`}</span>
+          )}の商品データになります。`}</span>
         </div>
       </div>
     </div>
