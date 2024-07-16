@@ -8,7 +8,7 @@ class Book < ApplicationRecord
                       format: { with: Constants::Regexps::URL }
   validates :price, numericality: { in: 0..9_999_999 }
   validates :score, numericality: { in: 0..1 }
-  validates :page, numericality: { in: 1..5000 }
+  validates :page, numericality: { in: 0..5000 }
   validates :launched, format: { with: Constants::Regexps::DATE }
   validates :scraped_at, format: { with: Constants::Regexps::DATE }
   validates :author, length: { maximum: 50 }

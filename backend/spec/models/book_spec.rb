@@ -139,16 +139,10 @@ RSpec.describe Book do
         expect(b.errors.full_messages_for(:page).first).to eq('ページ数は数値で入力してください')
       end
 
-      it '0入力不可' do
-        b = FactoryBot.build(:book, page: 0)
-        expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:page).first).to eq('ページ数は1..5000の範囲に含めてください')
-      end
-
       it 'ページ数が1~5000範囲外の場合エラー' do
         b = FactoryBot.build(:book, page: 5001)
         expect(b).not_to be_valid
-        expect(b.errors.full_messages_for(:page).first).to eq('ページ数は1..5000の範囲に含めてください')
+        expect(b.errors.full_messages_for(:page).first).to eq('ページ数は0..5000の範囲に含めてください')
       end
     end
 
