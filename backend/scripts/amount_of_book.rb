@@ -1,9 +1,10 @@
 BOOKS_COUNT = 24
 
-# rubocop:disable Metrics/BlockLength
+# rubocop:disable Metrics/BlockLength, Metrics/MethodLength
 def create_books(num)
   num.times do |n|
     book = Book.create({
+                         asin: SecureRandom.alphanumeric(10),
                          title: "テスト - #{n} フォン・ノイマンの哲学 人間のフリをした悪魔 (講談社現代新書)",
                          img_url: 'https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg',
                          score: Random.rand(0..1.0).round(3),
@@ -21,19 +22,19 @@ def create_books(num)
                                      'url' => 'http://example.com/1',
                                      'likes' => 10,
                                      'title' => 'example title',
-                                     'user_profile_img' => 'https://assets.st-note.com/production/uploads/images/41931547/profile_de48659dc5cd1c96d71e1ceca1a7b6af.jpg?fit=bounds&format=jpeg&quality=85&width=330'
+                                     'userProfileImg' => 'https://assets.st-note.com/production/uploads/images/41931547/profile_de48659dc5cd1c96d71e1ceca1a7b6af.jpg?fit=bounds&format=jpeg&quality=85&width=330'
                                    },
                                    {
                                      'url' => 'http://example.com/2',
                                      'likes' => 16,
                                      'title' => 'example title2',
-                                     'user_profile_img' => 'https://assets.st-note.com/production/uploads/images/41931547/profile_de48659dc5cd1c96d71e1ceca1a7b6af.jpg?fit=bounds&format=jpeg&quality=85&width=330'
+                                     'userProfileImg' => 'https://assets.st-note.com/production/uploads/images/41931547/profile_de48659dc5cd1c96d71e1ceca1a7b6af.jpg?fit=bounds&format=jpeg&quality=85&width=330'
                                    }
                                  ]
                                })
   end
 end
-# rubocop:enable Metrics/BlockLength
+# rubocop:enable Metrics/BlockLength, Metrics/MethodLength
 
 create_books(BOOKS_COUNT)
 puts "書籍を#{BOOKS_COUNT}冊追加しました！！"
