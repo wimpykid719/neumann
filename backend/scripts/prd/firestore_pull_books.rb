@@ -40,7 +40,7 @@ class AmazonBooks < Firestore
     )
 
     Rails.logger.info "#{amazon_book[:book][:title]} - #{id} を登録します"
-    book = Book.create!({ title:, price:, img_url:, score:, page:, launched:, scraped_at:, author:, publisher:, associate_url: })
+    book = Book.create!({ asin: id, title:, price:, img_url:, score:, page:, launched:, scraped_at:, author:, publisher:, associate_url: })
     book.create_note_reference!({ hashtags:, reference_objs: })
     Rails.logger.info '登録しました'
 
