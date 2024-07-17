@@ -22,7 +22,7 @@ class Api::V1::BooksController < ApplicationController
     book = Book.find(params[:id])
     render json: book.as_json(
       only: book_params_render,
-      methods: [:ranking, :price_delimited, :likes_count],
+      methods: [:ranking, :price_delimited, :likes_count, :round_score],
       include: {
         note_reference: {
           only: note_reference_params_render
@@ -46,7 +46,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def book_params_render
-    [*books_params_render, :scraped_at, :score, :page, :launched, :author, :publisher, :associate_url]
+    [*books_params_render, :scraped_at, :page, :launched, :author, :publisher, :associate_url]
   end
 
   def note_reference_params_render

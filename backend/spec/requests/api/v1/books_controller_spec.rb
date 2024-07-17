@@ -169,7 +169,7 @@ RSpec.describe Api::V1::BooksController do
         expect(json['img_url']).to eq('https://m.media-amazon.com/images/I/71uPA1fAPrL._SY522_.jpg')
         expect(json['scraped_at']).to eq('2024-07-09')
         expect(json['price_delimited']).to be_present
-        expect(json['score']).to be_present
+        expect(json['round_score']).to be_present
         expect(json['page']).to be_present
         expect(json['launched']).to eq('2021-02-17')
         expect(json['author']).to eq('高橋 昌一郎')

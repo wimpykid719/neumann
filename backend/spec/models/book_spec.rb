@@ -358,6 +358,7 @@ RSpec.describe Book do
     let(:user) { FactoryBot.create(:user) }
     let(:user_not_liked) { FactoryBot.create(:user, name: 'not-liked') }
     let(:like) { FactoryBot.create(:like, user:, likeable: book) }
+    let(:book_decimal_score) { FactoryBot.create(:book, score: 0.3380263888888889) }
 
     context 'liked_by_user?' do
       before do
@@ -421,6 +422,16 @@ RSpec.describe Book do
         user.likes.find_by(likeable: book).destroy
 
         expect(book.likes_count).to eq(0)
+      end
+    end
+
+    context 'round_score' do
+      it '小数点第5位までが返る' do
+        expect(book_decimal_score.round_score).to eq(0.33803)
+      end
+
+      it '桁数が5桁以下の場合そのままの値が返る' do
+        expect(book_low_score.round_score).to eq(0.3)
       end
     end
   end

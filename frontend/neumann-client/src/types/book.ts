@@ -15,7 +15,7 @@ export type Book = {
 export type BookDetail = Book & {
   scraped_at: string
   price_delimited: string
-  score: number
+  round_score: number
   page: number
   launched: string
   author: string

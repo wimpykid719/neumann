@@ -33,4 +33,8 @@ class Book < ApplicationRecord
   def likes_count
     likes.size
   end
+
+  def round_score
+    score.round(5).to_f
+  end
 end

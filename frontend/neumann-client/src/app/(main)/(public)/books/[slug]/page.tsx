@@ -69,7 +69,7 @@ export default async function Detail({ params }: { params: SlugsProps }) {
           id={res.id}
           associate_url={res.associate_url}
           price={res.price_delimited}
-          score={res.score}
+          score={res.round_score}
           likes={res.likes_count}
           page={res.page}
           launched={res.launched}

@@ -12,7 +12,7 @@ type InfoCardProps = {
   id: BookDetail['id']
   associate_url: BookDetail['associate_url']
   price: BookDetail['price_delimited']
-  score: BookDetail['score']
+  score: BookDetail['round_score']
   likes: BookDetail['likes_count']
   page: BookDetail['page']
   launched: BookDetail['launched']
