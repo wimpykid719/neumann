@@ -145,6 +145,21 @@ RSpec.describe Book do
         expect(b.score).to eq(0)
       end
 
+      it '小数点第16位まで入力可能' do
+        b = FactoryBot.build(:book, score: 0.0841099119785687)
+        expect(b).to be_valid
+        expect(b.score).to eq(0.0841099119785687)
+      end
+
+      it '小数点第17以降は表示桁を超えたとエラー表記になる' do
+        b = FactoryBot.build(:book, score: 0.08410991197856871)
+        expect(b).to be_valid
+
+        # rubocop:disable Style/ExponentialNotation
+        expect(b.score).to eq(0.841099119785687e-1)
+        # rubocop:enable Style/ExponentialNotation
+      end
+
       it '評価ポイントが0~1範囲外の場合エラー' do
         b = FactoryBot.build(:book, score: 2.5)
         expect(b).not_to be_valid
