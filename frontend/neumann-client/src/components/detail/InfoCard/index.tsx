@@ -58,16 +58,16 @@ export default function InfoCard({
       <div className='flex items-center justify-between'>
         <ul className='w-full text-xs space-y-3'>
           <li key={'score'} className='flex justify-between'>
-            <div className='flex'>
+            <div className='flex w-36'>
               <span className='mr-1'>
                 <OcticonGraphIcon width={ICON_SIZE} height={ICON_SIZE} />
               </span>
               評価ポイント
             </div>
-            <div>{score}</div>
+            <div className='break-all'>{score}</div>
           </li>
           <li key={'likes'} className='flex justify-between'>
-            <div className='flex'>
+            <div className='flex w-36'>
               <span className='mr-1'>
                 <HeartIcon width={ICON_SIZE} height={ICON_SIZE} />
               </span>
@@ -76,7 +76,7 @@ export default function InfoCard({
             <div>{likes}</div>
           </li>
           <li key={'page'} className='flex justify-between'>
-            <div className='flex'>
+            <div className='flex w-36'>
               <span className='mr-1'>
                 <PageIcon width={ICON_SIZE} height={ICON_SIZE} />
               </span>
@@ -85,7 +85,7 @@ export default function InfoCard({
             <div>{page}</div>
           </li>
           <li key={'launched'} className='flex justify-between'>
-            <div className='flex'>
+            <div className='flex w-36'>
               <span className='mr-1'>
                 <CalendarIcon width={ICON_SIZE} height={ICON_SIZE} />
               </span>
@@ -94,7 +94,7 @@ export default function InfoCard({
             <time>{new Date(launched).toLocaleDateString('ja-JP')}</time>
           </li>
           <li key={'publisher'} className='flex justify-between'>
-            <div className='flex'>
+            <div className='flex w-36'>
               <span className='mr-1'>
                 <CompanyIcon width={ICON_SIZE} height={ICON_SIZE} />
               </span>
