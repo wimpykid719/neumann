@@ -9,7 +9,7 @@ class AmazonBooks < Firestore
   end
 
   def continue_register_books?(amazon_books_size)
-    @page_limit <= amazon_books_size && @page_count <= @pull_500_books
+    @page_limit <= amazon_books_size && @page_count < @pull_500_books
   end
 
   def amazon_book_scraped(id)
