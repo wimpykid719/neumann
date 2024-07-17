@@ -5,49 +5,14 @@ import Hashtags from '@/components/detail/Hashtags'
 import InfoCard from '@/components/detail/InfoCard'
 import NoteReference from '@/components/detail/NoteReference'
 import { FetchError } from '@/lib/errors'
-import { getBook, getBooks } from '@/lib/wrappedFeatch/requests/book'
+import { getBook } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
-import { FIRST_PAGE } from '@/utils/page'
-import { range } from '@/utils/range'
 
-type SlugsProps = {
+type SlugProps = {
   slug: string
 }
 
-export const generateStaticParams = async () => {
-  const getBooksSlugs = async (page: number) => {
-    const res = await getBooks(page)
-    if (res instanceof FetchError) {
-      throw error.failedBooksFetch
-    }
-
-    return res.books.map(book => book.id)
-  }
-
-  const res = await getBooks()
-
-  if (res instanceof FetchError) {
-    throw error.failedBooksFetch
-  }
-
-  const pages = range(FIRST_PAGE, res.pages.last).map(num => num)
-  const allBookIds = await (async pages => {
-    return await Promise.all(
-      pages.map(async page => {
-        return getBooksSlugs(page)
-      }),
-    )
-  })(pages)
-
-  return allBookIds.reduce((slugs: SlugsProps[], pageBookIds) => {
-    if (pageBookIds) {
-      return [...slugs, ...pageBookIds.map(id => ({ slug: id.toString() }))]
-    }
-    return slugs
-  }, [])
-}
-
-export default async function Detail({ params }: { params: SlugsProps }) {
+export default async function Detail({ params }: { params: SlugProps }) {
   const res = await getBook(params.slug)
 
   if (res instanceof FetchError) {
