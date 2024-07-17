@@ -9,7 +9,7 @@ class AmazonBooks < Firestore
   end
 
   def continue_register_books?(amazon_books_size)
-    @page_limit <= amazon_books_size && i <= @pull_500_books
+    @page_limit <= amazon_books_size && @page_count <= @pull_500_books
   end
 
   def amazon_book_scraped(id)
@@ -23,7 +23,7 @@ class AmazonBooks < Firestore
     asin = amazon_book.document_id
     book = amazon_book[:book]
 
-    score = amazon_book[:score]
+    score = amazon_book[:score] / amazon_book[:count]
     scraped_at = amazon_book[:timeStamp]
     title, price, img_url, page, launched, publisher, associate_url, author = book.values_at(
       :title,
