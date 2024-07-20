@@ -24,7 +24,13 @@ export default async function Detail({ params }: { params: SlugProps }) {
     <section className='space-y-8'>
       <Tabs navigation={bookNavigation} />
       <div className='flex lg:flex-row flex-col lg:flex-wrap lg:gap-7 lg:space-y-0 space-y-6 justify-center lg:items-start items-center'>
-        <Card title={res.title} img_url={res.img_url} ranking={res.ranking} likes={res.likes_count} detail={false} />
+        <Card
+          title={res.title}
+          img_url={res.img_url}
+          ranking={res.ranking}
+          likes={res.likes_count}
+          associateUrl={res.associate_url}
+        />
         <div className='space-y-8 flex-1'>
           <h2 className='font-bold text-lg'>{res.title}</h2>
           <Hashtags hashtags={res.note_reference.hashtags} />
