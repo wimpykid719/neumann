@@ -8,13 +8,13 @@ import { useEffect, useState } from 'react'
 
 type AssociateLinkProps = {
   price: BookDetail['price_delimited']
-  associate_url: BookDetail['associate_url']
+  associateUrl: BookDetail['associate_url']
 }
 
 const ANIMATE_TIME = 1500 // アニメーションの継続時間 (2秒)
 const TRIGGER_TIME = 30000 // アニメーションのトリガー間隔 (30秒)
 
-export default function AssociateLink({ price, associate_url }: AssociateLinkProps) {
+export default function AssociateLink({ price, associateUrl }: AssociateLinkProps) {
   const [animate, setAnimate] = useState(false)
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function AssociateLink({ price, associate_url }: AssociateLinkPro
           bg-gradient-shine-primary
           ${animate && 'animate-shine'}
         `}
-        href={associate_url}
+        href={associateUrl}
       >
         <div className='flex justify-center items-center'>
           <div className='mr-2'>

@@ -48,7 +48,7 @@ export default function InfoCard({
   return (
     <div className='w-64 sub-bg-color rounded-lg p-6 space-y-8'>
       <div className='w-52 mx-auto'>
-        <AssociateLink price={price} associate_url={associate_url} />
+        <AssociateLink price={price} associateUrl={associate_url} />
         <p className='text-gray-500 text-xs'>
           広告収益の10%は本のプレゼントキャンペーンに当て、
           <br />
