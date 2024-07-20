@@ -5,6 +5,7 @@ import OcticonGraphIcon from '@/components/common/icon/OcticonGraphIcon'
 import PageIcon from '@/components/common/icon/PageIcon'
 import XIcon from '@/components/common/icon/XIcon'
 import { BookDetail } from '@/types/book'
+import { SUPPLEMENT_TEXT_SIZE } from '@/utils/constant'
 import AssociateLink from './AssociateLink'
 import LikeButton from './LikeButton'
 
@@ -33,7 +34,6 @@ export default function InfoCard({
 }: InfoCardProps) {
   const ICON_SIZE = 16
   const X_SHARE_URL = `https://twitter.com/intent/tweet?hashtags=BizRank&url=${'#'}&related=BizRank`
-  const SUPPLEMENT_TEXT_SIZE = '10px'
 
   const transformDateJaStyle = (date: string) => {
     const scrapedAt = new Date(date)
