@@ -43,6 +43,8 @@ export default function AssociateLink({ price, associateUrl }: AssociateLinkProp
           ${animate && 'animate-shine'}
         `}
         href={associateUrl}
+        target='_blank'
+        rel='noreferrer'
       >
         <div className='flex justify-center items-center'>
           <div className='mr-2'>
