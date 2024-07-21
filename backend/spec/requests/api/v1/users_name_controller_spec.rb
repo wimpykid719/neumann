@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::UsersNameController do
   include_context 'user_authorities'
-  # user_authoritiesでuserが1件追加されているので実際には234になる
+  # user_authoritiesでuserが2件追加されているので実際には235になる
   let(:users) { FactoryBot.build_list(:user, 233) }
 
   describe 'GET #index' do
@@ -58,7 +58,7 @@ RSpec.describe Api::V1::UsersNameController do
           json = response.parsed_body
 
           expect(json.size).to eq(2)
-          expect(json['user_names'].size).to eq(34)
+          expect(json['user_names'].size).to eq(35)
           expect(json['user_names'][0].size).to eq(1)
           expect(json['user_names'][0]['name']).to be_present
 

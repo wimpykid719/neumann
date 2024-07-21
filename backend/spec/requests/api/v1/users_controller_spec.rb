@@ -162,6 +162,10 @@ RSpec.describe Api::V1::UsersController do
     before do
       user
       profile
+      provider_default
+      user_google
+      profile_google
+      provider_google
     end
 
     context '正常系' do
@@ -226,6 +230,28 @@ RSpec.describe Api::V1::UsersController do
 
         expect(response).to have_http_status(:unauthorized)
         expect(response.cookies).not_to have_key('refresh_token')
+      end
+
+      it 'Google認証ユーザはメールアドレスのみ変更可' do
+        patch api_v1_users_path, **headers_with_access_token_google, params: update_params_email
+
+        expect(response).to have_http_status(:ok)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['email']).to eq(update_params[:user][:new_email])
+      end
+
+      it 'Google認証ユーザはパスワード変更不可' do
+        patch api_v1_users_path, **headers_with_access_token_google, params: update_params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('Google認証ユーザはパスワード変更不可です。')
       end
     end
 

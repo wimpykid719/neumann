@@ -50,13 +50,11 @@ class Api::V1::UsersController < ApplicationController
       update_params[:new_password]
     )
 
-    if update_hash[:password]
-      check_password(user, update_params[:old_password])
-      user.enforce_password_validation
-      update_hash[:current_token_version] = User.new_token_version
+    if rejected_user?(user, update_hash)
+      status_unprocessable_entity(I18n.t('errors.request.can_not_change_password_user_google'))
+    else
+      update_approved_user(user, update_hash)
     end
-
-    update_user_response(user, update_hash)
   end
 
   def destroy
@@ -119,5 +117,19 @@ class Api::V1::UsersController < ApplicationController
 
   def old_password_wrong
     render status: :unauthorized, json: { error: { message: I18n.t('errors.request.old_password_wrong') } }
+  end
+
+  def rejected_user?(user, update_hash)
+    user.provider.google? && update_hash[:password]
+  end
+
+  def update_approved_user(user, update_hash)
+    if update_hash[:password]
+      check_password(user, update_params[:old_password])
+      user.enforce_password_validation
+      update_hash[:current_token_version] = User.new_token_version
+    end
+
+    update_user_response(user, update_hash)
   end
 end
