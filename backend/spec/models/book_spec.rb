@@ -121,7 +121,7 @@ RSpec.describe Book do
         expect(b.price).to eq(0)
       end
 
-      it 'ページ数が1~5000範囲外の場合エラー' do
+      it '価格が0~9999999範囲外の場合エラー' do
         b = FactoryBot.build(:book, price: 99_999_999)
         expect(b).not_to be_valid
         expect(b.errors.full_messages_for(:price).first).to eq('価格は0..9999999の範囲に含めてください')
