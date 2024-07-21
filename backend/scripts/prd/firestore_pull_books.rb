@@ -22,8 +22,9 @@ class AmazonBooks < Firestore
   def generate_book_columns(amazon_book)
     asin = amazon_book.document_id
     book = amazon_book[:book]
+    count = amazon_book[:count]
 
-    score = amazon_book[:score] / amazon_book[:count]
+    score = amazon_book[:score] / count
     scraped_at = amazon_book[:timeStamp]
     title, price, img_url, page, launched, publisher, associate_url, author = book.values_at(
       :title,
@@ -36,7 +37,7 @@ class AmazonBooks < Firestore
       :author
     )
 
-    { asin:, title:, price:, img_url:, score:, page:, launched:, scraped_at:, author:, publisher:, associate_url: }
+    { asin:, title:, price:, img_url:, score:, page:, launched:, scraped_at:, author:, publisher:, associate_url:, count: }
   end
 
   def generate_note_reference_columns(amazon_book)
