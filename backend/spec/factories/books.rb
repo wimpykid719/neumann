@@ -9,6 +9,7 @@ FactoryBot.define do
     launched { '2021-02-17' }
     scraped_at { '2024-07-09' }
     author { '高橋 昌一郎' }
+    count { 1 }
     publisher { '講談社' }
     associate_url { 'https://amzn.to/4c9f3R8' }
 

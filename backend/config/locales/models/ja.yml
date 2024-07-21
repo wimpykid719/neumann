@@ -34,6 +34,7 @@ ja:
         author: 著者
         publisher: 出版社
         associate_url: アソシエイトリンク
+        count: 執筆者数
       like:
         user_id: ユーザー
       note_reference:

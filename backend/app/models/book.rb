@@ -14,6 +14,7 @@ class Book < ApplicationRecord
   validates :scraped_at, format: { with: Constants::Regexps::DATE }
   validates :author, length: { maximum: 50 }
   validates :publisher, length: { maximum: 50 }
+  validates :count, numericality: { in: 1..99_999 }
   validates :associate_url, length: { maximum: 4_096 },
                             format: { with: Constants::Regexps::URL }
 

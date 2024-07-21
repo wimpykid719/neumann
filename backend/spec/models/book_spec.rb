@@ -128,6 +128,30 @@ RSpec.describe Book do
       end
     end
 
+    context 'count' do
+      it '登録可能' do
+        expect(book.count).to be_present
+      end
+
+      it 'nilの場合エラー' do
+        b = FactoryBot.build(:book, count: nil)
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:count).first).to eq('執筆者数は数値で入力してください')
+      end
+
+      it '0入力不可' do
+        b = FactoryBot.build(:book, count: 0)
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:count).first).to eq('執筆者数は1..99999の範囲に含めてください')
+      end
+
+      it '執筆者数が1~9999範囲外の場合エラー' do
+        b = FactoryBot.build(:book, count: 999_999)
+        expect(b).not_to be_valid
+        expect(b.errors.full_messages_for(:count).first).to eq('執筆者数は1..99999の範囲に含めてください')
+      end
+    end
+
     context 'score' do
       it '登録可能' do
         expect(book.score).to be_present
