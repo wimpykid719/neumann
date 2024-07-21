@@ -22,6 +22,7 @@ import {
 } from '@/utils/profileURL'
 import { range } from '@/utils/range'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
 
 type SlugsProps = {
   slug: string
@@ -66,7 +67,7 @@ export default async function ProfileLayout({ children, params }: { children: Re
 
   if (res instanceof FetchError) {
     console.error(error.failedUserProfileFetch)
-    return
+    notFound()
   }
 
   return (

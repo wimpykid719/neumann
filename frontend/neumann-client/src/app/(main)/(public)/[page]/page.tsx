@@ -8,6 +8,7 @@ import error from '@/text/error.json'
 import { FIRST_PAGE } from '@/utils/page'
 import { range } from '@/utils/range'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 type PathsProps = {
   params: {
@@ -32,7 +33,10 @@ export default async function Index({ params }: PathsProps) {
   const page = Number(params.page)
   const res = await getBooks(page)
 
-  if (res instanceof FetchError) return <p>{error.failedBooksFetch}</p>
+  if (res instanceof FetchError) {
+    console.error(error.failedBooksFetch)
+    notFound()
+  }
 
   return (
     <section className='space-y-8'>

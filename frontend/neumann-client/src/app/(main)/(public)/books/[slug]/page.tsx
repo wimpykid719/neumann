@@ -7,6 +7,7 @@ import NoteReference from '@/components/detail/NoteReference'
 import { FetchError } from '@/lib/errors'
 import { getBook } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
+import { notFound } from 'next/navigation'
 
 type SlugProps = {
   slug: string
@@ -17,7 +18,7 @@ export default async function Detail({ params }: { params: SlugProps }) {
 
   if (res instanceof FetchError) {
     console.error(error.failedBookFetch)
-    return
+    notFound()
   }
 
   return (
