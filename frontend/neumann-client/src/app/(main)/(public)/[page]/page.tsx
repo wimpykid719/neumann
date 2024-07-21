@@ -5,31 +5,16 @@ import { booksNavigation } from '@/components/common/Tabs/Navigations'
 import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
 import error from '@/text/error.json'
-import { FIRST_PAGE } from '@/utils/page'
-import { range } from '@/utils/range'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-type PathsProps = {
+type PathProps = {
   params: {
     page: string
   }
 }
 
-export const generateStaticParams = async () => {
-  const res = await getBooks()
-
-  if (res instanceof FetchError) {
-    throw error.failedBooksFetch
-  }
-
-  const paths = range(FIRST_PAGE, res.pages.last).map(num => ({
-    page: `${num}`, //stringにしなければいけない
-  }))
-  return paths
-}
-
-export default async function Index({ params }: PathsProps) {
+export default async function Index({ params }: PathProps) {
   const page = Number(params.page)
   const res = await getBooks(page)
 

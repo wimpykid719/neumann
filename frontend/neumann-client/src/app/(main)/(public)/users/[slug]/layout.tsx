@@ -9,9 +9,7 @@ import XIcon from '@/components/common/icon/XIcon'
 import YouTubeIcon from '@/components/common/icon/YouTubeIcon'
 import { FetchError } from '@/lib/errors'
 import { getUserProfile } from '@/lib/wrappedFeatch/requests/profile'
-import { getUserNames } from '@/lib/wrappedFeatch/requests/user'
 import error from '@/text/error.json'
-import { FIRST_PAGE } from '@/utils/page'
 import {
   facebookAccountURL,
   instagramAccountURL,
@@ -20,48 +18,14 @@ import {
   xTwitterAccountURL,
   youtubeAccountURL,
 } from '@/utils/profileURL'
-import { range } from '@/utils/range'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
-type SlugsProps = {
+type SlugProps = {
   slug: string
 }
 
-export const generateStaticParams = async () => {
-  const getUserSlugs = async (page: number) => {
-    const res = await getUserNames(page)
-    if (res instanceof FetchError) {
-      throw error.failedUserNamesFetch
-    }
-
-    return res.user_names.map(user => user.name)
-  }
-
-  const res = await getUserNames()
-
-  if (res instanceof FetchError) {
-    throw error.failedBooksFetch
-  }
-
-  const pages = range(FIRST_PAGE, res.pages.last).map(num => num)
-  const allUserIds = await (async pages => {
-    return await Promise.all(
-      pages.map(async page => {
-        return getUserSlugs(page)
-      }),
-    )
-  })(pages)
-
-  return allUserIds.reduce((slugs: SlugsProps[], pageUserNames) => {
-    if (pageUserNames) {
-      return [...slugs, ...pageUserNames.map(userName => ({ slug: userName }))]
-    }
-    return slugs
-  }, [])
-}
-
-export default async function ProfileLayout({ children, params }: { children: React.ReactNode; params: SlugsProps }) {
+export default async function ProfileLayout({ children, params }: { children: React.ReactNode; params: SlugProps }) {
   const ICON_SIZE = 18
   const res = await getUserProfile(params.slug)
 

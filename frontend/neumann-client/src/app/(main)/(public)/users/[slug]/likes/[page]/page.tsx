@@ -3,8 +3,6 @@ import Pagination from '@/components/common/Pagination'
 import { FetchError } from '@/lib/errors'
 import { getUserLikes } from '@/lib/wrappedFeatch/requests/user'
 import error from '@/text/error.json'
-import { FIRST_PAGE } from '@/utils/page'
-import { range } from '@/utils/range'
 import Link from 'next/link'
 
 type SlugProps = {
@@ -16,19 +14,6 @@ type PageProps = {
 }
 
 type UserLikesProps = SlugProps & PageProps
-
-export const generateStaticParams = async ({ params }: { params: SlugProps }) => {
-  const res = await getUserLikes(params.slug)
-
-  if (res instanceof FetchError) {
-    throw error.failedUserLikes
-  }
-
-  const paths = range(FIRST_PAGE, res.pages.last).map(num => ({
-    page: `${num}`, //stringにしなければいけない
-  }))
-  return paths
-}
 
 export default async function UserLikesPage({ params }: { params: UserLikesProps }) {
   const page = Number(params.page)
