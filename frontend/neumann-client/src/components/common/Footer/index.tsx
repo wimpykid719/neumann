@@ -1,4 +1,5 @@
 import app from '@/text/app.json'
+import Link from 'next/link'
 import BizRankIcon from '../icon/BizRankIcon'
 
 export default function Footer() {
@@ -38,8 +39,12 @@ export default function Footer() {
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>Legal</div>
               <ul className='space-y-4'>
-                <li>利用規約</li>
-                <li>プライバシーポリシー</li>
+                <li>
+                  <Link href={'/policies/terms'}>利用規約</Link>
+                </li>
+                <li>
+                  <Link href={'/policies/privacy'}>プライバシーポリシー</Link>
+                </li>
               </ul>
             </div>
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
