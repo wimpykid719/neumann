@@ -10,7 +10,7 @@ class Api::V1::LikesController < ApplicationController
   def index
     user = User.find_by(name: params[:user_name])
     if user
-      pagy, user_book_likes = pagy(user.books)
+      pagy, user_book_likes = pagy(user.books.order('created_at DESC, id DESC'))
       metadata = pagy_metadata(pagy)
 
       render json: {
