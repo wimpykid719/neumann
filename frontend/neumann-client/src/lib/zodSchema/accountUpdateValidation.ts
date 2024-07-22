@@ -9,11 +9,13 @@ export const AccountUpdateValidationSchema = z
     newPassword: z
       .string()
       .regex(/^$|^.{8,}$/, { message: validation.passwordMin })
-      .max(72, validation.passwordMax),
+      .max(72, validation.passwordMax)
+      .optional(),
     newPasswordConfirm: z
       .string()
       .regex(/^$|^.{8,}$/, { message: validation.passwordMin })
-      .max(72, validation.passwordMax),
+      .max(72, validation.passwordMax)
+      .optional(),
   })
   .refine(data => data.newPassword === data.newPasswordConfirm, {
     message: validation.passwordNoMatch,

@@ -4,12 +4,12 @@ export default function InputLoading() {
   return (
     <section className='flex flex-col items-center justify-center px-6 pb-8 mx-auto lg:py-0'>
       <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md xl:p-0'>
-        <div className='lg:p-6 space-y-4 md:space-y-6 sm:p-8'>
+        <div className='lg:p-6 space-y-8 md:space-y-12 sm:p-8'>
           <div>
             <div className={`w-16 h-5 ${loadingClass}`}></div>
             <div className={`w-20 h-5 ${loadingClass}`}></div>
           </div>
-          <div className='space-y-4 md:space-y-6'>
+          <div className='space-y-8 md:space-y-12'>
             <div>
               <div className={`w-16 h-5 ${loadingClass}`}></div>
               <div className={`w-full h-11 ${loadingClass}`}></div>

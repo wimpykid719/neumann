@@ -28,7 +28,8 @@ class Api::V1::UsersController < ApplicationController
             :website,
             :avatar
           ]
-        }
+        },
+        provider: { only: [:kind] }
       }
     )
   end

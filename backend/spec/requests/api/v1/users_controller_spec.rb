@@ -23,6 +23,7 @@ RSpec.describe Api::V1::UsersController do
       before do
         user
         profile
+        provider_default
       end
 
       it '認証成功、ステータスコード/200が返る' do
@@ -36,8 +37,9 @@ RSpec.describe Api::V1::UsersController do
 
         json = response.parsed_body
 
-        expect(json.size).to eq(3)
+        expect(json.size).to eq(4)
         expect(json['profile'].size).to eq(10)
+        expect(json['provider'].size).to eq(1)
 
         expect(json['name']).to eq('neumann')
         expect(json['email']).to be_present
@@ -51,18 +53,7 @@ RSpec.describe Api::V1::UsersController do
         expect(json['profile']['youtube']).to eq('neumann-1903')
         expect(json['profile']['website']).to eq('https://neuman.com')
         expect(json['profile']['avatar']).to eq('https://lh4.googleusercontent.com/photo.jpg')
-      end
-
-      it 'ログインユーザ自身が別のユーザ詳細を取得しようとしても自身が返る' do
-        get api_v1_users_path, **headers_with_access_token
-        expect(response).to have_http_status(:ok)
-
-        json = response.parsed_body
-
-        expect(json.size).to eq(3)
-        expect(json['name']).to eq('neumann')
-        expect(json['email']).to be_present
-        expect(json['profile']['name']).to eq('ノイマン')
+        expect(json['provider']['kind']).to eq('default')
       end
 
       it '未ログインユーザがユーザ詳細を取得する場合、認証エラーとなる' do

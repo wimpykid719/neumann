@@ -1,3 +1,5 @@
+type Kinds = 'default' | 'google'
+
 export type User = {
   name: string
   email: string
@@ -12,5 +14,8 @@ export type User = {
     youtube: string
     website: string
     avatar: string
+  }
+  provider: {
+    kind: Kinds
   }
 }

@@ -61,6 +61,8 @@ export default function AccountForm({ user, setUser }: Props) {
     }
   }
 
+  const cannotPasswordChange = (kind: User['provider']['kind']) => kind === 'google'
+
   const {
     register,
     handleSubmit,
@@ -75,13 +77,13 @@ export default function AccountForm({ user, setUser }: Props) {
   return (
     <section className='flex flex-col items-center justify-center px-6 pb-8 mx-auto'>
       <div className='w-full md:mt-0 lg:max-w-xl sm:max-w-md'>
-        <div className='lg:p-6 space-y-4 md:space-y-6 sm:p-8'>
+        <div className='lg:p-6 space-y-8 md:space-y-12 sm:p-8'>
           <div>
             <span className='block mb-2 text-sm font-medium'>ユーザ名</span>
             <p>{user.name}</p>
           </div>
           <form onSubmit={handleSubmit(updateAccount)}>
-            <div className='space-y-4 md:space-y-6'>
+            <div className='space-y-8 md:space-y-12'>
               <div>
                 <label htmlFor='newEmail' className='block mb-2 text-sm font-medium'>
                   メールアドレス
@@ -120,7 +122,7 @@ export default function AccountForm({ user, setUser }: Props) {
                       新しいパスワード
                     </label>
                     <input
-                      {...register('newPassword')}
+                      {...register('newPassword', { disabled: cannotPasswordChange(user.provider.kind) })}
                       type='password'
                       name='newPassword'
                       id='newPassword'
@@ -152,7 +154,9 @@ export default function AccountForm({ user, setUser }: Props) {
                       再入力してください
                     </label>
                     <input
-                      {...register('newPasswordConfirm')}
+                      {...register('newPasswordConfirm', {
+                        disabled: cannotPasswordChange(user.provider.kind),
+                      })}
                       type='password'
                       name='newPasswordConfirm'
                       id='newPasswordConfirm'
@@ -180,6 +184,9 @@ export default function AccountForm({ user, setUser }: Props) {
                     )}
                   </div>
                 </div>
+                {cannotPasswordChange(user.provider.kind) && (
+                  <p className='text-sm text-primary mt-2'>{`${user.provider.kind}認証ユーザはパスワード変更不可です。`}</p>
+                )}
               </div>
               <div>
                 <span className='block text-sm font-medium mb-2'>アカウントの削除</span>
