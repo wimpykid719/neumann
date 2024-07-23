@@ -77,10 +77,10 @@ export default function AccountDeletePage() {
         </div>
         <div className='max-w-80 h-40 sub-bg-color rounded-lg p-6 shadow-sm dark:border dark:border-gray-600 mx-auto'>
           <ul className='list-disc list-inside'>
-            <li>ユーザ名</li>
-            <li>登録したメールアドレス</li>
-            <li>プロフィール情報</li>
-            <li>いいねした書籍</li>
+            <li key='name'>ユーザ名</li>
+            <li key='email'>登録したメールアドレス</li>
+            <li key='profile'>プロフィール情報</li>
+            <li key='like'>いいねした書籍</li>
           </ul>
         </div>
         <div className='flex gap-9 items-center max-w-64 mx-auto'>

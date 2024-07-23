@@ -13,7 +13,7 @@ export default function NoteReference({ referenceObjs }: NoteReferenceProps) {
     <div className='text-gray-500 space-y-2'>
       <ul className='space-y-4'>
         {referenceObjs.map(referenceObj => (
-          <li className='text-sm'>
+          <li key={referenceObj.title} className='text-sm'>
             <div className='flex space-x-2'>
               <a className='hover:opacity-70' href={referenceObj.url} target='_blank' rel='noreferrer'>
                 {referenceObj.title}

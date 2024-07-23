@@ -71,7 +71,7 @@ export default async function ProfileLayout({ children, params }: { children: Re
           <div>
             <ul className='flex flex-wrap'>
               {res.x_twitter && (
-                <li className='w-8 h-8 rounded hover:item-bg-color'>
+                <li key='x' className='w-8 h-8 rounded hover:item-bg-color'>
                   <a
                     className='flex w-full h-full justify-center items-center'
                     href={xTwitterAccountURL(res.x_twitter)}
@@ -81,7 +81,7 @@ export default async function ProfileLayout({ children, params }: { children: Re
                 </li>
               )}
               {res.instagram && (
-                <li className='w-8 h-8 rounded hover:item-bg-color'>
+                <li key='instagram' className='w-8 h-8 rounded hover:item-bg-color'>
                   <a
                     className='flex w-full h-full justify-center items-center'
                     href={instagramAccountURL(res.instagram)}
@@ -91,35 +91,35 @@ export default async function ProfileLayout({ children, params }: { children: Re
                 </li>
               )}
               {res.linkedin && (
-                <li className='w-8 h-8 rounded hover:item-bg-color'>
+                <li key='linkedin' className='w-8 h-8 rounded hover:item-bg-color'>
                   <a className='flex w-full h-full justify-center items-center' href={linkedinAccountURL(res.linkedin)}>
                     <LinkedInIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.facebook && (
-                <li className='w-8 h-8 rounded hover:item-bg-color'>
+                <li key='facebook' className='w-8 h-8 rounded hover:item-bg-color'>
                   <a className='flex w-full h-full justify-center items-center' href={facebookAccountURL(res.facebook)}>
                     <FacebookIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.tiktok && (
-                <li className='w-8 h-8 rounded hover:item-bg-color'>
+                <li key='tiktok' className='w-8 h-8 rounded hover:item-bg-color'>
                   <a className='flex w-full h-full justify-center items-center' href={tiktokAccountURL(res.tiktok)}>
                     <TikTokIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.youtube && (
-                <li className='w-8 h-8 rounded hover:item-bg-color'>
+                <li key='youtube' className='w-8 h-8 rounded hover:item-bg-color'>
                   <a className='flex w-full h-full justify-center items-center' href={youtubeAccountURL(res.youtube)}>
                     <YouTubeIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.website && (
-                <li className='w-8 h-8 rounded hover:item-bg-color'>
+                <li key='website' className='w-8 h-8 rounded hover:item-bg-color'>
                   <a className='flex w-full h-full justify-center items-center' href={res.website}>
                     <URLIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>

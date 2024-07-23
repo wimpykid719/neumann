@@ -22,16 +22,16 @@ export default function Footer() {
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>About</div>
               <ul className='space-y-4'>
-                <li>このサイトについて</li>
-                <li>予定する機能追加について</li>
+                <li key='aboutsite'>このサイトについて</li>
+                <li key='feature'>予定する機能追加について</li>
               </ul>
             </div>
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>Links</div>
               <ul className='space-y-4'>
-                <li>X（Twitter）</li>
-                <li>不具合報告</li>
-                <li>問い合わせ</li>
+                <li key='official-x'>X（Twitter）</li>
+                <li key='defect-report'>不具合報告</li>
+                <li key='inquiry'>問い合わせ</li>
               </ul>
             </div>
           </div>
@@ -39,10 +39,10 @@ export default function Footer() {
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>Legal</div>
               <ul className='space-y-4'>
-                <li>
+                <li key='terms'>
                   <Link href={'/policies/terms'}>利用規約</Link>
                 </li>
-                <li>
+                <li key='privacy'>
                   <Link href={'/policies/privacy'}>プライバシーポリシー</Link>
                 </li>
               </ul>
