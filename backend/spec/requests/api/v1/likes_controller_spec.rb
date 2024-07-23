@@ -30,6 +30,26 @@ RSpec.describe Api::V1::LikesController do
         expect(response).to have_http_status(:ok)
       end
 
+      it 'いいね一覧がいいねされた順に並んでいる' do
+        book1 = FactoryBot.create(:book, title: 'いいね - 1')
+        book2 = FactoryBot.create(:book, title: 'いいね - 2')
+        book3 = FactoryBot.create(:book, title: 'いいね - 3')
+        FactoryBot.create(:like, user:, likeable: book1, created_at: Time.zone.now)
+        FactoryBot.create(:like, user:, likeable: book2, created_at: Time.zone.now.ago(1))
+        FactoryBot.create(:like, user:, likeable: book3, created_at: Time.zone.now.ago(2))
+
+        get api_v1_likes_path, **headers, params: { user_name: user.name }
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(2)
+        expect(json['books'].size).to eq(3)
+        expect(json['books'][0].size).to eq(4)
+        expect(json['books'][0]['id']).to eq(book1.id)
+        expect(json['books'][1]['id']).to eq(book2.id)
+        expect(json['books'][2]['id']).to eq(book3.id)
+      end
+
       context '大量のいいねが存在する場合' do
         before do
           # rubocop:disable Rails/SkipsModelValidations:
