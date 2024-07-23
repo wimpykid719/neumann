@@ -45,6 +45,7 @@ export default async function Detail({ params }: { params: SlugProps }) {
           likes={res.likes_count}
           page={res.page}
           launched={res.launched}
+          author={res.author}
           publisher={res.publisher}
           scrapedAt={res.scraped_at}
         />

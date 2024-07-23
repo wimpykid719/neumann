@@ -1,3 +1,4 @@
+import AuthorIcon from '@/components/common/icon/AuthorIcon'
 import CalendarIcon from '@/components/common/icon/CalendarIcon'
 import CompanyIcon from '@/components/common/icon/CompanyIcon'
 import HeartIcon from '@/components/common/icon/HeartIcon'
@@ -17,6 +18,7 @@ type InfoCardProps = {
   likes: BookDetail['likes_count']
   page: BookDetail['page']
   launched: BookDetail['launched']
+  author: BookDetail['author']
   publisher: BookDetail['publisher']
   scrapedAt: BookDetail['scraped_at']
 }
@@ -29,6 +31,7 @@ export default function InfoCard({
   likes,
   page,
   launched,
+  author,
   publisher,
   scrapedAt,
 }: InfoCardProps) {
@@ -57,7 +60,7 @@ export default function InfoCard({
       </div>
       <div className='flex items-center justify-between'>
         <ul className='w-full text-xs space-y-3'>
-          <li key={'score'} className='flex justify-between'>
+          <li key='score' className='flex justify-between'>
             <div className='flex w-24'>
               <span className='mr-1'>
                 <OcticonGraphIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -66,7 +69,7 @@ export default function InfoCard({
             </div>
             <div className='break-all'>{score}</div>
           </li>
-          <li key={'likes'} className='flex justify-between'>
+          <li key='likes' className='flex justify-between'>
             <div className='flex w-24'>
               <span className='mr-1'>
                 <HeartIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -75,7 +78,7 @@ export default function InfoCard({
             </div>
             <div>{likes}</div>
           </li>
-          <li key={'page'} className='flex justify-between'>
+          <li key='page' className='flex justify-between'>
             <div className='flex w-24'>
               <span className='mr-1'>
                 <PageIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -84,7 +87,7 @@ export default function InfoCard({
             </div>
             <div>{page}</div>
           </li>
-          <li key={'launched'} className='flex justify-between'>
+          <li key='launched' className='flex justify-between'>
             <div className='flex w-24'>
               <span className='mr-1'>
                 <CalendarIcon width={ICON_SIZE} height={ICON_SIZE} />
@@ -93,7 +96,16 @@ export default function InfoCard({
             </div>
             <time>{new Date(launched).toLocaleDateString('ja-JP')}</time>
           </li>
-          <li key={'publisher'} className='flex justify-between'>
+          <li key='author' className='flex justify-between'>
+            <div className='flex w-24'>
+              <span className='mr-1'>
+                <AuthorIcon width={ICON_SIZE} height={ICON_SIZE} />
+              </span>
+              著者
+            </div>
+            <div>{author}</div>
+          </li>
+          <li key='publisher' className='flex justify-between'>
             <div className='flex w-24'>
               <span className='mr-1'>
                 <CompanyIcon width={ICON_SIZE} height={ICON_SIZE} />
