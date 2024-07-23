@@ -8,7 +8,7 @@ type ResponseUserNames = {
   user_names: { name: User['name'] }[]
   pages: PagyMeta
 }
-type ResponseUserLikes = {
+export type ResponseUserLikes = {
   books: Book[]
   pages: PagyMeta
 }

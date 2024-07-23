@@ -1,9 +1,14 @@
-import Card from '@/components/common/Card'
+'use client'
+
 import Pagination from '@/components/common/Pagination'
+import Books from '@/components/common/liked/Books'
+import LoadingBooks from '@/components/common/liked/loading/Books'
+import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
-import { getUserLikes } from '@/lib/wrappedFeatch/requests/user'
-import error from '@/text/error.json'
-import Link from 'next/link'
+import { ResponseUserLikes, getUserLikes } from '@/lib/wrappedFeatch/requests/user'
+import { toastStatus } from '@/utils/toast'
+import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 type SlugProps = {
   slug: string
@@ -15,27 +20,25 @@ type PageProps = {
 
 type UserLikesProps = SlugProps & PageProps
 
-export default async function UserLikesPage({ params }: { params: UserLikesProps }) {
+export default function UserLikesPage({ params }: { params: UserLikesProps }) {
   const page = Number(params.page)
-  const res = await getUserLikes(params.slug, page)
+  const { showToast } = useToast()
+  const [userLikes, setUserLikes] = useState<ResponseUserLikes>()
+  const { data } = useSWR([params, page], () => getUserLikes(params.slug, page))
 
-  if (res instanceof FetchError) return <p>{error.failedUserLikes}</p>
+  useEffect(() => {
+    if (data instanceof FetchError) {
+      showToast(data.message, toastStatus.error)
+    } else if (data) {
+      setUserLikes(data)
+    }
+  }, [data])
 
   return (
     <section className='space-y-8'>
-      <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto'>
-        <ul className='sm:flex sm:flex-wrap lg:gap-12 sm:gap-10'>
-          {res.books.map(book => (
-            <li key={book.id.toString()} className='sm:mb-0 mb-8 flex justify-center items-center'>
-              <Link href={`/books/${book.id}`}>
-                <Card title={book.title} img_url={book.img_url} likes={book.likes_count} />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {userLikes ? <Books books={userLikes?.books || []} /> : <LoadingBooks />}
       <div className='w-full'>
-        <Pagination page={page} lastPage={res.pages.last} siblingCount={2} />
+        {userLikes?.pages && <Pagination page={page} lastPage={userLikes.pages.last} siblingCount={2} />}
       </div>
     </section>
   )
