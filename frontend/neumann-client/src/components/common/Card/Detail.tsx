@@ -10,7 +10,7 @@ type DetailProps = {
 }
 
 export default function Detail({ title, imgUrl, likes }: DetailProps) {
-  const DISPLAY_WORDS = 50
+  const DISPLAY_WORDS = 30
 
   return (
     <>
