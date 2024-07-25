@@ -22,7 +22,7 @@ export default function privacyPage() {
           当サービスを利用することで、本プライバシーポリシーに同意いただいたものとみなします。
         </p>
       </div>
-      <MarkdownRenderer children={markdown.content} />
+      <MarkdownRenderer id={'clause-renderer'} className={'common-renderer'} children={markdown.content} />
     </div>
   )
 }

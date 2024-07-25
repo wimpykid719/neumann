@@ -9,16 +9,20 @@ import remarkBreaks from 'remark-breaks'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
 
-type Props = { children: string }
+type Props = {
+  id: string
+  className: string
+  children: string
+}
 
 const parseMarkdown = remark().use(remarkFrontmatter).use(remarkGfm).use(remarkBreaks)
 
-export const MarkdownRenderer: React.FC<Props> = async ({ children }) => {
+export const MarkdownRenderer: React.FC<Props> = async ({ id, className, children }) => {
   const mdastRoot = parseMarkdown.parse(children)
   await parseMarkdown.run(mdastRoot)
 
   return (
-    <div id='markdown-renderer'>
+    <div id={id} className={className}>
       <NodesRenderer nodes={mdastRoot.children} />
     </div>
   )

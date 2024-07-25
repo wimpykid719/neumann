@@ -36,7 +36,7 @@ export default function InfoCard({
   scrapedAt,
 }: InfoCardProps) {
   const ICON_SIZE = 16
-  const X_SHARE_URL = `https://twitter.com/intent/tweet?hashtags=BizRank&url=${'#'}&related=BizRank`
+  const X_SHARE_URL = `https://x.com/intent/post?hashtags=BizRank&url=${'#'}&related=BizRank`
 
   const transformDateJaStyle = (date: string) => {
     const scrapedAt = new Date(date)
