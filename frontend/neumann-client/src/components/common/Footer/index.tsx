@@ -22,7 +22,9 @@ export default function Footer() {
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>About</div>
               <ul className='space-y-4'>
-                <li key='aboutsite'>このサイトについて</li>
+                <li key='aboutsite'>
+                  <Link href={'/policies/about'}>このサイトについて</Link>
+                </li>
                 <li key='feature'>予定する機能追加について</li>
               </ul>
             </div>
