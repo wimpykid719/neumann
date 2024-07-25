@@ -22,7 +22,7 @@ export default function termsPage() {
         </p>
         <p>ユーザーは、本規約に同意した上で、当サービスを利用するものとします。</p>
       </div>
-      <MarkdownRenderer children={markdown.content} />
+      <MarkdownRenderer id={'clause-renderer'} className={'common-renderer'} children={markdown.content} />
     </div>
   )
 }

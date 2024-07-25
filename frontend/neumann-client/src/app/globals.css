@@ -61,103 +61,126 @@
   }
 }
 
-/* マークダウン用スタイル */
-#markdown-renderer > * + * {
-  @apply mt-0 mb-4;
-}
-
-#markdown-renderer li + li {
-  @apply mt-1;
-}
-
-#markdown-renderer li > p + p {
-  @apply mt-6;
-}
-
-#markdown-renderer li > p {
-  @apply px-0;
-}
-
-#markdown-renderer strong {
+/* マークダウンの共通スタイル */
+.common-renderer strong {
   @apply font-semibold;
 }
 
-#markdown-renderer p {
-  @apply px-6;
-}
-
-#markdown-renderer a {
+.common-renderer a {
   @apply text-secondary hover:underline;
 }
 
-#markdown-renderer strong a {
+.common-renderer strong a {
   @apply font-bold;
 }
 
-#markdown-renderer h1 {
-  @apply leading-tight border-b text-2xl font-semibold my-8 pb-2;
-}
-
-#markdown-renderer h2 {
-  @apply leading-tight border-b text-xl font-semibold my-8 pb-2;
-}
-
-#markdown-renderer h3 {
-  @apply leading-snug text-lg font-semibold my-8;
-}
-
-#markdown-renderer h4 {
+.common-renderer h4 {
   @apply leading-none text-base font-semibold my-8;
 }
 
-#markdown-renderer h5 {
+.common-renderer h5 {
   @apply leading-tight text-sm font-semibold my-8;
 }
 
-#markdown-renderer h6 {
-  @apply leading-tight text-sm font-semibold my-8;
-}
-
-#markdown-renderer blockquote {
+.common-renderer blockquote {
   @apply border-l-4 border-gray-500 pl-4 pr-4 text-gray-500;
 }
 
-#markdown-renderer code {
+
+/* 条項用のスタイル */
+#clause-renderer > * + * {
+  @apply mt-0 mb-4;
+}
+
+#clause-renderer li + li {
+  @apply mt-1;
+}
+
+#clause-renderer li > p + p {
+  @apply mt-6;
+}
+
+#clause-renderer li > p {
+  @apply px-0;
+}
+
+#clause-renderer p {
+  @apply px-6;
+}
+
+#clause-renderer h1 {
+  @apply leading-tight border-b text-2xl font-semibold my-8 pb-2;
+}
+
+#clause-renderer h2 {
+  @apply leading-tight border-b text-xl font-semibold my-8 pb-2;
+}
+
+#about-renderer h3 {
+  @apply leading-snug text-lg font-semibold my-8;
+}
+
+#clause-renderer h6 {
+  @apply leading-tight text-sm font-semibold my-8;
+}
+
+#clause-renderer code {
   @apply font-mono text-sm inline rounded px-1 py-5;
 }
 
-#markdown-renderer pre {
+#clause-renderer pre {
   @apply rounded-lg p-4;
 }
 
-#markdown-renderer pre code {
+#clause-renderer pre code {
   @apply block bg-transparent p-0 overflow-visible rounded-none;
 }
 
-#markdown-renderer ul {
+#clause-renderer ul {
   @apply ml-6 pl-4 list-disc;
 }
 
-#markdown-renderer ol {
+#clause-renderer ol {
   @apply ml-6 pl-4 list-decimal;
 }
 
-#markdown-renderer ol > li > ul {
+#clause-renderer ol > li > ul {
   @apply ml-0 py-2;
 }
 
-#markdown-renderer kbd {
+#clause-renderer kbd {
   @apply text-xs inline-block rounded border px-1 py-5 align-middle font-normal font-mono shadow;
 }
 
-#markdown-renderer table {
+#clause-renderer table {
   @apply border-gray-500;
 }
 
-#markdown-renderer th {
+#clause-renderer th {
   @apply border py-1 px-3;
 }
 
-#markdown-renderer td {
+#clause-renderer td {
   @apply border py-1 px-3;
+}
+
+/* about用のスタイル */
+#about-renderer > * + * {
+  @apply mt-0 mb-4;
+}
+
+#about-renderer h1 {
+  @apply leading-tight text-2xl font-semibold my-12;
+}
+
+#about-renderer h2 {
+  @apply leading-tight text-xl font-semibold my-4;
+}
+
+#about-renderer h3 {
+  @apply leading-snug text-lg font-semibold my-8;
+}
+
+#about-renderer h6 {
+  @apply leading-tight text-[10px] text-gray-500;
 }
