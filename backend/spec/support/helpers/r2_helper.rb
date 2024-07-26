@@ -27,8 +27,9 @@ module R2Helper
       allow(objects.first).to receive(:delete)
     end
 
-    def object_mock(user_name)
-      allow(r2_bucket).to receive(:object).with("#{user_name}/profile/avatar/#{file.original_filename}").and_return(object)
+    # ファイル名を動的に変更しないと@bucket.object(key)がテストで呼び出された際、期待しない値となりエラーになるためfile_nameを引数で受け取る形に変更
+    def object_mock(user_name, file_name)
+      allow(r2_bucket).to receive(:object).with("#{user_name}/profile/avatar/#{file_name}").and_return(object)
       allow(object).to receive(:upload_file).with(kind_of(String), acl: 'public-read')
     end
   end

@@ -26,7 +26,7 @@ RSpec.describe R2::Bucket, type: :service do
 
     context 'upload_file_r2' do
       before do
-        object_mock(user.name)
+        object_mock(user.name, file.original_filename)
       end
 
       it '公開用のURLが返る' do
