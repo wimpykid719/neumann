@@ -6,9 +6,17 @@ import Tabs from '@/components/common/Tabs'
 import { booksNavigation } from '@/components/common/Tabs/Navigations'
 import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
+import app from '@/text/app.json'
 import error from '@/text/error.json'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
+
+export const metadata: Metadata = {
+  title: `${app.title} | ${app.miniDescription}`,
+  description: app.description,
+  authors: { name: app.author, url: app.authorUrl },
+}
 
 export default async function Home() {
   const res = await getBooks()
