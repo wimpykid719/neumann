@@ -6,7 +6,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: `${app.privacy} | ${app.title}`,
+  title: app.privacy,
 }
 
 export default function privacyPage() {

@@ -7,7 +7,7 @@ import { SUPPLEMENT_TEXT_SIZE } from '@/utils/constant'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: `${app.about} | ${app.title}`,
+  title: app.about,
 }
 
 export default function aboutPage() {
