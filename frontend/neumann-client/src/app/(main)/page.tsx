@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: `${app.title} | ${app.miniDescription}`,
   description: app.description,
   authors: { name: app.author, url: app.authorUrl },
+  keywords: app.keywords,
 }
 
 export default async function Home() {
