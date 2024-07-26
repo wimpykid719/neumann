@@ -1,3 +1,10 @@
 {
-  "title": "BizRank"
+  "title": "BizRank",
+  "miniDescription": "働く人のためのビジネス書籍ランキング",
+  "description": "本当に価値のあるビジネス書籍を独自アルゴリズムで評価して紹介",
+  "author": "BizRankディベロッパー",
+  "authorUrl": "https://x.com/biz_rank57580",
+  "about": "このサイトについて",
+  "privacy": "プライバシーポリシー",
+  "terms": "利用規約"
 }
