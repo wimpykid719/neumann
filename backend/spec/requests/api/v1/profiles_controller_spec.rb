@@ -4,6 +4,7 @@ RSpec.describe Api::V1::ProfilesController do
   include_context 'user_authorities'
   include_context 'r2_helper'
 
+  let(:test_img_file) { Tempfile.new(['test_image', '.jpg']) }
   let(:update_params) do
     {
       profile: {
@@ -74,7 +75,7 @@ RSpec.describe Api::V1::ProfilesController do
         profile
         bucket_mock
         objects_mock(user.name)
-        object_mock(user.name)
+        object_mock(user.name, file.original_filename)
       end
 
       it '認証成功、ステータスコード/200が返る' do
@@ -84,7 +85,19 @@ RSpec.describe Api::V1::ProfilesController do
       end
 
       it '編集したプロフィール詳細が返る' do
-        patch api_v1_profiles_path, **headers_file_uploads, params: update_params
+        object_mock(user.name, File.basename(test_img_file.path))
+
+        test_img_file.binmode
+        size_in_kb = 512
+        test_img_file.write('a' * size_in_kb * 1024) # 'a'を1MB書き込む
+        test_img_file.rewind
+        avatar_512kb = Rack::Test::UploadedFile.new(test_img_file.path, 'image/jpg')
+
+        patch(
+          api_v1_profiles_path,
+          **headers_file_uploads,
+          params: update_params.merge({ profile: update_params[:profile].merge({ avatar: avatar_512kb }) })
+        )
 
         json = response.parsed_body
 
@@ -99,6 +112,10 @@ RSpec.describe Api::V1::ProfilesController do
         expect(json['youtube']).to eq('hiroki_1998')
         expect(json['website']).to eq('https://hiroki.com')
         expect(json['avatar']).to eq("https://#{ENV.fetch('BIZRANK_BUCKET_DOMAIN')}/#{user.name}/profile/avatar/avatar.jpg")
+
+        # テストファイルの削除
+        test_img_file.close
+        test_img_file.unlink
       end
 
       it '画像ファイルが空の場合、以前の画像が変更されない' do
@@ -148,6 +165,31 @@ RSpec.describe Api::V1::ProfilesController do
 
         expect(json.size).to eq(1)
         expect(json['error']['message']).to eq('画像ファイル以外をアップロードしないでください。')
+      end
+
+      it 'ファイルサイズが500KBを超える、ステータスコード/422が返る' do
+        test_img_file.binmode
+        size_in_mb = 1
+        test_img_file.write('a' * size_in_mb * 1024 * 1024) # 'a'を1MB書き込む
+        test_img_file.rewind
+        avatar_mb = Rack::Test::UploadedFile.new(test_img_file.path, 'image/jpg')
+
+        patch(
+          api_v1_profiles_path,
+          **headers_file_uploads,
+          params: update_params.merge({ profile: update_params[:profile].merge({ avatar: avatar_mb }) })
+        )
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('画像ファイルは512KB以下にしてください。')
+
+        # テストファイルの削除
+        test_img_file.close
+        test_img_file.unlink
       end
 
       it 'アクセストークンなし' do

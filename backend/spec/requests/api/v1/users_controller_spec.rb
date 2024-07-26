@@ -288,7 +288,7 @@ RSpec.describe Api::V1::UsersController do
       like
       bucket_mock
       objects_mock(user.name)
-      object_mock(user.name)
+      object_mock(user.name, file.original_filename)
     end
 
     context '正常系' do
