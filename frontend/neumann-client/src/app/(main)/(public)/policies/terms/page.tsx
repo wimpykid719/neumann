@@ -2,7 +2,12 @@ import { MarkdownRenderer } from '@/components/common/MarkdownRender'
 import BizRankIcon from '@/components/common/icon/BizRankIcon'
 import { readMarkdown } from '@/lib/readMarkdown'
 import app from '@/text/app.json'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: `${app.terms} | ${app.title}`,
+}
 
 export default function termsPage() {
   const markdown = readMarkdown('src/md/terms.md')
