@@ -17,6 +17,7 @@ class Api::V1::ProfilesController < ApplicationController
     file = profiles_params[:avatar]
 
     if file?(file)
+      status_image_over_512kb and return unless less_512kb?(file)
       status_not_image_file and return unless img_file?(file)
 
       profile.update!(profiles_params.merge({ avatar: avatar_url }))
@@ -32,6 +33,10 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   private
+
+  def less_512kb?(file)
+    file.size <= 0.5.megabyte
+  end
 
   def file?(file)
     file.instance_of?(ActionDispatch::Http::UploadedFile)

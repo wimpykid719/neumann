@@ -28,6 +28,10 @@ module HttpResponseConcern
     render status: :unprocessable_entity, json: { error: { message: I18n.t('errors.request.not_image_file') } }
   end
 
+  def status_image_over_512kb
+    render status: :unprocessable_entity, json: { error: { message: I18n.t('errors.request.less_512kb') } }
+  end
+
   def verify_xhr_request
     return if request.xhr?
 
