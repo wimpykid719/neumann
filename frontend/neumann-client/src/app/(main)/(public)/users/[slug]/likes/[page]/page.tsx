@@ -18,9 +18,9 @@ type PageProps = {
   page: string
 }
 
-type UserLikesProps = SlugProps & PageProps
+type UserLikesProps = { params: SlugProps & PageProps }
 
-export default function UserLikesPage({ params }: { params: UserLikesProps }) {
+export default function UserLikesPage({ params }: UserLikesProps) {
   const page = Number(params.page)
   const { showToast } = useToast()
   const [userLikes, setUserLikes] = useState<ResponseUserLikes>()
