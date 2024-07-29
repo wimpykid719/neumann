@@ -1,8 +1,8 @@
 'use client'
 
 import Pagination, { INITIAL_PAGE } from '@/components/common/Pagination'
-import Books from '@/components/common/liked/Books'
-import LoadingBooks from '@/components/common/liked/loading/Books'
+import Books from '@/components/profile/liked/Books'
+import LoadingBooks from '@/components/profile/liked/loading/Books'
 import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { ResponseUserLikes, getUserLikes } from '@/lib/wrappedFeatch/requests/user'
