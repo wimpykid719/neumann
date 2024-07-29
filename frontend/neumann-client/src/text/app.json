@@ -26,5 +26,7 @@
   ],
   "account": "アカウント設定",
   "accountDelete": "アカウント削除",
-  "profile": "プロフィール設定"
+  "profile": "プロフィール設定",
+  "signup": "会員登録",
+  "login": "ログイン"
 }
