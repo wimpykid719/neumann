@@ -12,7 +12,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
-export const getBookMemoized = cache(getBook)
+const getBookMemoized = cache(getBook)
 
 type SlugProps = {
   params: {
