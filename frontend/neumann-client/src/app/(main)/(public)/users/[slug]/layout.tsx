@@ -9,6 +9,7 @@ import XIcon from '@/components/common/icon/XIcon'
 import YouTubeIcon from '@/components/common/icon/YouTubeIcon'
 import { FetchError } from '@/lib/errors'
 import { getUserProfile } from '@/lib/wrappedFeatch/requests/profile'
+import app from '@/text/app.json'
 import error from '@/text/error.json'
 import {
   facebookAccountURL,
@@ -18,16 +19,35 @@ import {
   xTwitterAccountURL,
   youtubeAccountURL,
 } from '@/utils/profileURL'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
+
+const getUserProfileMemoized = cache(getUserProfile)
 
 type SlugProps = {
   slug: string
 }
 
+export async function generateMetadata({ params }: { params: SlugProps }): Promise<Metadata> {
+  const res = await getUserProfileMemoized(params.slug)
+
+  if (res instanceof FetchError) {
+    console.error(error.failedProfileFetchMetadata)
+    return {
+      title: app.title,
+    }
+  }
+
+  return {
+    title: `${res.name} | ${app.title}`,
+  }
+}
+
 export default async function ProfileLayout({ children, params }: { children: React.ReactNode; params: SlugProps }) {
   const ICON_SIZE = 18
-  const res = await getUserProfile(params.slug)
+  const res = await getUserProfileMemoized(params.slug)
 
   if (res instanceof FetchError) {
     console.error(error.failedUserProfileFetch)

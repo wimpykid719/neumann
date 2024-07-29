@@ -4,5 +4,6 @@
   "failedUserNamesFetch": "ユーザ名一覧の取得に失敗しました。",
   "failedUserProfileFetch": "プロフィールの取得に失敗しました。",
   "failedUserLikes": "ユーザいいね一覧の取得に失敗しました。",
-  "failedBooksFetchMetadata": "書籍詳細メタデータ取得に失敗しました。"
+  "failedBooksFetchMetadata": "書籍詳細メタデータ取得に失敗しました。",
+  "failedProfileFetchMetadata": "ユーザープロフィールのメタデータ取得に失敗しました。"
 }
