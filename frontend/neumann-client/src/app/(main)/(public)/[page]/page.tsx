@@ -4,13 +4,21 @@ import Tabs from '@/components/common/Tabs'
 import { booksNavigation } from '@/components/common/Tabs/Navigations'
 import { FetchError } from '@/lib/errors'
 import { getBooks } from '@/lib/wrappedFeatch/requests/book'
+import app from '@/text/app.json'
 import error from '@/text/error.json'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 type PathProps = {
   params: {
     page: string
+  }
+}
+
+export function generateMetadata({ params }: PathProps): Metadata {
+  return {
+    title: `${app.title} | ${params.page}ページ目`,
   }
 }
 
