@@ -3,5 +3,6 @@
   "failedBookFetch": "本の詳細情報取得に失敗しました。",
   "failedUserNamesFetch": "ユーザ名一覧の取得に失敗しました。",
   "failedUserProfileFetch": "プロフィールの取得に失敗しました。",
-  "failedUserLikes": "ユーザいいね一覧の取得に失敗しました。"
+  "failedUserLikes": "ユーザいいね一覧の取得に失敗しました。",
+  "failedBooksFetchMetadata": "書籍詳細メタデータ取得に失敗しました。"
 }

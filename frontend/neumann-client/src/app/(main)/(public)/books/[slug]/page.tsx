@@ -6,15 +6,37 @@ import InfoCard from '@/components/detail/InfoCard'
 import NoteReference from '@/components/detail/NoteReference'
 import { FetchError } from '@/lib/errors'
 import { getBook } from '@/lib/wrappedFeatch/requests/book'
+import app from '@/text/app.json'
 import error from '@/text/error.json'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
+
+export const getBookMemoized = cache(getBook)
 
 type SlugProps = {
-  slug: string
+  params: {
+    slug: string
+  }
 }
 
-export default async function Detail({ params }: { params: SlugProps }) {
-  const res = await getBook(params.slug)
+export async function generateMetadata({ params }: SlugProps): Promise<Metadata> {
+  const res = await getBookMemoized(params.slug)
+
+  if (res instanceof FetchError) {
+    console.error(error.failedBooksFetchMetadata)
+    return {
+      title: app.title,
+    }
+  }
+
+  return {
+    title: `${res.title} | ${app.title}`,
+  }
+}
+
+export default async function Detail({ params }: SlugProps) {
+  const res = await getBookMemoized(params.slug)
 
   if (res instanceof FetchError) {
     console.error(error.failedBookFetch)
