@@ -1,6 +1,5 @@
-import BizRankIcon from '../../common/icon/BizRankIcon'
-export const revalidate = 'force-cache'
 import app from '@/text/app.json'
+import BizRankIcon from '../../common/icon/BizRankIcon'
 
 export default function Default() {
   return (
