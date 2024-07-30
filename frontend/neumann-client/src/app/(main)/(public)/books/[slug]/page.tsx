@@ -8,17 +8,12 @@ import { FetchError } from '@/lib/errors'
 import { getBook } from '@/lib/wrappedFeatch/requests/book'
 import app from '@/text/app.json'
 import error from '@/text/error.json'
+import { SlugProps } from '@/types/slug'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
 const getBookMemoized = cache(getBook)
-
-type SlugProps = {
-  params: {
-    slug: string
-  }
-}
 
 export async function generateMetadata({ params }: SlugProps): Promise<Metadata> {
   const res = await getBookMemoized(params.slug)
