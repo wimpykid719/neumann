@@ -1,4 +1,4 @@
-export default function OgpTemplate({ contents }: { contents: React.ReactNode }) {
+export default function Base({ contents }: { contents: React.ReactNode }) {
   return (
     <div
       style={{

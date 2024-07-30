@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import OgpTemplate from '@/components/ogp/base'
-import { Default } from '@/components/ogp/default'
+import DefaultOGP from '@/components/ogp/DefaultOGP'
 import app from '@/text/app.json'
 import { ImageResponse } from 'next/og'
 
@@ -16,7 +15,7 @@ export default async function Image() {
   const inter = fs.readFileSync(path.join(process.cwd(), 'public/fonts/Inter-Regular.ttf'))
   const interBold = fs.readFileSync(path.join(process.cwd(), 'public/fonts/Inter-Bold.ttf'))
 
-  return new ImageResponse(<OgpTemplate contents={<Default />} />, {
+  return new ImageResponse(<DefaultOGP />, {
     ...size,
     fonts: [
       {
