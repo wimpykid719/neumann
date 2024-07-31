@@ -169,7 +169,7 @@ const LinkNode: FC<{ node: RootContentMap['link'] }> = ({ node }) => {
       <NodesRenderer nodes={node.children} />
     </Link>
   ) : (
-    <a className='' href={node.url} target='_blank' rel='noreferrer'>
+    <a className='' href={node.url} target='_blank' rel='nofollow'>
       <NodesRenderer nodes={node.children} />
     </a>
   )
@@ -213,7 +213,7 @@ const StrongNode: FC<{ node: RootContentMap['strong'] }> = ({ node }) => {
 
 const ImageNode: FC<{ node: RootContentMap['image'] }> = ({ node }) => {
   return (
-    <a href={node.url} target='_blank' rel='noreferrer'>
+    <a href={node.url} target='_blank' rel='nofollow'>
       <img src={node.url} alt={node.alt ?? ''} className='' />
     </a>
   )

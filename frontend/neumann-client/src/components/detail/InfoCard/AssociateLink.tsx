@@ -44,7 +44,7 @@ export default function AssociateLink({ price, associateUrl }: AssociateLinkProp
         `}
         href={associateUrl}
         target='_blank'
-        rel='noreferrer'
+        rel='sponsored'
       >
         <div className='flex justify-center items-center'>
           <div className='mr-2'>

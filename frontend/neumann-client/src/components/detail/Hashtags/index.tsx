@@ -23,7 +23,7 @@ export default function Hashtags({ hashtags }: HashtagsProps) {
             key={tag}
             className='mx-2 mb-4 border rounded-lg text-xs text-center hover:opacity-70 border-gray-500 text-gray-500'
           >
-            <a href={noteHashtagUrl(tag)} target='_blank' className='block px-2 py-2' rel='noreferrer'>
+            <a href={noteHashtagUrl(tag)} target='_blank' className='block px-2 py-2' rel='nofollow'>
               {tag}
             </a>
           </li>

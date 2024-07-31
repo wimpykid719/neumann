@@ -12,7 +12,7 @@ export default function AmazonLink({ title, imgUrl, associateUrl }: AmazonLinkPr
   return (
     <>
       <div className='relative'>
-        <a href={associateUrl} target='_blank' rel='noreferrer'>
+        <a href={associateUrl} target='_blank' rel='sponsored'>
           <AmazonBookImage title={title} imgUrl={imgUrl} />
         </a>
       </div>
