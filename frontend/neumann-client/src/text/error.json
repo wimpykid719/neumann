@@ -1,7 +1,12 @@
 {
   "failedBooksFetch": "本の取得に失敗しました。",
+  "failedBooksFetchMetadata": "本の取得に失敗しました。",
   "failedBookFetch": "本の詳細情報取得に失敗しました。",
   "failedUserNamesFetch": "ユーザ名一覧の取得に失敗しました。",
   "failedUserProfileFetch": "プロフィールの取得に失敗しました。",
-  "failedUserLikes": "ユーザいいね一覧の取得に失敗しました。"
+  "failedUserLikes": "ユーザいいね一覧の取得に失敗しました。",
+  "failedBookFetchMetadata": "書籍詳細メタデータ取得に失敗しました。",
+  "failedProfileFetchMetadata": "ユーザープロフィールのメタデータ取得に失敗しました。",
+  "failedUserProfileNameMetadata": "ユーザープロフィール名のメタデータ取得に失敗しました。",
+  "failedUserLikesFetchMetadata": "ユーザーいいね一覧のメタデータ取得に失敗しました。"
 }

@@ -1,8 +1,8 @@
 'use client'
 
 import Pagination from '@/components/common/Pagination'
-import Books from '@/components/common/liked/Books'
-import LoadingBooks from '@/components/common/liked/loading/Books'
+import Books from '@/components/profile/liked/Books'
+import LoadingBooks from '@/components/profile/liked/loading/Books'
 import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { ResponseUserLikes, getUserLikes } from '@/lib/wrappedFeatch/requests/user'
@@ -18,9 +18,9 @@ type PageProps = {
   page: string
 }
 
-type UserLikesProps = SlugProps & PageProps
+type UserLikesProps = { params: SlugProps & PageProps }
 
-export default function UserLikesPage({ params }: { params: UserLikesProps }) {
+export default function UserLikesPage({ params }: UserLikesProps) {
   const page = Number(params.page)
   const { showToast } = useToast()
   const [userLikes, setUserLikes] = useState<ResponseUserLikes>()

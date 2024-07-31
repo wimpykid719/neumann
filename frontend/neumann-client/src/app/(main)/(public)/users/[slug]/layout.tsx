@@ -8,7 +8,9 @@ import URLIcon from '@/components/common/icon/URLIcon'
 import XIcon from '@/components/common/icon/XIcon'
 import YouTubeIcon from '@/components/common/icon/YouTubeIcon'
 import { FetchError } from '@/lib/errors'
+import { failedPageMetadata } from '@/lib/metadata'
 import { getUserProfile } from '@/lib/wrappedFeatch/requests/profile'
+import app from '@/text/app.json'
 import error from '@/text/error.json'
 import {
   facebookAccountURL,
@@ -18,16 +20,33 @@ import {
   xTwitterAccountURL,
   youtubeAccountURL,
 } from '@/utils/profileURL'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
+
+const getUserProfileMemoized = cache(getUserProfile)
 
 type SlugProps = {
   slug: string
 }
 
+export async function generateMetadata({ params }: { params: SlugProps }): Promise<Metadata> {
+  const res = await getUserProfileMemoized(params.slug)
+
+  if (res instanceof FetchError) {
+    console.error(error.failedProfileFetchMetadata)
+    return failedPageMetadata()
+  }
+
+  return {
+    title: `${res.name} | ${app.title}`,
+  }
+}
+
 export default async function ProfileLayout({ children, params }: { children: React.ReactNode; params: SlugProps }) {
   const ICON_SIZE = 18
-  const res = await getUserProfile(params.slug)
+  const res = await getUserProfileMemoized(params.slug)
 
   if (res instanceof FetchError) {
     console.error(error.failedUserProfileFetch)
@@ -75,6 +94,7 @@ export default async function ProfileLayout({ children, params }: { children: Re
                   <a
                     className='flex w-full h-full justify-center items-center'
                     href={xTwitterAccountURL(res.x_twitter)}
+                    target='_blank' rel='nofollow'
                   >
                     <XIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
@@ -85,6 +105,7 @@ export default async function ProfileLayout({ children, params }: { children: Re
                   <a
                     className='flex w-full h-full justify-center items-center'
                     href={instagramAccountURL(res.instagram)}
+                    target='_blank' rel='nofollow'
                   >
                     <InstagramIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
@@ -92,35 +113,35 @@ export default async function ProfileLayout({ children, params }: { children: Re
               )}
               {res.linkedin && (
                 <li key='linkedin' className='w-8 h-8 rounded hover:item-bg-color'>
-                  <a className='flex w-full h-full justify-center items-center' href={linkedinAccountURL(res.linkedin)}>
+                  <a className='flex w-full h-full justify-center items-center' href={linkedinAccountURL(res.linkedin)} target='_blank' rel='nofollow'>
                     <LinkedInIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.facebook && (
                 <li key='facebook' className='w-8 h-8 rounded hover:item-bg-color'>
-                  <a className='flex w-full h-full justify-center items-center' href={facebookAccountURL(res.facebook)}>
+                  <a className='flex w-full h-full justify-center items-center' href={facebookAccountURL(res.facebook)} target='_blank' rel='nofollow'>
                     <FacebookIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.tiktok && (
                 <li key='tiktok' className='w-8 h-8 rounded hover:item-bg-color'>
-                  <a className='flex w-full h-full justify-center items-center' href={tiktokAccountURL(res.tiktok)}>
+                  <a className='flex w-full h-full justify-center items-center' href={tiktokAccountURL(res.tiktok)} target='_blank' rel='nofollow'>
                     <TikTokIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.youtube && (
                 <li key='youtube' className='w-8 h-8 rounded hover:item-bg-color'>
-                  <a className='flex w-full h-full justify-center items-center' href={youtubeAccountURL(res.youtube)}>
+                  <a className='flex w-full h-full justify-center items-center' href={youtubeAccountURL(res.youtube)} target='_blank' rel='nofollow'>
                     <YouTubeIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>
               )}
               {res.website && (
                 <li key='website' className='w-8 h-8 rounded hover:item-bg-color'>
-                  <a className='flex w-full h-full justify-center items-center' href={res.website}>
+                  <a className='flex w-full h-full justify-center items-center' href={res.website} target='_blank' rel='nofollow'>
                     <URLIcon width={ICON_SIZE} height={ICON_SIZE} />
                   </a>
                 </li>

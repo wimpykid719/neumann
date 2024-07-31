@@ -1,7 +1,16 @@
 import Header from '@/components/common/Header'
 import Tabs from '@/components/common/Tabs'
 import { settingsNavigation } from '@/components/common/Tabs/Navigations'
+import app from '@/text/app.json'
+import { Metadata } from 'next'
 import { Suspense } from 'react'
+
+export const metadata: Metadata = {
+  title: {
+    template: `%s | ${app.title}`,
+    default: app.title,
+  },
+}
 
 export default function SettingsLayout({
   children,

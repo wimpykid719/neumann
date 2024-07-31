@@ -5,16 +5,32 @@ import Hashtags from '@/components/detail/Hashtags'
 import InfoCard from '@/components/detail/InfoCard'
 import NoteReference from '@/components/detail/NoteReference'
 import { FetchError } from '@/lib/errors'
+import { failedPageMetadata } from '@/lib/metadata'
 import { getBook } from '@/lib/wrappedFeatch/requests/book'
+import app from '@/text/app.json'
 import error from '@/text/error.json'
+import { SlugProps } from '@/types/slug'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
 
-type SlugProps = {
-  slug: string
+const getBookMemoized = cache(getBook)
+
+export async function generateMetadata({ params }: SlugProps): Promise<Metadata> {
+  const res = await getBookMemoized(params.slug)
+
+  if (res instanceof FetchError) {
+    console.error(error.failedBookFetchMetadata)
+    return failedPageMetadata()
+  }
+
+  return {
+    title: `${res.title} | ${app.title}`,
+  }
 }
 
-export default async function Detail({ params }: { params: SlugProps }) {
-  const res = await getBook(params.slug)
+export default async function Detail({ params }: SlugProps) {
+  const res = await getBookMemoized(params.slug)
 
   if (res instanceof FetchError) {
     console.error(error.failedBookFetch)

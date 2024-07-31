@@ -4,6 +4,11 @@ import BizRankIcon from '@/components/common/icon/BizRankIcon'
 import { readMarkdown } from '@/lib/readMarkdown'
 import app from '@/text/app.json'
 import { SUPPLEMENT_TEXT_SIZE } from '@/utils/constant'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: app.about,
+}
 
 export default function aboutPage() {
   const RANKING = 1
