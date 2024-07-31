@@ -8,6 +8,7 @@ import URLIcon from '@/components/common/icon/URLIcon'
 import XIcon from '@/components/common/icon/XIcon'
 import YouTubeIcon from '@/components/common/icon/YouTubeIcon'
 import { FetchError } from '@/lib/errors'
+import { failedPageMetadata } from '@/lib/metadata'
 import { getUserProfile } from '@/lib/wrappedFeatch/requests/profile'
 import app from '@/text/app.json'
 import error from '@/text/error.json'
@@ -35,9 +36,7 @@ export async function generateMetadata({ params }: { params: SlugProps }): Promi
 
   if (res instanceof FetchError) {
     console.error(error.failedProfileFetchMetadata)
-    return {
-      title: app.title,
-    }
+    return failedPageMetadata()
   }
 
   return {

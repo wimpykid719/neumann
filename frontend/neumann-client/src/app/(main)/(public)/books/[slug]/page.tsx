@@ -5,6 +5,7 @@ import Hashtags from '@/components/detail/Hashtags'
 import InfoCard from '@/components/detail/InfoCard'
 import NoteReference from '@/components/detail/NoteReference'
 import { FetchError } from '@/lib/errors'
+import { failedPageMetadata } from '@/lib/metadata'
 import { getBook } from '@/lib/wrappedFeatch/requests/book'
 import app from '@/text/app.json'
 import error from '@/text/error.json'
@@ -19,10 +20,8 @@ export async function generateMetadata({ params }: SlugProps): Promise<Metadata>
   const res = await getBookMemoized(params.slug)
 
   if (res instanceof FetchError) {
-    console.error(error.failedBooksFetchMetadata)
-    return {
-      title: app.title,
-    }
+    console.error(error.failedBookFetchMetadata)
+    return failedPageMetadata()
   }
 
   return {

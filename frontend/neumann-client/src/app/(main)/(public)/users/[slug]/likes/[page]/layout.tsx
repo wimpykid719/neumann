@@ -1,3 +1,4 @@
+import { failedPageMetadata } from '@/lib/metadata'
 import app from '@/text/app.json'
 import error from '@/text/error.json'
 import { Metadata, ResolvingMetadata } from 'next'
@@ -26,9 +27,7 @@ export async function generateMetadata({ params }: UserLikesProps, parent: Resol
 
   if (!userProfileName) {
     console.error(error.failedUserProfileNameMetadata)
-    return {
-      title: app.title,
-    }
+    return failedPageMetadata()
   }
 
   return {
