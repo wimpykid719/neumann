@@ -41,19 +41,21 @@ export default function ProfileForm({ user, setUser }: Props) {
   const requestUpdate = async (data: ProfileUpdateValidation) => {
     const token = (await execSilentRefresh()) || accessToken
     if (!token) return showToast(toastText.no_access_token, toastStatus.error)
-    const options = {
-      maxSizeMB: 0.5,
-      maxWidthOrHeight: 500,
-      useWebWorker: true,
-    }
+    if (data.avatar) {
+      const options = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 500,
+        useWebWorker: true,
+      }
 
-    try {
-      const compressedAvatar = await imageCompression(data.avatar, options)
+      try {
+        const compressedAvatar = await imageCompression(data.avatar, options)
 
-      data.avatar = compressedAvatar
-    } catch {
-      showToast(toastText.failed_img_compression, toastStatus.error)
-      return
+        data.avatar = compressedAvatar
+      } catch {
+        showToast(toastText.failed_img_compression, toastStatus.error)
+        return
+      }
     }
 
     const form = new FormData()
