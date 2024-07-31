@@ -9,6 +9,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
+const LOCALHOST_URL = 'http://localhost'
 
 export const metadata: Metadata = {
   title: `${app.title} | ${app.miniDescription}`,
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
   authors: { name: app.author, url: app.authorUrl },
   keywords: app.keywords,
   referrer: 'origin-when-cross-origin',
+  metadataBase: new URL(process.env.BASE_URL ?? LOCALHOST_URL),
 }
 
 export default function RootLayout({

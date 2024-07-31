@@ -7,6 +7,7 @@ services:
       NEXT_PUBLIC_API_URL: "$BACK_URL:$BACK_PORT"
       API_URL_FROM_SERVER: "$BACK_URL_FROM_SERVER:$BACK_PORT"
       BIZRANK_BUCKET_DOMAIN: $BIZRANK_BUCKET_DOMAIN
+      BASE_URL: $BASE_URL
     build:
       context: ./frontend/
       dockerfile: Dockerfile
