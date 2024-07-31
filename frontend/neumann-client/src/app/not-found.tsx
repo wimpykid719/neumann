@@ -1,7 +1,11 @@
 import Header from '@/components/common/Header'
 import RightArrowIcon from '@/components/common/icon/RightArrowIcon'
+import { failedPageMetadata } from '@/lib/metadata'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
+
+export const metadata: Metadata = failedPageMetadata()
 
 export default function NotFound() {
   const ICON_SIZE = 16
