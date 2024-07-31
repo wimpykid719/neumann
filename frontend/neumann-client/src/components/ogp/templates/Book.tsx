@@ -11,7 +11,8 @@ export type BookProps = {
   likesCount: Book['likes_count']
 }
 
-const DISPLAY_WORDS = 30
+const DISPLAY_WORDS_TITLE = 100
+const DISPLAY_WORDS_TITLE_CARD = 30
 
 export default function Book({ title, imgUrl, likesCount }: BookProps) {
   return (
@@ -91,7 +92,7 @@ export default function Book({ title, imgUrl, likesCount }: BookProps) {
               padding: '0 32px',
             }}
           >
-            {textEllipsis(title, DISPLAY_WORDS)}
+            {textEllipsis(title, DISPLAY_WORDS_TITLE_CARD)}
           </p>
         </div>
         <h1
@@ -104,7 +105,7 @@ export default function Book({ title, imgUrl, likesCount }: BookProps) {
             padding: 0,
           }}
         >
-          {title}
+          {textEllipsis(title, DISPLAY_WORDS_TITLE)}
         </h1>
       </div>
       <div
