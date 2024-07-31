@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   description: app.description,
   authors: { name: app.author, url: app.authorUrl },
   keywords: app.keywords,
+  referrer: 'origin-when-cross-origin',
 }
 
 export default function RootLayout({
