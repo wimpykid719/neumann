@@ -23,6 +23,9 @@ type BookPagePath = (typeof PAGE_ELEMENT_PATH)[number]
 const PUBLISHER_ELEMENT_PATH = ['#rpi-attribute-book_details-publisher .rpi-attribute-value > span'] as const
 type PublisherPath = (typeof PUBLISHER_ELEMENT_PATH)[number]
 
+const PAPERBACK_ELEMENT_PATH = ['#tmm-grid-swatch-PAPERBACK a'] as const
+type PaperbackPath = (typeof PAPERBACK_ELEMENT_PATH)[number]
+
 const isRequestFailed = async (page: Page) =>
   await elementExists(page, 'form[method="get"][action="/errors/validateCaptcha"][name=""]')
 
@@ -53,7 +56,7 @@ const elementExists = async (page: Page, selector: string) => (await page.$(sele
 
 const exsistElement = async (
   page: Page,
-  paths: readonly PricePath[] | readonly BookPagePath[] | readonly PublisherPath[],
+  paths: readonly PricePath[] | readonly BookPagePath[] | readonly PublisherPath[] | readonly PaperbackPath[],
 ) => {
   for (const path of paths) {
     if (await elementExists(page, path)) return path
@@ -68,6 +71,13 @@ const getPrice = async (page: Page) => {
   if (!path) return
 
   return await page.$eval(path, element => element.textContent?.trim() || '')
+}
+
+const getPaperBackPath = async (page: Page) => {
+  const path = await exsistElement(page, PAPERBACK_ELEMENT_PATH)
+  if (!path || path !== PAPERBACK_ELEMENT_PATH[0]) return
+
+  return await page.$eval(path, element => (element.href && element.href !== 'javascript:void(0)' ? element.href : ''))
 }
 
 const getBookPage = async (page: Page) => {
@@ -145,6 +155,11 @@ export const getBookInfo = async (url: string) => {
       await browser.close()
 
       return new NotBookError(requestText.notBook, url)
+    }
+
+    const paperBackPath = await getPaperBackPath(page)
+    if (paperBackPath) {
+      await page.goto(paperBackPath, { waitUntil: 'domcontentloaded' })
     }
 
     const asin = getBookASIN(page)
