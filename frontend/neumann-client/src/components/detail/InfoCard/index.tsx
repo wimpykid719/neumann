@@ -36,7 +36,7 @@ export default function InfoCard({
   scrapedAt,
 }: InfoCardProps) {
   const ICON_SIZE = 16
-  const X_SHARE_URL = `https://x.com/intent/post?hashtags=BizRank&url=${'#'}&related=BizRank`
+  const X_SHARE_URL = `https://x.com/intent/post?hashtags=BizRank&url=${process.env.BASE_URL}/books/${id}&related=BizRank`
 
   const transformDateJaStyle = (date: string) => {
     const scrapedAt = new Date(date)
@@ -123,6 +123,8 @@ export default function InfoCard({
             <a
               className='flex justify-center items-center py-1 text-xs w-28 h-8 border border-gray-900 dark:border-gray-50 rounded-lg hover:opacity-70'
               href={X_SHARE_URL}
+              target='_blank'
+              rel='nofollow'
             >
               <span className='mr-1'>
                 <XIcon width={ICON_SIZE} height={ICON_SIZE} />
