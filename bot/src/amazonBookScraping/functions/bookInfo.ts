@@ -6,6 +6,7 @@ import puppeteer, { type Page } from 'puppeteer'
 const AFFILIATE_TAG = process.env.PARTNER_TAG!
 
 const BOOK_CATEGORIES = ['本', 'Kindleストア', 'Kindle本'] as const
+const REJECT_BOOK_CATEGORIES = ['Kindle洋書'] as const
 const PRICE_ELEMENT_PATH = [
   '#tmm-grid-swatch-PAPERBACK .slot-price > span',
   '#tmm-grid-swatch-KINDLE .slot-price > span',
@@ -31,6 +32,10 @@ const isBook = async (page: Page) => {
     elements => elements.map(element => element.textContent?.trim() || ''),
   )
   const includesInBookCategory = (element: string) => BOOK_CATEGORIES.some(BOOK_CATEGORIE => BOOK_CATEGORIE === element)
+  const includesInRejectBookCategory = (element: string) =>
+    REJECT_BOOK_CATEGORIES.some(BOOK_CATEGORIE => BOOK_CATEGORIE === element)
+
+  if (breadcrumbs.some(includesInRejectBookCategory)) return false
 
   return breadcrumbs.some(includesInBookCategory)
 }
