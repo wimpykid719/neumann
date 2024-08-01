@@ -3,7 +3,7 @@ class Api::V1::BooksController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :status_not_found_book
 
   def index
-    pagy, books = pagy(Book.order('score DESC, id DESC'))
+    pagy, books = pagy(Book.includes(:likes).order('score DESC, id DESC'))
     rankings_array = rankings(params['page'], books)
     metadata = pagy_metadata(pagy)
 
