@@ -20,6 +20,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.49.3",
+    "recharts": "^2.12.7",
     "remark": "^15.0.1",
     "remark-breaks": "^4.0.0",
     "remark-frontmatter": "^5.0.0",
