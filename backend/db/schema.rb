@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_21_064042) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_034054) do
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", default: "", null: false
     t.text "img_url"
@@ -75,6 +75,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_21_064042) do
     t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_providers_on_uid", unique: true
     t.index ["user_id"], name: "index_providers_on_user_id"
+  end
+
+  create_table "user_analytics", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.integer "count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
