@@ -40,6 +40,9 @@ ja:
       note_reference:
         hashtags: ハッシュタグ
         reference_objs: 参照先
+      user_analytic:
+        name: 日付
+        count: ユーザー数
     errors:
       models:
         user:
@@ -82,4 +85,9 @@ ja:
           attributes:
             user_id:
               taken: はこの書籍をいいね済みです
+        user_analytic:
+          attributes:
+            name:
+              invalid: が不正な形式です
+
 
