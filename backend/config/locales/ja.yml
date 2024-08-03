@@ -131,6 +131,7 @@ ja:
       not_image_file: 画像ファイル以外をアップロードしないでください。
       less_512kb: 画像ファイルは512KB以下にしてください。
       can_not_change_password_user_google: Google認証ユーザはパスワード変更不可です。
+      unauthorized_request: 不正なリクエストです。
   helpers:
     select:
       prompt: 選択してください

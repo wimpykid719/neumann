@@ -1,6 +1,9 @@
 import app from '@/text/app.json'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import BizRankIcon from '../icon/BizRankIcon'
+
+const DynamicUsersChart = dynamic(() => import('./UsersChart'), { ssr: false })
 
 export default function Footer() {
   return (
@@ -51,10 +54,7 @@ export default function Footer() {
             </div>
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>User</div>
-              <ul className='flex justify-between'>
-                <li>現在のユーザ数</li>
-                <li>25600</li>
-              </ul>
+              <DynamicUsersChart />
             </div>
           </div>
         </div>

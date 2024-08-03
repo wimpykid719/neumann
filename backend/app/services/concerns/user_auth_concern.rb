@@ -1,4 +1,6 @@
 module UserAuthConcern
+  include AuthConcern
+
   private
 
   def delete_session

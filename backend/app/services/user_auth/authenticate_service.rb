@@ -10,11 +10,6 @@ module UserAuth
 
     private
 
-    # リクエストヘッダートークンを取得する
-    def token_from_request_headers
-      request.headers['Authorization']&.split&.last
-    end
-
     # access_tokenから有効なユーザーを取得する
     def fetch_user_from_access_token
       User.from_access_token(token_from_request_headers)
