@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         resource :profiles, only: [:update]
         resources :profiles, only: [:show]
         resources :books, only: [:index, :show]
+        resources :user_analytics, only: [:index, :create]
         resources :google_oauth2, only: [:create] do
           post :authorization_url, on: :collection
         end
