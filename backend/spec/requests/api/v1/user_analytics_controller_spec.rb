@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Api::V1::UserAnalyticsController do
   include_context 'user_authorities'
   let(:user_analytic) { FactoryBot.create(:user_analytic) }
+  let!(:jwt) { Analytic::CronRequestAuth.new.token }
+  let(:headers_with_cron_request_token) { { headers: { 'X-Requested-With' => 'XMLHttpRequest', Authorization: "Bearer #{jwt}" } } }
 
   describe 'GET #index' do
     context '正常系' do
@@ -67,7 +69,7 @@ RSpec.describe Api::V1::UserAnalyticsController do
   describe 'POST #create' do
     context '正常系' do
       it 'リクエストを受け取ると現在のユーザ数が集計される' do
-        post api_v1_user_analytics_path, **headers
+        post api_v1_user_analytics_path, **headers_with_cron_request_token
 
         expect(UserAnalytic.all.size).to eq 1
         expect(response).to have_http_status(:created)
@@ -76,6 +78,19 @@ RSpec.describe Api::V1::UserAnalyticsController do
         expect(json.size).to eq(1)
         expect(json['user_analytic']['name']).to eq(Time.zone.now.strftime('%m/%d'))
         expect(json['user_analytic']['count']).to eq(2)
+      end
+    end
+
+    context '異常系' do
+      it 'トークンなしの場合エラーになる' do
+        post api_v1_user_analytics_path, **headers
+
+        expect(UserAnalytic.all.size).to eq 0
+        expect(response).to have_http_status(:unauthorized)
+        json = response.parsed_body
+
+        expect(json.size).to eq(1)
+        expect(json['error']['message']).to eq('不正なリクエストです。')
       end
     end
   end

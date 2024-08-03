@@ -41,4 +41,8 @@ module HttpResponseConcern
   def status_unprocessable_entity(message)
     render status: :unprocessable_entity, json: { error: { message: } }
   end
+
+  def unauthorized_request
+    render status: :unauthorized, json: { error: { message: I18n.t('errors.request.unauthorized_request') } }
+  end
 end
