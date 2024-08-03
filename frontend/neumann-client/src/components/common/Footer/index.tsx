@@ -54,10 +54,6 @@ export default function Footer() {
             </div>
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>User</div>
-              <ul className='flex justify-between'>
-                <li>現在のユーザ数</li>
-                <li>25600</li>
-              </ul>
               <DynamicUsersChart />
             </div>
           </div>
