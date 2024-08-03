@@ -101,18 +101,20 @@ export default function Avatar() {
                 </Link>
 
                 <ul>
-                  <li
-                    key={keys.goodBooks}
-                    className='flex items-center cursor-pointer p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
-                  >
-                    <span className='inline-flex items-center w-7'>
-                      <HeartIcon />
-                    </span>
-                    いいねした本
+                  <li key={keys.goodBooks}>
+                    <Link
+                      href={`/users/${user.name}/likes/1`}
+                      className='flex items-center cursor-pointer p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
+                    >
+                      <span className='inline-flex items-center w-7'>
+                        <HeartIcon />
+                      </span>
+                      いいねした本
+                    </Link>
                   </li>
                   <li key={keys.accountSettings}>
                     <Link
-                      href={'/settings/account'}
+                      href={`/users/${user.name}/likes/1`}
                       className='flex items-center p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
                     >
                       <span className='inline-flex items-center w-7'>
