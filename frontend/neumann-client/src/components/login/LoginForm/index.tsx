@@ -147,10 +147,10 @@ export default function LoginForm() {
                 ログイン
               </button>
               <p className='text-sm font-light text-gray-500'>
-                アカウントを持っていない?{' '}
-                <a href='#' className='font-medium text-secondary hover:underline'>
+                アカウントを持っていない?
+                <Link href={'/signup'} className='font-medium text-secondary hover:underline'>
                   アカウント作成
-                </a>
+                </Link>
               </p>
             </div>
           </form>
