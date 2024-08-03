@@ -2,14 +2,16 @@ import app from '@/text/app.json'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import BizRankIcon from '../icon/BizRankIcon'
+import { getUserAnalytics } from '@/lib/wrappedFeatch/requests/analytic'
 
 const DynamicUsersChart = dynamic(() => import('./UsersChart'), { ssr: false })
 
-export default function Footer() {
+export default async function Footer() {
   const BIZRANK_X = 'https://x.com/biz_rank57580'
   const DEFECT_REPORT = 'https://forms.gle/SthcCR8ELKGQ5Bgt7'
   const INQUIRY = 'https://forms.gle/3VHsnYvQUDHsTgUh7'
   const FEATURE = 'https://github.com/users/wimpykid719/projects/2'
+  const res = await getUserAnalytics()
 
   return (
     <div className='sub-bg-color'>
@@ -75,7 +77,7 @@ export default function Footer() {
             </div>
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>User</div>
-              <DynamicUsersChart />
+              <DynamicUsersChart data={res} />
             </div>
           </div>
         </div>

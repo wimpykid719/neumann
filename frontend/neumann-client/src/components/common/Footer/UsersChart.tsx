@@ -2,14 +2,16 @@
 
 import { useDarkMode } from '@/hooks/useDarkMode'
 import { FetchError } from '@/lib/errors'
-import { getUserAnalytics } from '@/lib/wrappedFeatch/requests/analytic'
+import { ResponseAnalytic } from '@/lib/wrappedFeatch/requests/analytic'
 import error from '@/text/error.json'
 import { Line, LineChart, ResponsiveContainer, YAxis } from 'recharts'
-import useSWR from 'swr'
 
-export default function UsersChart() {
+type UsersChartProps = {
+  data: FetchError | ResponseAnalytic
+}
+
+export default function UsersChart({ data }: UsersChartProps) {
   const isDarkMode = useDarkMode()
-  const { data } = useSWR('/api/v1/user_analytics', getUserAnalytics)
 
   if (!data || data instanceof FetchError) {
     return <p>{error.failedUserAnalyticsFetch}</p>
