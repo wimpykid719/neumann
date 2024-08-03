@@ -76,20 +76,52 @@ export default function LoginForm() {
           <div className='border border-x-0 border-t-0 relative main-border-color'>
             <span className='px-3 absolute right-2/4 translate-x-1/2 -translate-y-1/2 sub-bg-color'>or</span>
           </div>
-          <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit(loginUser)}>
-            <div>
-              <label htmlFor='email' className='block mb-2 text-sm font-medium'>
-                メールアドレス
-              </label>
-              <input
-                {...register('email')}
-                type='email'
-                name='email'
-                id='email'
-                className={`
+          <form className='space-y-14 md:space-y-16' onSubmit={handleSubmit(loginUser)}>
+            <div className='space-y-4 md:space-y-6'>
+              <div>
+                <label htmlFor='email' className='block mb-2 text-sm font-medium'>
+                  メールアドレス
+                </label>
+                <input
+                  {...register('email')}
+                  type='email'
+                  name='email'
+                  id='email'
+                  className={`
+                      border
+                      ${
+                        errors.email?.message
+                          ? 'focus:ring-primary focus:border-primary border-primary '
+                          : 'focus:ring-secondary focus:border-secondary border-gray-900 dark:border-gray-400'
+                      }
+                      sm:text-sm
+                      rounded-lg
+                      focus:ring-1
+                      focus:outline-none
+                      block
+                      w-full p-2.5
+                    placeholder-gray-400
+                    bg-gray-50
+                    dark:bg-gray-500
+                    `}
+                  placeholder='name@company.com'
+                />
+                {errors.email?.message && <p className='text-sm text-primary'>{errors.email?.message}</p>}
+              </div>
+              <div>
+                <label htmlFor='password' className='block mb-2 text-sm font-medium'>
+                  パスワード
+                </label>
+                <input
+                  {...register('password')}
+                  type='password'
+                  name='password'
+                  id='password'
+                  placeholder='••••••••'
+                  className={`
                     border
                     ${
-                      errors.email?.message
+                      errors.password?.message
                         ? 'focus:ring-primary focus:border-primary border-primary '
                         : 'focus:ring-secondary focus:border-secondary border-gray-900 dark:border-gray-400'
                     }
@@ -102,58 +134,25 @@ export default function LoginForm() {
                   placeholder-gray-400
                   bg-gray-50
                   dark:bg-gray-500
-                  `}
-                placeholder='name@company.com'
-              />
-              {errors.email?.message && <p className='text-sm text-primary'>{errors.email?.message}</p>}
+                    `}
+                />
+                {errors.password?.message && <p className='text-sm text-primary'>{errors.password?.message}</p>}
+              </div>
             </div>
-            <div>
-              <label htmlFor='password' className='block mb-2 text-sm font-medium'>
-                パスワード
-              </label>
-              <input
-                {...register('password')}
-                type='password'
-                name='password'
-                id='password'
-                placeholder='••••••••'
-                className={`
-                  border
-                  ${
-                    errors.password?.message
-                      ? 'focus:ring-primary focus:border-primary border-primary '
-                      : 'focus:ring-secondary focus:border-secondary border-gray-900 dark:border-gray-400'
-                  }
-                  sm:text-sm
-                  rounded-lg
-                  focus:ring-1
-                  focus:outline-none
-                  block
-                  w-full p-2.5
-                placeholder-gray-400
-                bg-gray-50
-                dark:bg-gray-500
-                  `}
-              />
-              {errors.password?.message && <p className='text-sm text-primary'>{errors.password?.message}</p>}
+            <div className='space-y-4 md:space-y-6'>
+              <button
+                type='submit'
+                className='w-full bg-secondary hover:bg-opacity-70 focus:ring-4 focus:outline-none focus:ring-secondary focus:ring-opacity-70 font-medium rounded-lg text-sm px-5 py-2.5 text-center sub-text-color'
+              >
+                ログイン
+              </button>
+              <p className='text-sm font-light text-gray-500'>
+                アカウントを持っていない?{' '}
+                <a href='#' className='font-medium text-secondary hover:underline'>
+                  アカウント作成
+                </a>
+              </p>
             </div>
-            <div className='flex items-center justify-between text-gray-500'>
-              <a href='#' className='text-sm font-medium hover:underline'>
-                パスワードを忘れた
-              </a>
-            </div>
-            <button
-              type='submit'
-              className='w-full bg-secondary hover:bg-opacity-70 focus:ring-4 focus:outline-none focus:ring-secondary focus:ring-opacity-70 font-medium rounded-lg text-sm px-5 py-2.5 text-center sub-text-color'
-            >
-              ログイン
-            </button>
-            <p className='text-sm font-light text-gray-500'>
-              アカウントを持っていない?{' '}
-              <a href='#' className='font-medium text-secondary hover:underline'>
-                アカウント作成
-              </a>
-            </p>
           </form>
         </div>
       </div>
