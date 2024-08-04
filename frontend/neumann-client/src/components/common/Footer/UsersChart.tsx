@@ -25,7 +25,7 @@ export default function UsersChart({ data }: UsersChartProps) {
       </ul>
       <ResponsiveContainer width='100%' height={112}>
         <LineChart data={data.user_analytics}>
-          <YAxis reversed hide />
+          <YAxis reversed={true} hide={true} />
           <Line
             type='monotone'
             dataKey='count'
