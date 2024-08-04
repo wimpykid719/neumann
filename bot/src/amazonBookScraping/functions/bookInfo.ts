@@ -1,6 +1,6 @@
 import { NotBookError, PuppeteerError, ScrapingRequestError } from '@/lib/errors'
 import requestText from '@/text/request.json'
-import { getASIN } from '@/utils/amazon'
+import { cleanAmazonUrl, getASIN } from '@/utils/amazon'
 import puppeteer, { type Page } from 'puppeteer'
 
 const AFFILIATE_TAG = process.env.PARTNER_TAG!
@@ -120,7 +120,7 @@ const getImgURL = async (page: Page) => {
 const getBookASIN = (page: Page) => getASIN(page.url())
 
 const generateAmazonAffiliateLink = (productUrl: string, tagId: string) => {
-  const { origin, pathname } = new URL(productUrl)
+  const { origin, pathname } = new URL(cleanAmazonUrl(productUrl))
 
   return origin + pathname + `?tag=${tagId}`
 }

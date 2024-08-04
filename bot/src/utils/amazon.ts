@@ -17,3 +17,8 @@ export const getASIN = (url: string) => {
   const regex = /\/(?:dp|gp\/product|exec\/obidos\/ASIN|asin)\/([A-Z0-9]{10})/
   return url.match(regex)?.[1]
 }
+
+export const cleanAmazonUrl = (url: string) => {
+  const regex = /(https?:\/\/.*?\/(?:dp|gp\/product|exec\/obidos\/ASIN|asin)\/[A-Z0-9]{10})/i
+  return url.match(regex)?.[1] || url
+}
