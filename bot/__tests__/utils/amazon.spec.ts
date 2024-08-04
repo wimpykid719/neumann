@@ -1,5 +1,5 @@
 import { getAmazonEmbeds } from '@/utils/amazon'
-import { getASIN, cleanAmazonUrl } from '@/utils/amazon'
+import { cleanAmazonUrl, getASIN } from '@/utils/amazon'
 
 describe('getAmazonEmbeds', () => {
   it('amazonのURL（amzn.to, amzn.asia, amazon.co.jp）を含む外部リンク一覧が返る', () => {
@@ -90,13 +90,21 @@ describe('cleanAmazonUrl', () => {
     const url5 = 'https://www.amazon.co.jp/exec/obidos/ASIN/4799326686/opc-22/ref=nosim'
     const url6 =
       'https://www.amazon.co.jp/exec/obidos/asin/4815608032/sgomis53040f-22?&linkCode=sl1&tag=sgomis53040f-22&linkId=6052383a45eacc078426c35cc299c339&language=ja_JP&ref_=as_li_ss_tl'
+    const url7 = 'https://www.amazon.co.jp/exec/obidos/ASIN/4000614134?tag=hero719-22'
 
-    expect(cleanAmazonUrl(url)).toEqual('https://www.amazon.co.jp/%E5%AE%9A%E5%B9%B4%E5%89%8D%E3%81%A8%E5%AE%9A%E5%B9%B4%E5%BE%8C%E3%81%AE%E5%83%8D%E3%81%8D%E6%96%B9%EF%BD%9E%E3%82%B5%E3%83%BC%E3%83%89%E3%82%A8%E3%82%A4%E3%82%B8%E3%82%92%E7%94%9F%E3%81%8D%E3%82%8B%E6%80%9D%E8%80%83%EF%BD%9E-%E5%85%89%E6%96%87%E7%A4%BE%E6%96%B0%E6%9B%B8-%E7%9F%B3%E5%B1%B1-%E6%81%92%E8%B2%B4-ebook/dp/B0C42W5716')
-    expect(cleanAmazonUrl(url2)).toEqual('https://www.amazon.co.jp/%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%81%E3%83%A5%E3%82%A8%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3-%E5%84%AA%E3%82%8C%E3%81%9F%E8%B5%B7%E6%A5%AD%E5%AE%B6%E3%81%8C%E5%AE%9F%E8%B7%B5%E3%81%99%E3%82%8B%E3%80%8C5%E3%81%A4%E3%81%AE%E5%8E%9F%E5%89%87%E3%80%8D-%E5%90%89%E7%94%B0-%E6%BA%80%E6%A2%A8-ebook/dp/B0C9CF55J6')
-    expect(cleanAmazonUrl(url3)).toEqual('https://www.amazon.co.jp/%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6-%E4%B8%80%E8%88%AC%E6%9B%B8-%E5%8F%A4%E8%B3%80-%E5%8F%B2%E5%81%A5/dp/4591178544')
+    expect(cleanAmazonUrl(url)).toEqual(
+      'https://www.amazon.co.jp/%E5%AE%9A%E5%B9%B4%E5%89%8D%E3%81%A8%E5%AE%9A%E5%B9%B4%E5%BE%8C%E3%81%AE%E5%83%8D%E3%81%8D%E6%96%B9%EF%BD%9E%E3%82%B5%E3%83%BC%E3%83%89%E3%82%A8%E3%82%A4%E3%82%B8%E3%82%92%E7%94%9F%E3%81%8D%E3%82%8B%E6%80%9D%E8%80%83%EF%BD%9E-%E5%85%89%E6%96%87%E7%A4%BE%E6%96%B0%E6%9B%B8-%E7%9F%B3%E5%B1%B1-%E6%81%92%E8%B2%B4-ebook/dp/B0C42W5716',
+    )
+    expect(cleanAmazonUrl(url2)).toEqual(
+      'https://www.amazon.co.jp/%E3%82%A8%E3%83%95%E3%82%A7%E3%82%AF%E3%83%81%E3%83%A5%E3%82%A8%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3-%E5%84%AA%E3%82%8C%E3%81%9F%E8%B5%B7%E6%A5%AD%E5%AE%B6%E3%81%8C%E5%AE%9F%E8%B7%B5%E3%81%99%E3%82%8B%E3%80%8C5%E3%81%A4%E3%81%AE%E5%8E%9F%E5%89%87%E3%80%8D-%E5%90%89%E7%94%B0-%E6%BA%80%E6%A2%A8-ebook/dp/B0C9CF55J6',
+    )
+    expect(cleanAmazonUrl(url3)).toEqual(
+      'https://www.amazon.co.jp/%E3%81%95%E3%81%BF%E3%81%97%E3%81%84%E5%A4%9C%E3%81%AB%E3%81%AF%E3%83%9A%E3%83%B3%E3%82%92%E6%8C%81%E3%81%A6-%E4%B8%80%E8%88%AC%E6%9B%B8-%E5%8F%A4%E8%B3%80-%E5%8F%B2%E5%81%A5/dp/4591178544',
+    )
     expect(cleanAmazonUrl(url4)).toEqual('https://www.amazon.co.jp/gp/product/B08J7GGY6N')
     expect(cleanAmazonUrl(url5)).toEqual('https://www.amazon.co.jp/exec/obidos/ASIN/4799326686')
     expect(cleanAmazonUrl(url6)).toEqual('https://www.amazon.co.jp/exec/obidos/asin/4815608032')
+    expect(cleanAmazonUrl(url7)).toEqual('https://www.amazon.co.jp/exec/obidos/ASIN/4000614134')
   })
   it('形式がマッチしない場合、元のURLを返す', () => {
     const url = 'https://amzn.asia/d/imUy4q5'
