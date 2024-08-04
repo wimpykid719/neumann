@@ -22,6 +22,13 @@ export const storeObjOverWrite = async (
   await docRef.set(obj, { merge: true })
 }
 
+export const updateObjField = async (
+  docRef: DocumentReference<DocumentData, DocumentData>,
+  obj: PartialWithFieldValue<DocumentData>,
+) => {
+  await docRef.update(obj)
+}
+
 export const notesErrorQuery = (firestore: Firestore, collectionName: string, hashtag: HashTags, limit: number) =>
   firestore.collection(collectionName).where('tag', '==', hashtag).limit(limit)
 
