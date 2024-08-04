@@ -22,9 +22,9 @@ export default async function Footer() {
             {app.title}
           </div>
           <p className='leading-5'>
-            本当に価値のあるビジネス書籍を独自
+            影響力ある人が薦める、おすすめの一冊を
             <br />
-            アルゴリズムで評価して紹介
+            独自アルゴリズムで評価して紹介
           </p>
         </div>
         <div className='lg:flex-1 lg:flex lg:m-0 lg:space-y-0 lg:max-w-none md:max-w-96 max-w-64 mx-auto space-y-4'>
