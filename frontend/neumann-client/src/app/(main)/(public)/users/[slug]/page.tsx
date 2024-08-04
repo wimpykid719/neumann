@@ -28,7 +28,7 @@ export default function UserLikesPage({ params }: { params: SlugProps }) {
   }, [data])
 
   return (
-    <section className='space-y-8'>
+    <section className='space-y-8 h-screen'>
       {userLikes ? <Books books={userLikes?.books || []} /> : <LoadingBooks />}
       <div className='w-full'>
         {userLikes?.pages && (

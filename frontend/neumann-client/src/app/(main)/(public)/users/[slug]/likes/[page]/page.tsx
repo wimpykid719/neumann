@@ -35,7 +35,7 @@ export default function UserLikesPage({ params }: UserLikesProps) {
   }, [data])
 
   return (
-    <section className='space-y-8'>
+    <section className='space-y-8 h-screen'>
       {userLikes ? <Books books={userLikes?.books || []} /> : <LoadingBooks />}
       <div className='w-full'>
         {userLikes?.pages && <Pagination page={page} lastPage={userLikes.pages.last} siblingCount={2} />}
