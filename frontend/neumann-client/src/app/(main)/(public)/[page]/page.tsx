@@ -46,7 +46,7 @@ export default async function Index({ params }: PathProps) {
     <section className='space-y-8'>
       <div className='space-y-8'>
         <Tabs navigation={booksNavigation} />
-        <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto'>
+        <div className='lg:max-w-5xl md:max-w-[656px] sm:max-w-[424px] mx-auto min-h-screen'>
           <ul className='sm:flex sm:flex-wrap lg:gap-12 sm:gap-10 lg:mb-24 md:mb-16 mb-8'>
             {res.books.map((book, index) => (
               <li key={book.id.toString()} className='sm:mb-0 mb-8 flex justify-center items-center'>
