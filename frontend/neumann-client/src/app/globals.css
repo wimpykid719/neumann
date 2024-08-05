@@ -45,7 +45,6 @@
   }
 }
 
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -85,11 +84,6 @@
 .common-renderer blockquote {
   @apply border-l-4 border-gray-500 pl-4 pr-4 text-gray-500;
 }
-
-.common-renderer li {
-  @apply ml-6 pl-4 mb-4 list-disc;
-}
-
 
 /* 条項用のスタイル */
 #clause-renderer > * + * {
@@ -187,4 +181,8 @@
 
 #about-renderer h6 {
   @apply leading-tight text-[10px] text-gray-500;
+}
+
+#about-renderer ul > li {
+  @apply ml-6 pl-4 mb-4 list-disc;
 }
