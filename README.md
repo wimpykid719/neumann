@@ -257,3 +257,7 @@ docker compose -f docker-compose.frontend.yml -p frontend down
   ]
 }
 ```
+
+## 結合テスト
+
+[実施内容 - スプレッドシート](https://docs.google.com/spreadsheets/d/1NNmBQheygvedELX9dXe8L_FCsSsIPmWdRzR_7lVsv50/edit?usp=sharing)
