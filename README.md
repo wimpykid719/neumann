@@ -83,13 +83,13 @@ docker network create interconnect
 docker compose -f docker-compose.backend.yml -p backend up --build
 ```
 
-`[localhost:8080](http://localhost:8080)` にアクセスすればrailsにアクセス出来る。
+[localhost:8080](http://localhost:8080) にアクセスすればrailsにアクセス出来る。
 
 
 
 ### フロントエンド
 
-下記のコマンドを実行すると `[localhost:3000](http://localhost:3000)` でNext.jsに接続出来るようになる。
+下記のコマンドを実行すると [localhost:3000](http://localhost:3000) でNext.jsに接続出来るようになる。
 
 ```zsh
 # 初回起動時
