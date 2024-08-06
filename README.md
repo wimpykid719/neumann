@@ -46,6 +46,7 @@
 ## 環境構築
 
 **前提条件**
+
 Dockerがインストールされていること
 
 dockerを使ってローカルで起動させる。
@@ -144,6 +145,7 @@ docker compose -f docker-compose.backend.yml -p backend down
 ```
 
 **rubocopの設定**
+
 コンテナ内にインストールされたrubocopを使用する用の設定を読み込ませます。
 ※ローカル環境は汚したくないので、コンテナ内で完結するようにしています。
 下記のコマンドを実行
@@ -155,6 +157,7 @@ cp pre-commit.sh .git/hooks/pre-commit
 これでコミット時にコンテナ内のrubocopを使って変更予定のファイルを解析します。
 
 **RSpecの設定**
+
 BizRankでは開発時に[vscode-run-rspec-file](https://marketplace.visualstudio.com/items?itemName=Thadeu.vscode-run-rspec-file)という拡張機能を使ってエディターからコンテナ内のRSpecを実行して開発を進めています。
 
 下記の設定をするとRSpecファイルの好きな行で `cmd + ctr + l` を入力する事で素早くRSpecを実行して動作確認を行う事ができます。
@@ -178,6 +181,7 @@ docker compose -f docker-compose.frontend.yml -p frontend down
 ```
 
 **biomeの設定**
+
 コンテナ内にインストールされたbiomeを使用する設定をします。
 ※ローカル環境は汚したくないので、コンテナ内で完結するようにしています。
 
@@ -199,7 +203,9 @@ docker compose -f docker-compose.frontend.yml -p frontend down
 これでコード保存時に整形を行います。
 
 ### 書籍データ取得基盤
+
 **Jest**
+
 ショートカットから実行出来るようにします。
 下記の設定が `.vscode/tasks.json` に設定されているのでこちらをショートカットキーで呼び出せるようにします。
 
@@ -233,6 +239,7 @@ docker compose -f docker-compose.frontend.yml -p frontend down
 ※RSpecみたいに1箇所ずつの指定は出来ないです。
 
 **biomeの設定**
+
 コンテナ内にインストールされたbiomeを使用する設定をします。
 ※ローカル環境は汚したくないので、コンテナ内で完結するようにしています。
 
