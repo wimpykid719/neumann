@@ -1,168 +1,172 @@
-## 最初に
 
-Next.jsとRailsの組み合わせでサービスを作成して見たかったのでたった2つのコマンドで環境を構築出来るようにしました。
+## BizRank
+
+本と人をつなぐサービスを作ろうと思い、BizRankを開発しました。
+ビジネスについて影響力ある人が薦める、おすすめの一冊を
+独自アルゴリズムで評価して紹介するサービスです。
+
+![BizRank - モック](https://github.com/user-attachments/assets/3b8decdd-942d-49ee-a1b7-92a8a0ab3110)
+
+
+## 機能
+
+ - ランキング生成: 独自アルゴリズムによる書籍の評価とランキング表示
+ - ユーザー認証: Google認証を用いたログイン機能
+ - インタラクション: 書籍へのいいね機能
+ - プロフィール管理: ユーザープロフィールの作成と編集
+ - SNS連携: Twitter（X）でのコメント投稿機能
+ - レスポンシブデザイン: モバイルからデスクトップまで対応
+ - ダークモード対応
+
+## 技術スタック
+
+ - フロントエンド
+   - Next.js
+     - biome（リンター・フォーマッター）
+     - Jest（テスト）
+ - バックエンド
+   - Ruby on Rails
+     - jwt（認証）
+     - rubocop（リンター）
+     - RSpec（テスト）
+ - データベース
+    - MySQL（RDB）
+    - Firestore（NoSQL）
+ - 書籍データ取得基盤
+   - Node.js
+      - Puppeteer (ウェブスクレイピング)
+      - biome（リンター・フォーマッター）
+      - Jest（テスト）
+- その他
+  - Docker
+  - GitHub Actions（CI/CD）
+  - Cloud Run（デプロイメント）
+  - Cloudflare R2（ストレージ）
 
 ## 環境構築
 
+**前提条件**
+Dockerがインストールされていること
+
+dockerを使ってローカルで起動させる。
 リポジトリを好きなフォルダにcloneする。
 
-コンテナ起動前下記のコマンドを実行する。
+```zsh
+git clone https://github.com/wimpykid719/neumann.git
+```
+
+コンテナ起動前、下記のコマンドを実行する。
 2つのコンテナ群で使用する共有のネットワークを作成する。
 
-```bash
+```zsh
 docker network create interconnect
 ```
 
 2つのコンテナ群で共通のネットワークを作成してそこにコンテナを入れる。
 バックエンド、フロントエンドコンテナのサーバ側で双方向のhttp通信を行う事ができるようになる。
 
+### 環境変数
+
+`.env.example` ファイルを `.env` にコピーし、必要な変数を設定してください。
+
 ### バックエンド
 
-バックエンドのコンテナをビルドして起動するには
+**用意するもの**
 
-```bash
+ - `master.key` ファイルを `backend/config` ディレクトリに配置
+ - 新しい `credentials.yml.enc` を作成し、secret_key_baseを設定
+
+コンテナの起動
+
+```zsh
 # 初回起動時のコマンド
 docker compose -f docker-compose.backend.yml -p backend up --build
 ```
 
-このコマンド一つでいい感じに環境を作ってサーバを起動してくれる。
+`[localhost:8080](http://localhost:8080)` にアクセスすればrailsにアクセス出来る。
 
-あとは `[localhost:8080](http://localhost:8080)` にアクセスすればrailsにアクセス出来る。
 
-ただしデータベースの接続設定をしていないのでエラーページが返る。
 
-後述で設定する。
+### フロントエンド
 
-バックエンドのログとフロントエンドのログを別々で確認したいので、docker-composeファイルを分けて起動している。そのため `-p backend` でプロジェクト名を付けてないとコンテナが混合していると警告が出る。
+下記のコマンドを実行すると `[localhost:3000](http://localhost:3000)` でNext.jsに接続出来るようになる。
 
-環境構築後に使用するコマンド群
+```zsh
+# 初回起動時
+docker compose -f docker-compose.frontend.yml -p frontend up --build
+```
 
-```yaml
+
+### 書籍データ取得基盤
+BizRankではNoteAPIからビジネス書籍に関連する記事を取得して、影響力ある人が薦める、おすすめの一冊を収集・評価しています。
+そして収集したデータはFirestoreに保存されるようになっています。
+
+```zsh
+# 初回起動時のコマンド
+docker compose -f docker-compose.bot.yml -p bot up --build
+```
+媒体取得基盤はコンテナ内に入って操作をします。
+
+```zsh
+docker exec -it bot /bin/bash
+
+# データ収集が始まります
+npm run start
+
+# Jestが実行されます
+npm run test
+```
+
+
+
+## 開発ツール設定
+
+開発を行う際の便利な設定
+
+### バックエンド
+
+```zsh
 # ビルド後こちらで起動する
 docker compose -f docker-compose.backend.yml -p backend up
 
 # コンテナに入る際は
 docker exec -it backend-rails-api /bin/bash
+
 # そこからDBにアクセスする
 # ここからSQL構文で自由にデータ操作出来る
 rails dbconsole
 
+# 書籍追加時のレイアウト確認行いたい場合、下記のコマンドを実行するとテストデータを追加する
+bundle exec rails r scripts/amount_of_book.rb
+
 # コンテナの削除
-docker compose -f docker-compose.backend.yml -p backend rm
+docker compose -f docker-compose.backend.yml -p backend down
 ```
 
-データベースの設定
+**rubocopの設定**
+コンテナ内にインストールされたrubocopを使用する用の設定を読み込ませます。
+※ローカル環境は汚したくないので、コンテナ内で完結するようにしています。
+下記のコマンドを実行
 
-`rails new` によって `config/datebase.yml` が作成されていると思うので下記設定に置き換えるとPostgresqlに接続出来るようになる。再びコンテナを止めて `docker-compose -f docker-compose.backend.yml -p backend up` で起動して  `[localhost:8080](http://localhost:8080)` にアクセスするとrailsのページが今度はエラーなしで返ってくる。所どころ `neumann` と名前が出てくるがこれは個人的にサービス名に使いたい名前なので作りたいサービスに合わせて変更して貰えればと思う。その際は `docker-compose.backend.yml` 等にも記述されているので全てを変更する必要がある。
+```zsh
+cp pre-commit.sh .git/hooks/pre-commit
+```
 
-**config/datebase.yml**
+これでコミット時にコンテナ内のrubocopを使って変更予定のファイルを解析します。
 
-```yaml
-# PostgreSQL. Versions 9.3 and up are supported.
-#
-# Install the pg driver:
-#   gem install pg
-# On macOS with Homebrew:
-#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
-# On macOS with MacPorts:
-#   gem install pg -- --with-pg-config=/opt/local/lib/postgresql84/bin/pg_config
-# On Windows:
-#   gem install pg
-#       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
-#
-# Configure Using Gemfile
-# gem "pg"
-#
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  host: db
-  username: neumann
-  password: password
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+**RSpecの設定**
+BizRankでは開発時に[vscode-run-rspec-file](https://marketplace.visualstudio.com/items?itemName=Thadeu.vscode-run-rspec-file)という拡張機能を使ってエディターからコンテナ内のRSpecを実行して開発を進めています。
 
-development:
-  <<: *default
-  database: neumann_development
+下記の設定をするとRSpecファイルの好きな行で `cmd + ctr + l` を入力する事で素早くRSpecを実行して動作確認を行う事ができます。
 
-  # The specified database role being used to connect to postgres.
-  # To create additional roles in postgres see `$ createuser --help`.
-  # When left blank, postgres will use the default role. This is
-  # the same name as the operating system user running Rails.
-  #username: backend
-
-  # The password associated with the postgres role (username).
-  #password:
-
-  # Connect on a TCP socket. Omitted by default since the client uses a
-  # domain socket that doesn't need configuration. Windows does not have
-  # domain sockets, so uncomment these lines.
-  #host: localhost
-
-  # The TCP port the server listens on. Defaults to 5432.
-  # If your server runs on a different port number, change accordingly.
-  #port: 5432
-
-  # Schema search path. The server defaults to $user,public
-  #schema_search_path: myapp,sharedapp,public
-
-  # Minimum log levels, in increasing order:
-  #   debug5, debug4, debug3, debug2, debug1,
-  #   log, notice, warning, error, fatal, and panic
-  # Defaults to warning.
-  #min_messages: notice
-
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
-test:
-  <<: *default
-  database: neumann_test
-
-# As with config/credentials.yml, you never want to store sensitive information,
-# like your database password, in your source code. If your source code is
-# ever seen by anyone, they now have access to your database.
-#
-# Instead, provide the password or a full connection URL as an environment
-# variable when you boot the app. For example:
-#
-#   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
-#
-# If the connection URL is provided in the special DATABASE_URL environment
-# variable, Rails will automatically merge its configuration values on top of
-# the values provided in this file. Alternatively, you can specify a connection
-# URL environment variable explicitly:
-#
-#   production:
-#     url: <%= ENV["MY_APP_DATABASE_URL"] %>
-#
-# Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
-# for a full overview on how database connection configuration can be specified.
-#
-production:
-  <<: *default
-  database: neumann_production
-  username: backend
-  password: <%= ENV["BACKEND_DATABASE_PASSWORD"] %>
+```json:settings.json
+"vscode-run-rspec-file.custom-command": "docker exec -it backend-rails-api bundle exec rspec",
+"vscode-run-rspec-file.folder": "backend/spec",
 ```
 
 ### フロントエンド
 
-Next.jsの環境を作るコンテナ
-
-下記のコマンドを実行すると `[localhost:3000](http://localhost:3000)` でNext.jsに接続出来るようになる。
-
-```bash
-# 初回起動時
-docker compose -f docker-compose.frontend.yml -p frontend up --build
-```
-
-環境構築後に使用するコマンド群
-
-```bash
+```zsh
 # ビルド後こちらで起動する
 docker compose -f docker-compose.frontend.yml -p frontend up
 
@@ -170,21 +174,79 @@ docker compose -f docker-compose.frontend.yml -p frontend up
 docker exec -it frontend-nextjs /bin/bash
 
 # コンテナの削除
-docker compose -f docker-compose.frontend.yml -p frontend rm
+docker compose -f docker-compose.frontend.yml -p frontend down
 ```
 
-これで環境構築が出来る。
+**biomeの設定**
+コンテナ内にインストールされたbiomeを使用する設定をします。
+※ローカル環境は汚したくないので、コンテナ内で完結するようにしています。
 
-たった2つのコマンドで環境構築が出来る。一個だけ気になるのが、ctr+cでコンテナを終了する際に `exit 137` でコンテナを終了して正常終了してくれない。調べるとメモリが足りない等の記事が出る。しかし8GBもあげているので別の問題だと思われる。
+この設定はVSCode, Cursorのみでしか設定出来ないものになります。
+[Run on Save](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave) という拡張機能をインストールします。
+その後、下記の設定を行います。
 
-試しにサーバを起動しない状態でコンテナを起動して `ctr+c` したら正常に終了したので
+```json:settings.json
+"emeraldwalk.runonsave": {
+  "commands": [
+      {
+        "match": "frontend/.*\\.(js|jsx|ts|tsx|json)$",
+        "cmd": "echo '${relativeFile}' | sed -e 's:frontend/::; s/(/\\\\(/g; s/)/\\\\)/g;' | xargs -0 -I{} sh -c 'docker compose -f docker-compose.frontend.yml -p frontend exec -T frontend npx @biomejs/biome check --apply {}'"
+      }
+  ]
+}
+```
 
-おそらく rails, next.js等のサーバを起動したままコンテナを終了しているのが原因かと思われる。
+これでコード保存時に整形を行います。
 
-会社の開発環境でも `exit 137` で終了していたのでこれは仕方なさそう。解決方法ご存知の方いらしたら教えて下さい。
+### 書籍データ取得基盤
+**Jest**
+ショートカットから実行出来るようにします。
+下記の設定が `.vscode/tasks.json` に設定されているのでこちらをショートカットキーで呼び出せるようにします。
 
-何がともあれこれでバンバン開発ライフを送れる。
+```json:.vscode/tasks.json
+"tasks": [
+  {
+    "label": "Run Jest on Current File",
+    "type": "shell",
+    "command": "docker exec -it bot npx jest ${relativeFile}",
+    "problemMatcher": [],
+    "group": {
+        "kind": "test",
+        "isDefault": true
+    }
+  },
+]
+```
 
-### 参照
+`cmd + shift + p` で Open Keybord Shortcuts（JSON）を開きます。
+下記の設定を追加
 
-[たった2つのコマンドでNext.js、Rails環境を構築できるようにした。](https://zenn.dev/unemployed/articles/nextjs-rails-postgresql-docker)
+```json:keybindings.json
+{
+    "key": "cmd+j",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Run Jest on Current File"
+}
+```
+
+これで任意のjestファイルで `cmd + j` を実行するとそのファイルに書かれたテストが実行されます。
+※RSpecみたいに1箇所ずつの指定は出来ないです。
+
+**biomeの設定**
+コンテナ内にインストールされたbiomeを使用する設定をします。
+※ローカル環境は汚したくないので、コンテナ内で完結するようにしています。
+
+この設定はVSCode, Cursorのみでしか設定出来ないものになります。
+[Run on Save](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave) という拡張機能をインストールします。
+その後、下記の設定を行います。
+
+```json:settings.json
+"emeraldwalk.runonsave": {
+  "commands": [
+      {
+        "match": "bot/.*\\.(js|jsx|ts|tsx|json)$",
+        "cmd": "echo '${relativeFile}' | sed -e 's:bot/::; s/(/\\\\(/g; s/)/\\\\)/g;' | xargs -0 -I{} sh -c 'docker compose -f docker-compose.bot.yml -p bot exec -T bot npx @biomejs/biome check --apply {}'"
+      },
+  ]
+}
+```
