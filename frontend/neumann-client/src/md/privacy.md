@@ -61,7 +61,8 @@ Google AnalyticsによるCookieの利用を停止する方法は[Google Analytic
 本プライバシーポリシーに関するお問い合わせは、以下の連絡先までお願いします。
 
 [BizRank](/)
-メールアドレス: bizrank@gmail.com
+
+[連絡先](https://forms.gle/3VHsnYvQUDHsTgUh7)
 以上
 
 このプライバシーポリシーは、 2024年08月01日 から適用されます。

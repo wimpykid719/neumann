@@ -41,4 +41,5 @@
 この利用規約は、 2024年08月01日 から適用されます。
 
 [BizRank](/)
-メールアドレス: bizrank@bizrank.com
+
+[問い合わせ先](https://forms.gle/3VHsnYvQUDHsTgUh7)
