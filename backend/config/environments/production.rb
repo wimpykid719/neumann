@@ -84,6 +84,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # Allow Cloud Run domains
-  config.hosts << /.*\.run\.app/
+  config.hosts << ENV.fetch('BASE_URL')
 end
