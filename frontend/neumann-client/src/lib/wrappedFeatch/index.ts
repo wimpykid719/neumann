@@ -87,7 +87,9 @@ function buildPathWithSearchParams<T = object>(path: string, params?: T) {
 /** 通信処理を共通化した関数 */
 async function http<T>(path: string, config: RequestInit, revalidate = 0): Promise<T | FetchError> {
   const apiUrl =
-    process.env.PROXY_MODE === 'true' ? process.env.NEXT_PUBLIC_API_URL_PROXY! : process.env.NEXT_PUBLIC_API_URL!
+    process.env.NEXT_PUBLIC_PROXY_MODE === 'true'
+      ? process.env.NEXT_PUBLIC_API_URL_PROXY!
+      : process.env.NEXT_PUBLIC_API_URL!
   const request = new Request(
     // API_URLは必ず値が存在する想定なので `!` で型エラーを回避する
     buildFullPath(process.env.API_URL_FROM_SERVER || apiUrl, path),
