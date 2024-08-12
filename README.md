@@ -97,6 +97,16 @@ docker compose -f docker-compose.backend.yml -p backend up --build
 docker compose -f docker-compose.frontend.yml -p frontend up --build
 ```
 
+### リバースプロキシー
+
+`PROXY_MODE=true` にして
+下記のコマンドを実行すると [localhost:3100](http://localhost:3100) でNext.jsに接続出来るようになる。
+
+```zsh
+# 初回起動時
+docker compose -f docker-compose.proxy.yml -p proxy up --build
+```
+
 
 ### 書籍データ取得基盤
 BizRankではNoteAPIからビジネス書籍に関連する記事を取得して、影響力ある人が薦める、おすすめの一冊を収集・評価しています。
@@ -117,8 +127,6 @@ npm run start
 # Jestが実行されます
 npm run test
 ```
-
-
 
 ## 開発ツール設定
 
@@ -196,6 +204,41 @@ docker compose -f docker-compose.frontend.yml -p frontend down
         "match": "frontend/.*\\.(js|jsx|ts|tsx|json)$",
         "cmd": "echo '${relativeFile}' | sed -e 's:frontend/::; s/(/\\\\(/g; s/)/\\\\)/g;' | xargs -0 -I{} sh -c 'docker compose -f docker-compose.frontend.yml -p frontend exec -T frontend npx @biomejs/biome check --apply {}'"
       }
+  ]
+}
+```
+
+これでコード保存時に整形を行います。
+
+### リバースプロキシー
+
+```zsh
+# ビルド後こちらで起動する
+docker compose -f docker-compose.proxy.yml -p proxy up
+
+# コンテナに入る際は
+docker exec -it proxy /bin/bash
+
+# コンテナの削除
+docker compose -f docker-compose.proxy.yml -p proxy down
+```
+
+**biomeの設定**
+
+コンテナ内にインストールされたbiomeを使用する設定をします。
+※ローカル環境は汚したくないので、コンテナ内で完結するようにしています。
+
+この設定はVSCode, Cursorのみでしか設定出来ないものになります。
+[Run on Save](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave) という拡張機能をインストールします。
+その後、下記の設定を行います。
+
+```json:settings.json
+"emeraldwalk.runonsave": {
+  "commands": [
+        {
+          "match": "proxy/.*\\.(js|jsx|ts|tsx|json)$",
+          "cmd": "echo '${relativeFile}' | sed -e 's:proxy/::; s/(/\\\\(/g; s/)/\\\\)/g;' | xargs -0 -I{} sh -c 'docker compose -f docker-compose.proxy.yml -p proxy exec -T proxy npx @biomejs/biome check --apply {}'"
+        },
   ]
 }
 ```
