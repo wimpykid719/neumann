@@ -3,8 +3,6 @@ version: '3'
 services:
   proxy:
     environment:
-      BACKEND_URL: "$BACK_URL_FROM_SERVER:$BACK_PORT"
-      FRONTEND_URL: "$FRONT_URL_FROM_SERVER:$FRONT_PORT"
       PROXY_PORT: $PROXY_PORT
     build:
       context: ./proxy/
