@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  proxy:
+    environment:
+      BACKEND_URL: "$BACK_URL_FROM_SERVER:$BACK_PORT"
+      FRONTEND_URL: "$FRONT_URL_FROM_SERVER:$FRONT_PORT"
+      PROXY_PORT: $PROXY_PORT
+    build:
+      context: ./proxy/
+      dockerfile: Dockerfile
+    container_name: proxy
+    working_dir: /proxy
+    stop_signal: SIGINT
+    volumes:
+      - ./proxy:/proxy
+    networks:
+      - interconnect
+    ports:
+      - "$PROXY_PORT:$PROXY_PORT"
+    stdin_open: true
+    # -tを意味する
+    tty: true
+networks:
+  interconnect:
+    name: interconnect
+    external: true

@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins ENV.fetch('FRONT_ORIGINS')
+    origins ENV['RAILS_ENV'] == 'production' ? ENV.fetch('BASE_URL') : [ENV.fetch('FRONT_ORIGINS'), ENV.fetch('FRONT_ORIGINS_PROXY')]
 
     resource '*',
       headers: :any,
