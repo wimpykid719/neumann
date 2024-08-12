@@ -17,7 +17,7 @@ module Oauth2
         token_url: '/token'
       }.freeze
       AUTHORIZE_PARAMS = {
-        redirect_uri: ENV.fetch('FRONT_REDIRECT_URI')
+        redirect_uri: ENV.fetch('PROXY_MODE', 'false') == 'true' ? ENV.fetch('FRONT_REDIRECT_URI_PROXY') : ENV.fetch('FRONT_REDIRECT_URI')
       }.freeze
 
       def initialize
