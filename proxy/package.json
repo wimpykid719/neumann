@@ -1,0 +1,11 @@
+{
+  "name": "src",
+  "scripts": {
+    "dev": "tsx watch src/index.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1"
+  }
+}
