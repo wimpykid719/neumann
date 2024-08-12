@@ -10,8 +10,7 @@ class Firestore
   end
 
   def ranking_query(collection_name, page, page_limit)
-    # インデックスを貼らないと実行出来ないクエリー
-    query = @firestore.col(collection_name).where(:scraping, '=', false).order(:score, :desc).limit(page_limit)
+    query = @firestore.col(collection_name).order(:score, :desc).limit(page_limit)
     return query.start_after(page) if page
 
     query

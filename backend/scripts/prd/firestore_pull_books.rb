@@ -76,7 +76,7 @@ class AmazonBooks < Firestore
     return unless amazon_books
 
     amazon_books.each do |amazon_book|
-      register_book(amazon_book)
+      register_book(amazon_book) unless amazon_book[:scraping]
     end
 
     amazon_books_size, next_page = extract_amazon_books_data(amazon_books).values_at(
