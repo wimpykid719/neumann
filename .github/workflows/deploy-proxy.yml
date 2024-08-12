@@ -6,12 +6,8 @@ on:
   push:
     branches:
       - master
-      - feat/*
-      - chore/*
-      - fix/*
     paths:
-      - '.github/workflows/deploy-proxy.yml'
-      - 'proxy/**/*'
+      - '.github/workflows/deploy-backend.yml'
 
 jobs:
   deploy:
