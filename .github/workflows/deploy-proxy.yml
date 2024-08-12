@@ -11,6 +11,7 @@ on:
       - fix/*
     paths:
       - '.github/workflows/deploy-proxy.yml'
+      - 'proxy/**/*'
 
 jobs:
   deploy:
