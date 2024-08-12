@@ -114,7 +114,7 @@ export default function Avatar() {
                   </li>
                   <li key={keys.accountSettings}>
                     <Link
-                      href={`/users/${user.name}/likes/1`}
+                      href={'/settings/account'}
                       className='flex items-center p-3 dark:hover:bg-gray-600 hover:bg-gray-100'
                     >
                       <span className='inline-flex items-center w-7'>
