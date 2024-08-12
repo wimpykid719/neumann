@@ -50,6 +50,10 @@ frontend/neumann-client/.pnp.js
 /frontend/neumann-client/.next/
 /frontend/neumann-client/out/
 
+# Proxy
+/proxy/.dev.vars
+/proxy/.wrangler/
+
 # production
 /frontend/neumann-client/build
 

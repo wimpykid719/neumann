@@ -1,0 +1,35 @@
+name: deploy proxy cloudflare workers
+
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: ./proxy
+      - run: npm ci
+        working-directory: ./proxy
+      - name: Publish
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: 'proxy'
+          secrets: |
+            BACKEND_URL
+            FRONTEND_URL
+        env:
+          BACKEND_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          FRONTEND_URL: ${{ vars.FRONT_ORIGINS }}
