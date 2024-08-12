@@ -19,7 +19,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: ./proxy
       - run: npm ci
+        working-directory: ./proxy
       - name: Publish
         uses: cloudflare/wrangler-action@v3
         with:
