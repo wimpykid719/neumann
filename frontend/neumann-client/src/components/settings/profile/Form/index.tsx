@@ -38,6 +38,12 @@ export default function ProfileForm({ user, setUser }: Props) {
     }
   }
 
+  const addOriginalFileName = (file: File, originalFileName: File['name']) =>
+    new File([file], originalFileName, {
+      type: file.type,
+      lastModified: new Date().getTime(),
+    })
+
   const requestUpdate = async (data: ProfileUpdateValidation) => {
     const token = (await execSilentRefresh()) || accessToken
     if (!token) return showToast(toastText.no_access_token, toastStatus.error)
@@ -51,7 +57,7 @@ export default function ProfileForm({ user, setUser }: Props) {
       try {
         const compressedAvatar = await imageCompression(data.avatar, options)
 
-        data.avatar = compressedAvatar
+        data.avatar = addOriginalFileName(compressedAvatar, data.avatar.name)
       } catch {
         showToast(toastText.failed_img_compression, toastStatus.error)
         return
