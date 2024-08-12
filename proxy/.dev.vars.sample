@@ -1,0 +1,2 @@
+BACKEND_URL = "http://backend:8080"
+FRONTEND_URL = "http://frontend:3000"
