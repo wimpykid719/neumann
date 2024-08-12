@@ -7,6 +7,8 @@ on:
     branches:
       - master
       - feat/*
+      - chore/*
+      - fix/*
     paths:
       - '.github/workflows/deploy-proxy.yml'
 
@@ -32,5 +34,5 @@ jobs:
             BACKEND_URL
             FRONTEND_URL
         env:
-          BACKEND_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          FRONTEND_URL: ${{ secrets.FRONT_ORIGINS }}
+          BACKEND_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          FRONTEND_URL: ${{ vars.FRONT_ORIGINS }}
