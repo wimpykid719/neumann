@@ -8,6 +8,7 @@ const AFFILIATE_TAG = process.env.PARTNER_TAG!
 const BOOK_CATEGORIES = ['本', 'Kindleストア', 'Kindle本'] as const
 const REJECT_BOOK_CATEGORIES = ['Kindle洋書'] as const
 const PRICE_ELEMENT_PATH = [
+  '#tmm-grid-swatch-HARDCOVER .slot-price > span',
   '#tmm-grid-swatch-PAPERBACK .slot-price > span',
   '#tmm-grid-swatch-KINDLE .slot-price > span',
   '#tmm-grid-swatch-OTHER .slot-price > span',
@@ -23,7 +24,7 @@ type BookPagePath = (typeof PAGE_ELEMENT_PATH)[number]
 const PUBLISHER_ELEMENT_PATH = ['#rpi-attribute-book_details-publisher .rpi-attribute-value > span'] as const
 type PublisherPath = (typeof PUBLISHER_ELEMENT_PATH)[number]
 
-const PAPERBACK_ELEMENT_PATH = ['#tmm-grid-swatch-PAPERBACK a'] as const
+const PAPERBACK_ELEMENT_PATH = ['#tmm-grid-swatch-HARDCOVER a', '#tmm-grid-swatch-PAPERBACK a'] as const
 type PaperbackPath = (typeof PAPERBACK_ELEMENT_PATH)[number]
 
 const isRequestFailed = async (page: Page) =>
@@ -73,11 +74,13 @@ const getPrice = async (page: Page) => {
   return await page.$eval(path, element => element.textContent?.trim() || '')
 }
 
-const getPaperBackPath = async (page: Page) => {
+const getPaperBookPath = async (page: Page) => {
   const path = await exsistElement(page, PAPERBACK_ELEMENT_PATH)
-  if (!path || path !== PAPERBACK_ELEMENT_PATH[0]) return
+  if (!path) return
 
-  return await page.$eval(path, element => (element.href && element.href !== 'javascript:void(0)' ? element.href : ''))
+  return await page.$eval(path, element =>
+    element instanceof HTMLAnchorElement && element.href && element.href !== 'javascript:void(0)' ? element.href : '',
+  )
 }
 
 const getBookPage = async (page: Page) => {
@@ -157,7 +160,7 @@ export const getBookInfo = async (url: string) => {
       return new NotBookError(requestText.notBook, url)
     }
 
-    const paperBackPath = await getPaperBackPath(page)
+    const paperBackPath = await getPaperBookPath(page)
     if (paperBackPath) {
       await page.goto(paperBackPath, { waitUntil: 'domcontentloaded' })
     }
