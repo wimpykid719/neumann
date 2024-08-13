@@ -7,7 +7,6 @@ on:
     branches:
       - master
       - fix/*
-      - feat/*
     paths:
       - '.github/workflows/deploy-frontend.yml'
 
