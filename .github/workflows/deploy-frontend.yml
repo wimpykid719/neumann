@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - master
+      - fix/*
     paths:
       - '.github/workflows/deploy-frontend.yml'
 
