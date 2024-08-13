@@ -1,3 +1,4 @@
+import 'server-only'
 import { codeHighLight } from '@/lib/codeHighLight'
 import { PhrasingContent, RootContent, RootContentMap } from 'mdast'
 import Link from 'next/link'
