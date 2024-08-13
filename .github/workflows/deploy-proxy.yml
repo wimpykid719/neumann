@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/deploy-backend.yml'
+      - '.github/workflows/deploy-proxy.yml'
 
 jobs:
   deploy:
