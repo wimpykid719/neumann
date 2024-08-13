@@ -16,7 +16,7 @@ type Props = {
 
 const parseMarkdown = remark().use(remarkFrontmatter).use(remarkGfm).use(remarkBreaks)
 
-export const MarkdownRenderer: React.FC<Props> = async ({ id, className, children }) => {
+export async function MarkdownRenderer({ id, className, children }: Props) {
   const mdastRoot = parseMarkdown.parse(children)
   await parseMarkdown.run(mdastRoot)
 
