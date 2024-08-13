@@ -79,14 +79,24 @@ jobs:
         run: |
           gcloud run deploy bizrank-api \
             --set-env-vars RAILS_ENV=${{ vars.RAILS_ENV }} \
-            --set-env-vars FRONT_ORIGINS=${{ vars.FRONT_ORIGINS }} \
-            --set-env-vars ALLOW_HOST_PORT=${{ secrets.ALLOW_HOST }}:${{ secrets.BACK_PORT }} \
+            --set-env-vars BASE_URL=${{ secrets.BASE_URL }} \
             --set-env-vars NEUMANN_DATABASE_HOST=${{ secrets.NEUMANN_DATABASE_HOST }} \
             --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --set-env-vars MYSQL_USER=${{ secrets.MYSQL_USER }} \
             --set-env-vars NEUMANN_DATABASE_PASSWORD=${{ secrets.NEUMANN_DATABASE_PASSWORD }} \
             --set-env-vars MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
             --set-env-vars NEUMANN_DATABASE_SOCKET=${{ secrets.NEUMANN_DATABASE_SOCKET }} \
+            --set-env-vars GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
+            --set-env-vars GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
+            --set-env-vars FRONT_REDIRECT_URI=${{ secrets.BASE_URL }} \
+            --set-env-vars STATE_SECRET=${{ secrets.STATE_SECRET }} \
+            --set-env-vars CLOUDFLARE_R2_ACCESS_KEY_ID=${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }} \
+            --set-env-vars CLOUDFLARE_R2_SECRET_ACCESS_KEY=${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }} \
+            --set-env-vars CLOUDFLARE_R2_API_TOKEN=${{ secrets.CLOUDFLARE_R2_API_TOKEN }} \
+            --set-env-vars CLOUDFLARE_R2_ACCOUNT_ID=${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }} \
+            --set-env-vars CLOUDFLARE_R2_BUCKET=${{ secrets.CLOUDFLARE_R2_BUCKET }} \
+            --set-env-vars CLOUDFLARE_R2_ENDPOINT=${{ secrets.CLOUDFLARE_R2_ENDPOINT }} \
+            --set-env-vars BIZRANK_BUCKET_DOMAIN=${{ secrets.BIZRANK_BUCKET_DOMAIN }} \
             --region=${{ vars.REGION }} \
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.BACKEND_REPOSITORY_NAME }}/rails-api \
             --port=${{ secrets.BACK_PORT }} \
@@ -121,12 +131,23 @@ jobs:
             --memory=1024Mi \
             --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --set-env-vars RAILS_ENV=${{ vars.RAILS_ENV }} \
-            --set-env-vars FRONT_ORIGINS=${{ vars.FRONT_ORIGINS }} \
-            --set-env-vars ALLOW_HOST_PORT=${{ secrets.ALLOW_HOST }}:${{ secrets.BACK_PORT }} \
+            --set-env-vars BASE_URL=${{ secrets.BASE_URL }} \
+            --set-env-vars FRONT_ORIGINS=${{ secrets.BASE_URL }} \
             --set-env-vars NEUMANN_DATABASE_HOST=${{ secrets.NEUMANN_DATABASE_HOST }} \
             --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --set-env-vars MYSQL_USER=${{ secrets.MYSQL_USER }} \
             --set-env-vars NEUMANN_DATABASE_PASSWORD=${{ secrets.NEUMANN_DATABASE_PASSWORD }} \
             --set-env-vars MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
             --set-env-vars NEUMANN_DATABASE_SOCKET=${{ secrets.NEUMANN_DATABASE_SOCKET }} \
+            --set-env-vars GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
+            --set-env-vars GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
+            --set-env-vars FRONT_REDIRECT_URI=${{ secrets.BASE_URL }} \
+            --set-env-vars STATE_SECRET=${{ secrets.STATE_SECRET }} \
+            --set-env-vars CLOUDFLARE_R2_ACCESS_KEY_ID=${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }} \
+            --set-env-vars CLOUDFLARE_R2_SECRET_ACCESS_KEY=${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }} \
+            --set-env-vars CLOUDFLARE_R2_API_TOKEN=${{ secrets.CLOUDFLARE_R2_API_TOKEN }} \
+            --set-env-vars CLOUDFLARE_R2_ACCOUNT_ID=${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }} \
+            --set-env-vars CLOUDFLARE_R2_BUCKET=${{ secrets.CLOUDFLARE_R2_BUCKET }} \
+            --set-env-vars CLOUDFLARE_R2_ENDPOINT=${{ secrets.CLOUDFLARE_R2_ENDPOINT }} \
+            --set-env-vars BIZRANK_BUCKET_DOMAIN=${{ secrets.BIZRANK_BUCKET_DOMAIN }} \
             --execute-now
