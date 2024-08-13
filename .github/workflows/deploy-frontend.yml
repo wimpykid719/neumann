@@ -54,12 +54,14 @@ jobs:
       - name: docker auth
         run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
       - name: docker build
-        run: docker build \
+        run: |
+          docker build \
           --build-arg NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }} \
           --build-arg BIZRANK_BUCKET_DOMAIN=${{ secrets.BIZRANK_BUCKET_DOMAIN }} \
           --build-arg API_URL_FROM_SERVER=${{ secrets.BASE_URL }} \
           --build-arg BASE_URL=${{ secrets.BASE_URL }} \
-          -f Dockerfile.prd -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs .
+          -f Dockerfile.prd \
+          -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs .
       - name: docker push to Artifact Registry
         run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs
 
