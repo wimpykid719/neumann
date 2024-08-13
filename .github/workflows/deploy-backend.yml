@@ -7,7 +7,6 @@ on:
     branches:
       - master
       - fix/*
-      - feat/*
     paths:
       - '.github/workflows/deploy-backend.yml'
 
@@ -133,7 +132,6 @@ jobs:
             --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --set-env-vars RAILS_ENV=${{ vars.RAILS_ENV }} \
             --set-env-vars BASE_URL=${{ secrets.BASE_URL }} \
-            --set-env-vars FRONT_ORIGINS=${{ secrets.BASE_URL }} \
             --set-env-vars NEUMANN_DATABASE_HOST=${{ secrets.NEUMANN_DATABASE_HOST }} \
             --set-env-vars RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --set-env-vars MYSQL_USER=${{ secrets.MYSQL_USER }} \
