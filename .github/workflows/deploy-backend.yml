@@ -3,6 +3,12 @@ name: deploy backend
 on:
   release:
     types: [published]
+  push:
+    branches:
+      - master
+      - fix/*
+    paths:
+      - '.github/workflows/deploy-backend.yml'
 
 jobs:
   create-artifact-repository:
