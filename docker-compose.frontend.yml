@@ -13,6 +13,11 @@ services:
     build:
       context: ./frontend/
       dockerfile: Dockerfile
+      # Docker.prdをローカルでビルドしたい際に必要な値
+      args:
+        NEXT_PUBLIC_API_URL: $BASE_URL
+        BIZRANK_BUCKET_DOMAIN: $BIZRANK_BUCKET_DOMAIN
+        BASE_URL: $BASE_URL
     container_name: frontend-nextjs
     working_dir: /frontend
     stop_signal: SIGINT
