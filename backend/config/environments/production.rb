@@ -86,6 +86,8 @@ Rails.application.configure do
 
   allowed_hosts = ENV.fetch('ALLOW_HOST', '').split(';')
   allowed_hosts.each do |host|
+    puts '中身を確認'
+    puts host
     config.hosts << host
   end
 end
