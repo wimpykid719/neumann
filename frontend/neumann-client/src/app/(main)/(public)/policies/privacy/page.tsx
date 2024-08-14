@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: app.privacy,
 }
 
-export default async function privacyPage() {
+export default async function PrivacyPage() {
   const markdown = readMarkdown('src/md/privacy.md')
 
   return (
