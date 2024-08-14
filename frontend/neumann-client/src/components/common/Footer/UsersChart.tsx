@@ -1,19 +1,22 @@
 'use client'
 
 import { useDarkMode } from '@/hooks/useDarkMode'
-import { FetchError } from '@/lib/errors'
 import { ResponseAnalytic } from '@/lib/wrappedFeatch/requests/analytic'
 import error from '@/text/error.json'
 import { Line, LineChart, ResponsiveContainer, YAxis } from 'recharts'
 
 type UsersChartProps = {
-  data: FetchError | ResponseAnalytic
+  data: string | ResponseAnalytic
 }
 
 export default function UsersChart({ data }: UsersChartProps) {
   const isDarkMode = useDarkMode()
 
-  if (!data || data instanceof FetchError) {
+  if (typeof data === 'string') {
+    return <p>{data}</p>
+  }
+
+  if (!data) {
     return <p>{error.failedUserAnalyticsFetch}</p>
   }
 
