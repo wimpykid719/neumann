@@ -18,7 +18,7 @@ Rails.application.configure do
   config.server_timing = true
 
   # フロントエンドからのサーバサイドからのリクエストを許可する
-  allowed_hosts = ENV.fetch('ALLOW_HOST', '').split(',')
+  allowed_hosts = ENV.fetch('ALLOW_HOST', '').split(';')
   allowed_hosts.each do |host|
     config.hosts << host
   end
