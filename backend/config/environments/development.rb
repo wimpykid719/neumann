@@ -18,10 +18,10 @@ Rails.application.configure do
   config.server_timing = true
 
   # フロントエンドからのサーバサイドからのリクエストを許可する
-  config.hosts << ENV.fetch('ALLOW_HOST_PORT')
-
-  # Allow Cloud Run domains
-  config.hosts << /.*\.run\.app/
+  allowed_hosts = ENV.fetch('ALLOW_HOST', '').split(',')
+  allowed_hosts.each do |host|
+    config.hosts << host
+  end
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
