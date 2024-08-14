@@ -6,7 +6,7 @@ RUN set -eux && \
     apt-get install -y \
       default-mysql-client
 
-
+ENV TZ=Asia/Tokyo
 COPY Gemfile Gemfile.lock* /backend/
 COPY . /backend/
 
