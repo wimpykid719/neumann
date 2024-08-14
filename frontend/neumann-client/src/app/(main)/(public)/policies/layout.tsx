@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function SettingsLayout({
+export default function PoliciesLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
