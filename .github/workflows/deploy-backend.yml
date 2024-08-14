@@ -123,7 +123,7 @@ jobs:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
       - name: Excute Cloud Run Jobs
         run: |
-          gcloud run jobs create add-books-db \
+          gcloud run jobs deploy add-books-db \
             --args=bundle,exec,rails,runner,scripts/amount_of_book.rb \
             --quiet \
             --region=${{ vars.REGION }} \
