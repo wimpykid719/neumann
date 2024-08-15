@@ -39,7 +39,7 @@ export default function RootLayout({
           </LoginHistoryProvider>
         </AccessTokenProvider>
       </body>
-      <GoogleAnalytics gaId={process.env.GA_ID ?? ''} />
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
     </html>
   )
 }
