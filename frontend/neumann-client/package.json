@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@next/third-parties": "^14.2.5",
     "browser-image-compression": "^2.0.2",
     "framer-motion": "^11.0.3",
     "gray-matter": "^4.0.3",

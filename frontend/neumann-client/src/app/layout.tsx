@@ -4,6 +4,7 @@ import { ModalProvider } from '@/contexts/ModalContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 import { UserProvider } from '@/contexts/UserContext'
 import app from '@/text/app.json'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -38,6 +39,7 @@ export default function RootLayout({
           </LoginHistoryProvider>
         </AccessTokenProvider>
       </body>
+      <GoogleAnalytics gaId={process.env.GA_ID ?? ''} />
     </html>
   )
 }
