@@ -86,6 +86,4 @@ Rails.application.configure do
 
   config.hosts = ENV.fetch('ALLOW_HOST', '').split(';')
   puts "ホストの設定を確認 - 配列: #{config.hosts}"
-  config.hosts << /.*\.run\.app/
-  puts "ホストの設定を確認: #{config.hosts}"
 end
