@@ -33,6 +33,8 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /frontend/neumann-client/public ./public
+COPY --from=builder /frontend/neumann-client/src/md ./src/md
+
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
@@ -44,4 +46,4 @@ USER nextjs
 EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME '0.0.0.0'
-CMD ["node", "server.js"]
+CMD ["node", "neumann-client/server.js"]
