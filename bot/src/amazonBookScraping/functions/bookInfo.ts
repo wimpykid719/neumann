@@ -125,7 +125,7 @@ const getBookASIN = (page: Page) => getASIN(page.url())
 const generateAmazonAffiliateLink = (productUrl: string, tagId: string) => {
   const { origin, pathname } = new URL(cleanAmazonUrl(productUrl))
 
-  return origin + pathname + `?tag=${tagId}`
+  return origin + pathname + `/ref=nosim?tag=${tagId}`
 }
 
 const settingsCookie = async (page: Page) => {

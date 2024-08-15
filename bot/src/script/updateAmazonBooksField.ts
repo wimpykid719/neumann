@@ -41,7 +41,7 @@ const firestore = new Firestore()
 const generateAmazonAffiliateLink = (productUrl: string, tagId: string) => {
   const { origin, pathname } = new URL(cleanAmazonUrl(productUrl))
 
-  return origin + pathname + `?tag=${tagId}`
+  return origin + pathname + `/ref=nosim?tag=${tagId}`
 }
 
 const getAmazonBooks = async (initialPage: QueryDocumentSnapshot | undefined) => {
