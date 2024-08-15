@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: app.about,
 }
 
-export default async function AboutPage() {
+export default function AboutPage() {
   const RANKING = 1
   const BOOK_TITLE = 'ＵＳＪを劇的に変えた、たった１つの考え方　成功を引き寄せるマーケティング入門'
   const BOOK_IMG_URL = 'https://m.media-amazon.com/images/I/81+AV0WrM3L._SL1500_.jpg'

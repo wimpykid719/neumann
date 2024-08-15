@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: app.terms,
 }
 
-export default async function TermsPage() {
+export default function TermsPage() {
   const markdown = readMarkdown('src/md/terms.md')
 
   return (
