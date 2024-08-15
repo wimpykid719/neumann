@@ -84,7 +84,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.hosts ENV.fetch('ALLOW_HOST', '').split(';')
+  config.hosts = ENV.fetch('ALLOW_HOST', '').split(';')
   puts "ホストの設定を確認 - 配列: #{config.hosts}"
   config.hosts << /.*\.run\.app/
   puts "ホストの設定を確認: #{config.hosts}"
