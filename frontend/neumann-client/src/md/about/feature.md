@@ -24,4 +24,4 @@ BizRankは定期的にNote APIから書籍データを収集して独自のア�
 ### #Xにてコメントの投稿
 
 ログインを行わなくても気になる書籍について記録を残しておきたい場合、Xにてコメント付きで投稿するのは効果的です。
-[#BizRank](https://x.com/intent/post?hashtags=BizRank&url=policies/about&related=BizRank) が投稿に含まれていると運営者・BizRankユーザ間でおすすめのビジネス書籍について討論することが出来ます。
+[#BizRank](https://x.com/intent/post?hashtags=BizRank&url=https://biz-rank.com/policies/about&related=BizRank) が投稿に含まれていると運営者・BizRankユーザ間でおすすめのビジネス書籍について討論することが出来ます。
