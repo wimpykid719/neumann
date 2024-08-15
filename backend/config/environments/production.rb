@@ -85,5 +85,4 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.hosts = ENV.fetch('ALLOW_HOST', '').split(';')
-  puts "ホストの設定を確認 - 配列: #{config.hosts}"
 end
