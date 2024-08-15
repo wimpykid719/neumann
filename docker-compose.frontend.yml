@@ -19,7 +19,6 @@ services:
         BIZRANK_BUCKET_DOMAIN: $BIZRANK_BUCKET_DOMAIN
         BASE_URL: $BASE_URL
     container_name: frontend-nextjs
-    working_dir: /frontend
     stop_signal: SIGINT
     volumes:
       - ./frontend:/frontend
