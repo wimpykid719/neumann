@@ -9,8 +9,9 @@ export const metadata: Metadata = {
   title: app.terms,
 }
 
-export default function termsPage() {
+export default function TermsPage() {
   const markdown = readMarkdown('src/md/terms.md')
+
   return (
     <div className='break-words max-w-2xl mx-auto text-sm space-y-8'>
       <div className='text-xl font-bold text-center '>

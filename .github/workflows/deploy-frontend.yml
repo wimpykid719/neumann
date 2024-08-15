@@ -3,6 +3,11 @@ name: deploy frontend
 on:
   release:
     types: [published]
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/deploy-frontend.yml'
 
 jobs:
   create-artifact-repository:
@@ -50,7 +55,14 @@ jobs:
       - name: docker auth
         run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
       - name: docker build
-        run: docker build --build-arg NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }} -f Dockerfile.prd -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs .
+        run: |
+          docker build \
+          --build-arg NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }} \
+          --build-arg BIZRANK_BUCKET_DOMAIN=${{ secrets.BIZRANK_BUCKET_DOMAIN }} \
+          --build-arg API_URL_FROM_SERVER=${{ secrets.BASE_URL }} \
+          --build-arg BASE_URL=${{ secrets.BASE_URL }} \
+          -f Dockerfile.prd \
+          -t ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs .
       - name: docker push to Artifact Registry
         run: docker push ${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs
 
@@ -72,7 +84,10 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy bizrank-front \
-            --set-env-vars NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }} \
+            --set-env-vars NEXT_PUBLIC_API_URL=${{ secrets.BASE_URL }} \
+            --set-env-vars API_URL_FROM_SERVER=${{ vars.NEXT_PUBLIC_API_URL }} \
+            --set-env-vars BASE_URL=${{ secrets.BASE_URL }} \
+            --set-env-vars BIZRANK_BUCKET_DOMAIN=${{ secrets.BIZRANK_BUCKET_DOMAIN }} \
             --region=${{ vars.REGION }} \
             --image=${{ vars.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ vars.FRONTEND_REPOSITORY_NAME }}/nextjs \
             --port=${{ secrets.FRONT_PORT }} \

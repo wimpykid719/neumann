@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import BizRankIcon from '../icon/BizRankIcon'
 import { getUserAnalytics } from '@/lib/wrappedFeatch/requests/analytic'
+import { FetchError } from '@/lib/errors'
 
 const DynamicUsersChart = dynamic(() => import('./UsersChart'), { ssr: false })
 
@@ -77,7 +78,7 @@ export default async function Footer() {
             </div>
             <div className='lg:max-w-40 max-w-28 w-full space-y-5'>
               <div className='font-bold'>User</div>
-              <DynamicUsersChart data={res} />
+              <DynamicUsersChart data={res instanceof FetchError ? res.message : res} />
             </div>
           </div>
         </div>

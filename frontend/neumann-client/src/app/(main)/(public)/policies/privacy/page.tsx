@@ -9,8 +9,9 @@ export const metadata: Metadata = {
   title: app.privacy,
 }
 
-export default function privacyPage() {
+export default function PrivacyPage() {
   const markdown = readMarkdown('src/md/privacy.md')
+
   return (
     <div className='break-words max-w-2xl mx-auto text-sm space-y-8'>
       <div className='text-xl font-bold text-center '>
