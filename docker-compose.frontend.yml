@@ -20,6 +20,7 @@ services:
         BASE_URL: $BASE_URL
     container_name: frontend-nextjs
     stop_signal: SIGINT
+    # Docker.prdをビルドする際はコメントアウトしてください
     volumes:
       - ./frontend:/frontend
     networks:
