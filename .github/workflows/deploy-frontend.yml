@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - '.github/workflows/deploy-frontend.yml'
 
 jobs:
   create-artifact-repository:
