@@ -304,3 +304,7 @@ docker compose -f docker-compose.proxy.yml -p proxy down
 ## 結合テスト
 
 [実施内容 - スプレッドシート](https://docs.google.com/spreadsheets/d/1NNmBQheygvedELX9dXe8L_FCsSsIPmWdRzR_7lVsv50/edit?usp=sharing)
+
+## UI設計
+
+[BizRank UI](https://www.figma.com/design/UGugSfQCkplaBzaCzS6MC7/BizRank-UI?t=raAITMBgXsV28qXH-1)
