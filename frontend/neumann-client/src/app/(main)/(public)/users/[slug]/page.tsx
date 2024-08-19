@@ -6,15 +6,12 @@ import LoadingBooks from '@/components/profile/liked/loading/Books'
 import { useToast } from '@/contexts/ToastContext'
 import { FetchError } from '@/lib/errors'
 import { ResponseUserLikes, getUserLikes } from '@/lib/wrappedFeatch/requests/user'
+import { SlugProps } from '@/types/slug'
 import { toastStatus } from '@/utils/toast'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
-type SlugProps = {
-  slug: string
-}
-
-export default function UserLikesPage({ params }: { params: SlugProps }) {
+export default function UserLikesPage({ params }: SlugProps) {
   const { showToast } = useToast()
   const [userLikes, setUserLikes] = useState<ResponseUserLikes>()
   const { data } = useSWR(params, params => getUserLikes(params.slug))

@@ -1,17 +1,14 @@
 import { failedPageMetadata } from '@/lib/metadata'
 import app from '@/text/app.json'
 import error from '@/text/error.json'
+import { SlugProps } from '@/types/slug'
 import { Metadata, ResolvingMetadata } from 'next'
-
-type SlugProps = {
-  slug: string
-}
 
 type PageProps = {
   page: string
 }
 
-type UserLikesProps = { params: SlugProps & PageProps }
+type UserLikesProps = { params: SlugProps['params'] & PageProps }
 
 const extractUsername = (input: string | null) => {
   if (!input) return null

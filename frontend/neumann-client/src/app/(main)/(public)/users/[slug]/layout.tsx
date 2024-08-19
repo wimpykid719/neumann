@@ -24,14 +24,11 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
+import { SlugProps } from '@/types/slug'
 
 const getUserProfileMemoized = cache(getUserProfile)
 
-type SlugProps = {
-  slug: string
-}
-
-export async function generateMetadata({ params }: { params: SlugProps }): Promise<Metadata> {
+export async function generateMetadata({ params }: SlugProps): Promise<Metadata> {
   const res = await getUserProfileMemoized(params.slug)
 
   if (res instanceof FetchError) {
@@ -44,7 +41,7 @@ export async function generateMetadata({ params }: { params: SlugProps }): Promi
   }
 }
 
-export default async function ProfileLayout({ children, params }: { children: React.ReactNode; params: SlugProps }) {
+export default async function ProfileLayout({ children, params }: { children: React.ReactNode } & SlugProps) {
   const ICON_SIZE = 18
   const res = await getUserProfileMemoized(params.slug)
 
