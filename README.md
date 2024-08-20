@@ -20,6 +20,8 @@
 
 ## 技術スタック
 
+![構成図](https://github.com/user-attachments/assets/14c146db-fa7b-4f16-a0fd-fd2cc9506bbd)
+
  - フロントエンド
    - Next.js
      - biome（リンター・フォーマッター）
@@ -29,19 +31,24 @@
      - jwt（認証）
      - rubocop（リンター）
      - RSpec（テスト）
+ - プロキシーサーバー
+    - TypeScript
+        - biome
  - データベース
     - MySQL（RDB）
     - Firestore（NoSQL）
  - 書籍データ取得基盤
    - Node.js
       - Puppeteer (ウェブスクレイピング)
-      - biome（リンター・フォーマッター）
-      - Jest（テスト）
+      - biome
+      - Jest
 - その他
   - Docker
   - GitHub Actions（CI/CD）
   - Cloud Run（デプロイメント）
   - Cloudflare R2（ストレージ）
+  - Cloudflare Workers（プロキシーサーバー・Cron）
+  - Cloudflare CDN
 
 ## 環境構築
 
