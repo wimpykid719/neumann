@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: SlugProps): Promise<Metadata>
   }
 }
 
-export default async function ProfileLayout({ children, params }: { children: React.ReactNode } & SlugProps) {
+export default async function UserProfileLayout({ children, params }: { children: React.ReactNode } & SlugProps) {
   const ICON_SIZE = 18
   const res = await getUserProfileMemoized(params.slug)
 
