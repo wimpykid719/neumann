@@ -2,7 +2,7 @@ import * as fetch from '@/lib/wrappedFeatch'
 import { Book, BookDetail } from '@/types/book'
 import { PageParams, PagyMeta } from '@/types/pagy'
 
-type ResponseBooks = {
+export type ResponseBooks = {
   books: Book[]
   rankings: number[]
   pages: PagyMeta
