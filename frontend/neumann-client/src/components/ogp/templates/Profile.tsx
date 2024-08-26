@@ -29,7 +29,6 @@ export default function Profile({
   website,
   avatar,
 }: ProfileProps) {
-  avatar = ''
   return (
     <div
       style={{
