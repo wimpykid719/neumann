@@ -5,7 +5,7 @@
 ビジネスについて影響力ある人が薦める、おすすめの一冊を
 独自アルゴリズムで評価して紹介するサービスです。
 
-![BizRank - モック](https://github.com/user-attachments/assets/3b8decdd-942d-49ee-a1b7-92a8a0ab3110)
+![BizRank - モック](https://github.com/user-attachments/assets/969e52bf-5e14-44af-8f37-f231edf5d791)
 
 
 ## 機能
@@ -20,12 +20,14 @@
 
 ## 技術スタック
 
+### システムアーキテクチャ
 ![構成図](https://github.com/user-attachments/assets/14c146db-fa7b-4f16-a0fd-fd2cc9506bbd)
 
  - フロントエンド
    - Next.js
      - biome（リンター・フォーマッター）
      - Jest（テスト）
+     - Zod（バリデーション）
  - バックエンド
    - Ruby on Rails
      - jwt（認証）
@@ -49,6 +51,10 @@
   - Cloudflare R2（ストレージ）
   - Cloudflare Workers（プロキシーサーバー・Cron）
   - Cloudflare CDN
+
+### ER図
+
+![erd](https://github.com/user-attachments/assets/0e2967f7-807e-4faf-b5c3-25bd7d36aad7)
 
 ## 環境構築
 
