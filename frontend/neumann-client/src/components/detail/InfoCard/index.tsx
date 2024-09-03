@@ -50,7 +50,7 @@ export default function InfoCard({
 
   return (
     <div className='w-64 sub-bg-color rounded-lg p-6 space-y-8'>
-      <div className='w-52 mx-auto'>
+      <div className='w-52 mx-auto space-y-3'>
         <AssociateLink price={price} associateUrl={associate_url} />
         <p className='text-gray-500 text-xs'>
           広告収益の10%は本のプレゼントキャンペーンに当て、
