@@ -32,12 +32,14 @@ export default function AssociateLink({ price, associateUrl }: AssociateLinkProp
 
   return (
     <Tooltip message={tooltip.amazonAssociate}>
+      <span className='animate-ping absolute inline-flex h-[25px] w-[118px] rounded-lg bg-primary opacity-75 m-auto top-0 bottom-0 left-0 right-0'></span>
       <a
         className={`
+          relative
           block text-center
           py-1 w-full h-8
           sub-text-color
-          rounded-lg mb-3
+          rounded-lg
           bg-[length:800%_auto]
           bg-gradient-shine-primary
           ${animate && 'animate-shine'}
