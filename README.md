@@ -28,6 +28,7 @@
      - biome（リンター・フォーマッター）
      - Jest（テスト）
      - Zod（バリデーション）
+     - Tailwind css
  - バックエンド
    - Ruby on Rails
      - jwt（認証）
