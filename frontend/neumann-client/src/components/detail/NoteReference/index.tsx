@@ -10,10 +10,11 @@ export default function NoteReference({ referenceObjs }: NoteReferenceProps) {
   const ICON_SIZE = 16
 
   return (
-    <div className='text-gray-500 space-y-2'>
-      <ul className='space-y-4'>
+    <div className='space-y-8 text-sm'>
+      <span>書籍が紹介されていた記事</span>
+      <ul className='space-y-4 text-gray-500'>
         {referenceObjs.map(referenceObj => (
-          <li key={referenceObj.title} className='text-sm'>
+          <li key={referenceObj.title}>
             <div className='flex space-x-2'>
               <a className='hover:opacity-70' href={referenceObj.url} target='_blank' rel='nofollow'>
                 {referenceObj.title}
@@ -41,7 +42,6 @@ export default function NoteReference({ referenceObjs }: NoteReferenceProps) {
           </li>
         ))}
       </ul>
-      <span className='text-xs flex justify-end'>書籍が紹介されていた記事</span>
     </div>
   )
 }
