@@ -184,8 +184,51 @@ BizRankでは開発時に[vscode-run-rspec-file](https://marketplace.visualstudi
 
 下記の設定をするとRSpecファイルの好きな行で `cmd + ctr + l` を入力する事で素早くRSpecを実行して動作確認を行う事ができます。
 
+vscode-run-rspec-fileのショートカット設定
+```json:keybindings.json
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "command": "extension.runLineOnRspec",
+        "key": "ctrl+cmd+l",
+        "when": "editorLangId == 'ruby'"
+    },
+    {
+        "command": "extension.runAllOpenedFiles",
+        "key": "cmd+alt+j",
+        "when": "editorLangId == 'ruby'"
+    },
+    {
+        "command": "extension.runFileOnRspec",
+        "key": "cmd+alt+l",
+        "when": "editorLangId == 'ruby'"
+    },
+    {
+        "command": "extension.runOpenSpec", // and toggle between files
+        "key": "cmd+alt+o",
+        "when": "editorLangId == 'ruby'"
+    },
+    {
+        "command": "extension.runOnLastSpec",
+        "key": "cmd+y",
+        "when": "editorLangId == 'ruby'"
+    },
+    {
+        "key": "cmd+l",
+        "command": "-extension.runLineOnRspec",
+        "when": "editorLangId == 'ruby'"
+    },
+    {
+        "key": "cmd+j",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run Jest on Current File"
+    }
+]
+```
+
+コンテナ内のRSpecでテストを実行する設定
 ```json:settings.json
-"vscode-run-rspec-file.custom-command": "docker exec -it backend-rails-api bundle exec rspec",
+"vscode-run-rspec-file.custom-command": "docker exec -it backend-rails-api bundle exec rspec --color",
 "vscode-run-rspec-file.folder": "backend/spec",
 ```
 

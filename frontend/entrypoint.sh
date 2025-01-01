@@ -12,6 +12,11 @@ if [ ! -e "/frontend/package.json" ]; then
   cd neumann-client
 fi
 
+if [ ! -d "/frontend/node_modules" ]; then
+  echo 'frontendの開発環境構築'
+  npm install
+fi
+
 if [ ! -d "/frontend/neumann-client/node_modules" ]; then
   echo 'neumann-clientの環境構築'
   cd neumann-client
