@@ -10,11 +10,12 @@ ENV TZ=Asia/Tokyo
 COPY Gemfile Gemfile.lock* /backend/
 COPY . /backend/
 
-RUN bundle install
+RUN bundle install --without development test
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
+
 
 EXPOSE 8080
 # イメージ実行時に起動させる主プロセスを設定
