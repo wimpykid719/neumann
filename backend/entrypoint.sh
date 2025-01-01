@@ -3,15 +3,8 @@ set -e
 
 # 本番環境以外で実行された場合はテストDBを作成
 if [ "$RAILS_ENV" != "production" ]; then
-  echo '開発環境用のGemをインストール'
-  bundle install
-
   echo 'RSpec用のテストDBを作成'
   bundle exec rails db:create RAILS_ENV=test
-
-else
-  echo '本番環境用のGemをインストール'
-  bundle install --without development test
 fi
 
 bundle exec rails db:migrate
