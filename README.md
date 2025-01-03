@@ -130,7 +130,7 @@ BizRankではNoteAPIからビジネス書籍に関連する記事を取得して
 # 初回起動時のコマンド
 docker compose -f docker-compose.bot.yml -p bot up --build
 ```
-媒体取得基盤はコンテナ内に入って操作をします。
+書籍取得基盤はコンテナ内に入って操作をします。
 
 ```zsh
 docker exec -it bot /bin/bash
