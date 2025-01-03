@@ -130,7 +130,7 @@ BizRankではNoteAPIからビジネス書籍に関連する記事を取得して
 # 初回起動時のコマンド
 docker compose -f docker-compose.bot.yml -p bot up --build
 ```
-媒体取得基盤はコンテナ内に入って操作をします。
+書籍取得基盤はコンテナ内に入って操作をします。
 
 ```zsh
 docker exec -it bot /bin/bash
@@ -186,7 +186,6 @@ BizRankでは開発時に[vscode-run-rspec-file](https://marketplace.visualstudi
 
 vscode-run-rspec-fileのショートカット設定
 ```json:keybindings.json
-// Place your key bindings in this file to override the defaults
 [
     {
         "command": "extension.runLineOnRspec",
@@ -204,7 +203,7 @@ vscode-run-rspec-fileのショートカット設定
         "when": "editorLangId == 'ruby'"
     },
     {
-        "command": "extension.runOpenSpec", // and toggle between files
+        "command": "extension.runOpenSpec",
         "key": "cmd+alt+o",
         "when": "editorLangId == 'ruby'"
     },
